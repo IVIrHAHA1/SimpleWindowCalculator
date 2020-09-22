@@ -1,3 +1,4 @@
+import 'package:SimpleWindowCalculator/objects/CounterObsverver.dart';
 /**
  * Module displays overall results of vital information
  */
@@ -6,33 +7,46 @@ import 'package:flutter/material.dart';
 
 class ResultsModule extends StatelessWidget {
   final double height;
+  final CounterObserver observer;
 
-  ResultsModule({this.height});
+  ResultsModule({this.height, @required this.observer});
 
   @override
   Widget build(BuildContext context) {
+    ResultCircle priceCircle = ResultCircle(
+      height: height * .8,
+      label: 'price',
+      observer: observer,
+    );
+
+    ResultCircle approxCircle = ResultCircle(
+      height: height * .6,
+      label: 'approx time',
+      observer: observer,
+    );
+
     return Container(
       height: height,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Card(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           elevation: 5,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-
               // Price Result Circle
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                child: ResultCircle(height: height*.8, label: 'price'),
+                child: priceCircle,
               ),
 
               // Approx Time Result Circle
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                child: ResultCircle(height: height*.6, label: 'approx time'),
+                child: approxCircle,
               ),
             ],
           ),
@@ -45,18 +59,35 @@ class ResultsModule extends StatelessWidget {
 class ResultCircle extends StatefulWidget {
   final double height;
   final String label;
+  final CounterObserver observer;
 
-  ResultCircle({this.height, this.label});
+  _ResultCircleState _circleState;
+
+  ResultCircle({this.height, this.label, @required this.observer}) {
+    _circleState = _ResultCircleState(height, label);
+
+    observer.subscribe(label, _circleState);
+  }
 
   @override
-  _ResultCircleState createState() => _ResultCircleState(height, label);
+  _ResultCircleState createState() => _circleState;
 }
 
-class _ResultCircleState extends State<ResultCircle> {
+class _ResultCircleState extends State<ResultCircle> with CountObserver {
   double _height;
   String _label;
+  var value;
 
-  _ResultCircleState(this._height, this._label);
+  _ResultCircleState(this._height, this._label) {
+    value = 0;
+  }
+
+  @override
+  void updateCount(double count) {
+    setState(() {
+      value = count * 12;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +110,7 @@ class _ResultCircleState extends State<ResultCircle> {
               width: (_height * .8) - 8,
               child: Center(
                   child: Text(
-                '\$200',
+                '\$${value.toString()}',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               )),
             ),

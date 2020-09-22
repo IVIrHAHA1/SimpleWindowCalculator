@@ -1,23 +1,29 @@
+import 'package:SimpleWindowCalculator/objects/CounterObsverver.dart';
 import 'package:flutter/material.dart';
 import '../objects/Window.dart';
 
 class CounterModule extends StatefulWidget {
   final double height;
   final List<Window> windowList;
+  final CounterObserver observer;
 
-  CounterModule({this.height, this.windowList});
+  CounterModule({this.height, this.windowList, @required this.observer});
 
   @override
-  _CounterModuleState createState() => _CounterModuleState(height, windowList);
+  _CounterModuleState createState() =>
+      _CounterModuleState(height, windowList, observer);
 }
 
 class _CounterModuleState extends State<CounterModule> {
-  final double _buttonSize = 48.0;
+  double _buttonSize;
   final double _widgetHeight;
+  final CounterObserver _observer;
 
   final List<Window> _list;
 
-  _CounterModuleState(this._widgetHeight, this._list);
+  _CounterModuleState(this._widgetHeight, this._list, this._observer) {
+    _buttonSize = _widgetHeight * .25;
+  }
 
   double _counter2 = 0, _counter1 = 0;
   double _totalCounter = 0;
@@ -28,6 +34,9 @@ class _CounterModuleState extends State<CounterModule> {
       _totalCounter += -1;
 
       _list[1].setCount(_counter2);
+
+      _observer.notify('2nd Story Window', _counter2);
+      _observer.notify('price', _counter2 + _counter1);
     });
   }
 
@@ -37,6 +46,9 @@ class _CounterModuleState extends State<CounterModule> {
       _totalCounter += 1;
 
       _list[1].setCount(_counter2);
+
+      _observer.notify('2nd Story Window', _counter2);
+      _observer.notify('price', _counter2 + _counter1);
     });
   }
 
@@ -46,6 +58,9 @@ class _CounterModuleState extends State<CounterModule> {
       _totalCounter += -1;
 
       _list[0].setCount(_counter1);
+
+      _observer.notify('1st Story Window', _counter1);
+      _observer.notify('price', _counter2 + _counter1);
     });
   }
 
@@ -55,6 +70,9 @@ class _CounterModuleState extends State<CounterModule> {
       _totalCounter += 1;
 
       _list[0].setCount(_counter1);
+
+      _observer.notify('1st Story Window', _counter1);
+      _observer.notify('price', _counter2 + _counter1);
     });
   }
 

@@ -1,24 +1,38 @@
+import 'package:SimpleWindowCalculator/objects/CounterObsverver.dart';
 import 'package:flutter/material.dart';
 
 class WindowTile extends StatefulWidget {
   final String name;
   final double countDisplay;
+  final CounterObserver observer;
 
-  WindowTile({this.name, this.countDisplay});
+  _WindowTileState _windowState;
+
+  WindowTile({this.name, this.countDisplay, this.observer}) {
+    _windowState = _WindowTileState(name, countDisplay);
+
+    observer.subscribe(name, _windowState);
+  }
 
   @override
-  _WindowTileState createState() => _WindowTileState(name, countDisplay);
+  _WindowTileState createState() => _windowState;
 }
 
-class _WindowTileState extends State<WindowTile> {
+class _WindowTileState extends State<WindowTile> with CountObserver {
   final String _name;
   double _countDisplay;
 
   _WindowTileState(this._name, this._countDisplay);
 
   @override
+  updateCount(double count) {
+    setState(() {
+      _countDisplay = count;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    print(_countDisplay);
     return Row(
       children: [
         // Item Title

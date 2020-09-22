@@ -1,8 +1,10 @@
-import './widgets/CounterModule.dart';
-import './widgets/ResultsModule.dart';
+import 'package:SimpleWindowCalculator/objects/CounterObsverver.dart';
+
+import 'widgets/CounterModule.dart';
+import 'widgets/ResultsModule.dart';
 import './objects/Window.dart';
 import 'package:flutter/material.dart';
-import './widgets/OverviewModule.dart';
+import 'widgets/OverviewModule.dart';
 
 void main() {
   runApp(MyApp());
@@ -44,6 +46,9 @@ class _MyHomePageState extends State<MyHomePage> {
         mAppBar.preferredSize.height -
         MediaQuery.of(context).padding.top;
 
+
+    CounterObserver countObserver = CounterObserver();
+
     return Scaffold(
       appBar: mAppBar,
       body: Column(
@@ -51,16 +56,19 @@ class _MyHomePageState extends State<MyHomePage> {
           
           ResultsModule(
             height: screenSize * .30,
+            observer: countObserver,
           ),
 
           CounterModule(
             height: screenSize * .30,
             windowList: windowList,
+            observer: countObserver,
           ),
 
           OverviewModule(
             height: (screenSize * .40),
             windowList: windowList,
+            observer: countObserver,
           ),
         ],
       ),

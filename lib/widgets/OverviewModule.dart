@@ -1,3 +1,4 @@
+import 'package:SimpleWindowCalculator/objects/CounterObsverver.dart';
 import 'package:SimpleWindowCalculator/widgets/TechDetails.dart';
 import 'package:flutter/material.dart';
 import 'WindowTile.dart';
@@ -6,11 +7,13 @@ import '../objects/Window.dart';
 class OverviewModule extends StatefulWidget {
   final double height;
   final List<Window> windowList;
+  final CounterObserver observer;
 
-  OverviewModule({this.height, this.windowList});
+  OverviewModule({this.height, this.windowList, this.observer});
 
   @override
-  _OverviewModuleState createState() => _OverviewModuleState(height, windowList);
+  _OverviewModuleState createState() =>
+      _OverviewModuleState(height, windowList, observer);
 }
 
 class _OverviewModuleState extends State<OverviewModule>
@@ -19,8 +22,9 @@ class _OverviewModuleState extends State<OverviewModule>
 
   final double mHeight;
   final List<Window> _list;
+  final CounterObserver _observer;
 
-  _OverviewModuleState(this.mHeight, this._list);
+  _OverviewModuleState(this.mHeight, this._list, this._observer);
 
   @override
   void initState() {
@@ -80,7 +84,7 @@ class _OverviewModuleState extends State<OverviewModule>
             child: TabBarView(
               controller: _controller,
               children: [
-                ResultList(_list),
+                ResultList(_list, _observer),
                 TechDetails(),
               ],
             ),
@@ -93,8 +97,9 @@ class _OverviewModuleState extends State<OverviewModule>
 
 class ResultList extends StatelessWidget {
   final List<Window> items;
+  final CounterObserver observer;
 
-  ResultList(this.items);
+  ResultList(this.items, this.observer);
 
   @override
   Widget build(BuildContext context) {
@@ -106,6 +111,7 @@ class ResultList extends StatelessWidget {
               return WindowTile(
                 name: '${items[index].getName()}',
                 countDisplay: items[index].getCount(),
+                observer: observer,
               );
             },
           );
