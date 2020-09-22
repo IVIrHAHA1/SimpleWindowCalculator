@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import '../objects/Window.dart';
 
-class Counter extends StatefulWidget {
+class CounterModule extends StatefulWidget {
   final double height;
   final List<Window> windowList;
 
-  Counter({this.height, this.windowList});
+  CounterModule({this.height, this.windowList});
 
   @override
-  _CounterState createState() => _CounterState(height, windowList);
+  _CounterModuleState createState() => _CounterModuleState(height, windowList);
 }
 
-class _CounterState extends State<Counter> {
+class _CounterModuleState extends State<CounterModule> {
   final double _buttonSize = 48.0;
   final double _widgetHeight;
 
   final List<Window> _list;
 
-  _CounterState(this._widgetHeight, this._list);
+  _CounterModuleState(this._widgetHeight, this._list);
 
   double _counter2 = 0, _counter1 = 0;
   double _totalCounter = 0;

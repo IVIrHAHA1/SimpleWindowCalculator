@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
 
-class WindowListItem extends StatefulWidget {
+class WindowTile extends StatefulWidget {
   final String name;
-  double countDisplay;
+  final double countDisplay;
 
-  WindowListItem({this.name, this.countDisplay});
+  WindowTile({this.name, this.countDisplay});
 
   @override
-  _WindowListItemState createState() => _WindowListItemState(name, countDisplay);
+  _WindowTileState createState() => _WindowTileState(name, countDisplay);
 }
 
-class _WindowListItemState extends State<WindowListItem> {
+class _WindowTileState extends State<WindowTile> {
   final String _name;
   double _countDisplay;
 
-  _WindowListItemState(this._name, this._countDisplay);
+  _WindowTileState(this._name, this._countDisplay);
 
   @override
   Widget build(BuildContext context) {
+    print(_countDisplay);
     return Row(
       children: [
         // Item Title
@@ -46,7 +47,7 @@ class _WindowListItemState extends State<WindowListItem> {
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24),
-                child: Text('$_countDisplay'),
+                child: Text('${_countDisplay.toString()}'),
               ),
             ),
           ),

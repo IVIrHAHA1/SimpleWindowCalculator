@@ -1,9 +1,8 @@
-import './widgets/Counter.dart';
-import './widgets/TechDetails.dart';
-import './widgets/Totals.dart';
-import './widgets/WindowListItem.dart';
+import './widgets/CounterModule.dart';
+import './widgets/ResultsModule.dart';
 import './objects/Window.dart';
 import 'package:flutter/material.dart';
+import './widgets/OverviewModule.dart';
 
 void main() {
   runApp(MyApp());
@@ -49,128 +48,22 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: mAppBar,
       body: Column(
         children: <Widget>[
-          Totals(
+          
+          ResultsModule(
             height: screenSize * .30,
           ),
-          Counter(
+
+          CounterModule(
             height: screenSize * .30,
             windowList: windowList,
           ),
-          _BodyWidget(
+
+          OverviewModule(
             height: (screenSize * .40),
             windowList: windowList,
           ),
         ],
       ),
     );
-  }
-}
-
-class _BodyWidget extends StatefulWidget {
-  final double height;
-  final List<Window> windowList;
-
-  _BodyWidget({this.height, this.windowList});
-
-  @override
-  _BodyWidgetState createState() => _BodyWidgetState(height, windowList);
-}
-
-class _BodyWidgetState extends State<_BodyWidget>
-    with SingleTickerProviderStateMixin {
-  TabController _controller;
-
-  final double mHeight;
-  final List<Window> _list;
-
-  _BodyWidgetState(this.mHeight, this._list);
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = TabController(
-      vsync: this,
-      length: 2,
-    );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: mHeight,
-      child: Column(
-        children: [
-          // Tabs
-          Material(
-            color: Colors.blue,
-            child: TabBar(
-              controller: _controller,
-              indicatorColor: Colors.black,
-              tabs: [
-                Tab(
-                  child: Text(
-                    'Overview',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
-                Tab(
-                  child: Text(
-                    'Details',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          //Body
-          Flexible(
-            fit: FlexFit.tight,
-            child: TabBarView(
-              controller: _controller,
-              children: [
-                ResultList(_list),
-                TechDetails(),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class ResultList extends StatelessWidget {
-  final List<Window> items;
-
-  ResultList(this.items);
-
-  @override
-  Widget build(BuildContext context) {
-    return items.isEmpty
-        ? Text('List is empty')
-        : ListView.builder(
-            itemCount: items.length,
-            itemBuilder: (ctx, index) {
-              return WindowListItem(
-                name: '${items[index].getName()}',
-                countDisplay: items[index].getCount(),
-              );
-            },
-          );
   }
 }

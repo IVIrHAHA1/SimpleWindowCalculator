@@ -1,4 +1,46 @@
+/**
+ * Module displays overall results of vital information
+ */
+
 import 'package:flutter/material.dart';
+
+class ResultsModule extends StatelessWidget {
+  final double height;
+
+  ResultsModule({this.height});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: height,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Card(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          elevation: 5,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+
+              // Price Result Circle
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                child: ResultCircle(height: height*.8, label: 'price'),
+              ),
+
+              // Approx Time Result Circle
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                child: ResultCircle(height: height*.6, label: 'approx time'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
 
 class ResultCircle extends StatefulWidget {
   final double height;
