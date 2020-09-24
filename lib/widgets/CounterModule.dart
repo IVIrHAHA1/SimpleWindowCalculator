@@ -1,28 +1,26 @@
-import 'package:SimpleWindowCalculator/objects/CounterObsverver.dart';
-import 'package:SimpleWindowCalculator/widgets/WindowTile.dart';
 import 'package:flutter/material.dart';
 import '../objects/Window.dart';
 
 class CounterModule extends StatefulWidget {
   final double height;
   final List<Window> windowList;
-  final CounterObserver observer;
+  final Function function;
 
-  CounterModule({this.height, this.windowList, @required this.observer});
+  CounterModule({this.height, this.windowList, this.function});
 
   @override
   _CounterModuleState createState() =>
-      _CounterModuleState(height, windowList, observer);
+      _CounterModuleState(height, windowList, function);
 }
 
 class _CounterModuleState extends State<CounterModule> {
   double _buttonSize;
   final double _widgetHeight;
-  final CounterObserver _observer;
+  final Function _function;
 
   final List<Window> _list;
 
-  _CounterModuleState(this._widgetHeight, this._list, this._observer) {
+  _CounterModuleState(this._widgetHeight, this._list, this._function) {
     _buttonSize = _widgetHeight * .15;
   }
 
@@ -35,8 +33,7 @@ class _CounterModuleState extends State<CounterModule> {
       _totalCounter += -1;
 
       _list[1].setCount(_counter2);
-
-      _observer.notify('price', '\$${(_totalCounter * _list[1].getPrice())}');
+      _function();
     });
   }
 
@@ -46,9 +43,7 @@ class _CounterModuleState extends State<CounterModule> {
       _totalCounter += 1;
 
       _list[1].setCount(_counter2);
-
-      _observer.notify('price', '\$${(_totalCounter * _list[1].getPrice())}');
-      // _observer.notify('approx time', _totalCounter * _list[1].getDuration());
+      _function();
     });
   }
 
@@ -58,8 +53,7 @@ class _CounterModuleState extends State<CounterModule> {
       _totalCounter += -1;
 
       _list[0].setCount(_counter1);
-
-      _observer.notify('price', '\$${(_totalCounter * _list[1].getPrice())}');
+      _function();
     });
   }
 
@@ -69,8 +63,7 @@ class _CounterModuleState extends State<CounterModule> {
       _totalCounter += 1;
 
       _list[0].setCount(_counter1);
-
-      _observer.notify('price', '\$${(_totalCounter * _list[1].getPrice())}');
+      _function();
     });
   }
 

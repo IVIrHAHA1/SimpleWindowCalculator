@@ -1,4 +1,5 @@
 import 'package:SimpleWindowCalculator/objects/CounterObsverver.dart';
+import 'package:flutter/foundation.dart';
 
 import 'widgets/CounterModule.dart';
 import 'widgets/ResultsModule.dart';
@@ -27,14 +28,51 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  State<StatefulWidget> createState() => _MyHomePage();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  List<Window> windowList = [
-    Window(name: '1st Story Window', time: 10, price: 12),
-    Window(name: '2nd Story Window', time: 12, price: 12),
+class _MyHomePage extends State {
+  final List<Window> windowList = [
+    Window(
+        name: '1st Story Window', duration: Duration(minutes: 10), price: 12),
+    Window(duration: Duration(minutes: 12), price: 12.50),
   ];
+
+  var priceTotal;
+  var timeTotal;
+
+  static const double mDRIVETIME = 25;
+  static const double mMIN_PRICE = 150;
+
+  format(Duration d) =>
+      d.toString().split('.').first.split(':').take(2).join(":");
+
+  update() {
+    // Calculate price before adjustments
+    var windowTotal = 0.0;
+    for (Window window in windowList) {
+      windowTotal += window.getTotal();
+    }
+
+    // Add Drive time
+    priceTotal = windowTotal + mDRIVETIME;
+
+    // Round for price simplicity
+    var temp = priceTotal % 5;
+    if (temp != 0) {
+      priceTotal += (5 - temp);
+    }
+
+    // Ensure price is not below minimum
+    if (priceTotal < mMIN_PRICE) {
+      priceTotal = mMIN_PRICE;
+    }
+
+    timeTotal = format(
+        windowList[0].getTotalDuration() + windowList[1].getTotalDuration());
+
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,25 +85,39 @@ class _MyHomePageState extends State<MyHomePage> {
         mAppBar.preferredSize.height -
         MediaQuery.of(context).padding.top;
 
-
-// Observer notifies windgets dependent on Counter values
-// TODO: Reorganize code to make this process simpler
-    CounterObserver countObserver = CounterObserver();
+    TextStyle a_style = TextStyle(fontWeight: FontWeight.bold, fontSize: 20);
 
     return Scaffold(
       appBar: mAppBar,
       body: Column(
         children: <Widget>[
-          
           ResultsModule(
-            height: screenSize * .30,
-            observer: countObserver,
+            height: screenSize * .35,
+            children: [
+              priceTotal != null
+                  ? Text(
+                      '\$$priceTotal',
+                      style: a_style,
+                    )
+                  : Text(
+                      '\$0',
+                      style: a_style,
+                    ),
+              timeTotal != null
+                  ? Text(
+                      '$timeTotal',
+                      style: a_style,
+                    )
+                  : Text(
+                      '0:00',
+                      style: a_style,
+                    ),
+            ],
           ),
-
           CounterModule(
             height: screenSize * .50,
             windowList: windowList,
-            observer: countObserver,
+            function: update,
           ),
         ],
       ),

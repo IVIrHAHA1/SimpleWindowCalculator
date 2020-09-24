@@ -7,22 +7,22 @@ import 'package:flutter/material.dart';
 
 class ResultsModule extends StatelessWidget {
   final double height;
-  final CounterObserver observer;
+  final List<Text> children;
 
-  ResultsModule({this.height, @required this.observer});
+  ResultsModule({this.height, this.children});
 
   @override
   Widget build(BuildContext context) {
     ResultCircle priceCircle = ResultCircle(
       height: height * .8,
+      textView: children[0],
       label: 'price',
-      observer: observer,
     );
 
     ResultCircle approxCircle = ResultCircle(
       height: height * .6,
+      textView: children[1],
       label: 'approx time',
-      observer: observer,
     );
 
     return Container(
@@ -56,44 +56,17 @@ class ResultsModule extends StatelessWidget {
   }
 }
 
-// ignore: must_be_immutable
-class ResultCircle extends StatefulWidget {
+class ResultCircle extends StatelessWidget {
   final double height;
   final String label;
-  final CounterObserver observer;
+  final Text textView;
 
-  _ResultCircleState _circleState;
-
-  ResultCircle({this.height, this.label, @required this.observer}) {
-    this._circleState = _ResultCircleState(height, label);
-
-    observer.subscribe(label, _circleState);
-  }
-
-  @override
-  _ResultCircleState createState() => _circleState;
-}
-
-class _ResultCircleState extends State<ResultCircle> with CountObserver {
-  double _height;
-  String _label;
-  var value;
-
-  _ResultCircleState(this._height, this._label) {
-    value = 0;
-  }
-
-  @override
-  void updateValue(var value) {
-    setState(() {
-      this.value = value;
-    });
-  }
+  ResultCircle({this.height, this.label, this.textView});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: _height,
+      height: height,
       child: Column(
         children: [
           // Circle
@@ -107,22 +80,20 @@ class _ResultCircleState extends State<ResultCircle> with CountObserver {
               ),
             ),
             child: Container(
-              height: (_height * .8) - 8,
-              width: (_height * .8) - 8,
+              height: (height * .8) - 8,
+              width: (height * .8) - 8,
               child: Center(
-                  child: Text(
-                '${value.toString()}',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-              )),
+                child: textView,
+              ),
             ),
           ),
 
           // Label
-          (_label != null)
+          (label != null)
               ? Container(
-                  height: _height * .2,
+                  height: height * .2,
                   child: Text(
-                    _label,
+                    label,
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   ),
                 )

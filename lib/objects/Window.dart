@@ -1,28 +1,36 @@
-import 'package:flutter/foundation.dart';
-
 class Window {
+  static const double mPRICE = 12;
+  static const String mNAME = 'Standard Window';
+  static const Duration mDURATION = Duration(minutes: 10);
+
   final double price;
-  final double time;
   final String name;
+  final Duration duration;
 
   double count;
-  Duration duration;
 
-  Window({@required this.price, @required this.time, @required this.name}) {
+  Window({this.price, this.duration, this.name}) {
     count = 0;
-    duration = Duration(minutes: 10);
-  }
-
-  getPrice() {
-    return price;
-  }
-
-  getDuration() {
-    return duration;
   }
 
   getName() {
-    return name;
+    return name != null ? name : mNAME; 
+  }
+
+  getPrice() {
+    return price != null ? price : mPRICE;
+  }
+
+  getDuration() {
+    return duration != null ? duration : mDURATION;
+  }
+
+  getTotalDuration() {
+    return this.getDuration() * count;
+  }
+
+  getTotal() {
+    return this.getPrice() * count;
   }
 
   setCount(double count) {
