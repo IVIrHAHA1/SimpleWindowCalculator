@@ -4,18 +4,11 @@ import 'package:flutter/material.dart';
 class WindowTile extends StatefulWidget {
   final String name;
   final double countDisplay;
-  final CounterObserver observer;
 
-  _WindowTileState _windowState;
-
-  WindowTile({this.name, this.countDisplay, this.observer}) {
-    _windowState = _WindowTileState(name, countDisplay);
-
-    observer.subscribe(name, _windowState);
-  }
+  WindowTile({this.name, this.countDisplay});
 
   @override
-  _WindowTileState createState() => _windowState;
+  _WindowTileState createState() => _WindowTileState(name, countDisplay);
 }
 
 class _WindowTileState extends State<WindowTile> with CountObserver {
@@ -25,7 +18,7 @@ class _WindowTileState extends State<WindowTile> with CountObserver {
   _WindowTileState(this._name, this._countDisplay);
 
   @override
-  updateCount(double count) {
+  updateValue(var count) {
     setState(() {
       _countDisplay = count;
     });

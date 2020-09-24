@@ -6,17 +6,19 @@ class Window {
   final String name;
 
   double count;
+  Duration duration;
 
   Window({@required this.price, @required this.time, @required this.name}) {
     count = 0;
+    duration = Duration(minutes: 10);
   }
 
   getPrice() {
     return price;
   }
 
-  getTime() {
-    return time;
+  getDuration() {
+    return duration;
   }
 
   getName() {

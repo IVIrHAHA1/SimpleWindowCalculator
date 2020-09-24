@@ -1,4 +1,5 @@
 import 'package:SimpleWindowCalculator/objects/CounterObsverver.dart';
+import 'package:SimpleWindowCalculator/widgets/WindowTile.dart';
 import 'package:flutter/material.dart';
 import '../objects/Window.dart';
 
@@ -22,7 +23,7 @@ class _CounterModuleState extends State<CounterModule> {
   final List<Window> _list;
 
   _CounterModuleState(this._widgetHeight, this._list, this._observer) {
-    _buttonSize = _widgetHeight * .25;
+    _buttonSize = _widgetHeight * .15;
   }
 
   double _counter2 = 0, _counter1 = 0;
@@ -35,8 +36,7 @@ class _CounterModuleState extends State<CounterModule> {
 
       _list[1].setCount(_counter2);
 
-      _observer.notify('2nd Story Window', _counter2);
-      _observer.notify('price', _counter2 + _counter1);
+      _observer.notify('price', '\$${(_totalCounter * _list[1].getPrice())}');
     });
   }
 
@@ -47,8 +47,8 @@ class _CounterModuleState extends State<CounterModule> {
 
       _list[1].setCount(_counter2);
 
-      _observer.notify('2nd Story Window', _counter2);
-      _observer.notify('price', _counter2 + _counter1);
+      _observer.notify('price', '\$${(_totalCounter * _list[1].getPrice())}');
+      // _observer.notify('approx time', _totalCounter * _list[1].getDuration());
     });
   }
 
@@ -59,8 +59,7 @@ class _CounterModuleState extends State<CounterModule> {
 
       _list[0].setCount(_counter1);
 
-      _observer.notify('1st Story Window', _counter1);
-      _observer.notify('price', _counter2 + _counter1);
+      _observer.notify('price', '\$${(_totalCounter * _list[1].getPrice())}');
     });
   }
 
@@ -71,8 +70,7 @@ class _CounterModuleState extends State<CounterModule> {
 
       _list[0].setCount(_counter1);
 
-      _observer.notify('1st Story Window', _counter1);
-      _observer.notify('price', _counter2 + _counter1);
+      _observer.notify('price', '\$${(_totalCounter * _list[1].getPrice())}');
     });
   }
 
@@ -85,7 +83,7 @@ class _CounterModuleState extends State<CounterModule> {
           height: _widgetHeight * .1,
         ),
         Container(
-          height: _widgetHeight * .7,
+          height: _widgetHeight * .5,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Row(
@@ -174,10 +172,41 @@ class _CounterModuleState extends State<CounterModule> {
           height: _widgetHeight * .1,
         ),
         Container(
-          height: _widgetHeight * .1,
+          padding: EdgeInsets.fromLTRB(0, 8, 0, 0),
+          height: _widgetHeight * .2,
           child: Row(
             children: [
-              Text('$_totalCounter total windows'),
+              // Item Title
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'Total Window Count',
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+              ),
+
+              Flexible(
+                fit: FlexFit.tight,
+                child: Container(),
+              ),
+
+              // Item Value
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  color: Colors.blue,
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8.0, horizontal: 24),
+                      child: Text('${_totalCounter.toString()}'),
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),

@@ -56,6 +56,7 @@ class ResultsModule extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class ResultCircle extends StatefulWidget {
   final double height;
   final String label;
@@ -64,7 +65,7 @@ class ResultCircle extends StatefulWidget {
   _ResultCircleState _circleState;
 
   ResultCircle({this.height, this.label, @required this.observer}) {
-    _circleState = _ResultCircleState(height, label);
+    this._circleState = _ResultCircleState(height, label);
 
     observer.subscribe(label, _circleState);
   }
@@ -83,9 +84,9 @@ class _ResultCircleState extends State<ResultCircle> with CountObserver {
   }
 
   @override
-  void updateCount(double count) {
+  void updateValue(var value) {
     setState(() {
-      value = count * 12;
+      this.value = value;
     });
   }
 
@@ -110,7 +111,7 @@ class _ResultCircleState extends State<ResultCircle> with CountObserver {
               width: (_height * .8) - 8,
               child: Center(
                   child: Text(
-                '\$${value.toString()}',
+                '${value.toString()}',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               )),
             ),

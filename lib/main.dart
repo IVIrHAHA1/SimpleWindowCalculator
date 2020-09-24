@@ -42,11 +42,14 @@ class _MyHomePageState extends State<MyHomePage> {
       title: Text('Simple Window Calculator'),
     );
 
+// Get available screen space
     double screenSize = MediaQuery.of(context).size.height -
         mAppBar.preferredSize.height -
         MediaQuery.of(context).padding.top;
 
 
+// Observer notifies windgets dependent on Counter values
+// TODO: Reorganize code to make this process simpler
     CounterObserver countObserver = CounterObserver();
 
     return Scaffold(
@@ -60,13 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
 
           CounterModule(
-            height: screenSize * .30,
-            windowList: windowList,
-            observer: countObserver,
-          ),
-
-          OverviewModule(
-            height: (screenSize * .40),
+            height: screenSize * .50,
             windowList: windowList,
             observer: countObserver,
           ),

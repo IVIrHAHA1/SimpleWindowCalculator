@@ -47,47 +47,10 @@ class _OverviewModuleState extends State<OverviewModule>
       height: mHeight,
       child: Column(
         children: [
-          // Tabs
-          Material(
-            color: Colors.blue,
-            child: TabBar(
-              controller: _controller,
-              indicatorColor: Colors.black,
-              tabs: [
-                Tab(
-                  child: Text(
-                    'Overview',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
-                Tab(
-                  child: Text(
-                    'Details',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
           //Body
           Flexible(
-            fit: FlexFit.tight,
-            child: TabBarView(
-              controller: _controller,
-              children: [
-                ResultList(_list, _observer),
-                TechDetails(),
-              ],
-            ),
+            fit: FlexFit.tight,     
+            child: ResultList(_list, _observer),
           ),
         ],
       ),
@@ -111,7 +74,6 @@ class ResultList extends StatelessWidget {
               return WindowTile(
                 name: '${items[index].getName()}',
                 countDisplay: items[index].getCount(),
-                observer: observer,
               );
             },
           );

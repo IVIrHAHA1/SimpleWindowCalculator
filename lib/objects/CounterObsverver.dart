@@ -18,13 +18,14 @@ class CounterObserver {
     observerList.remove(key);
   }
 
-  void notify(String key, double count) {
+  void notify(String key, var value) {
+    // retrieve subsriber in question
     CountObserver subscriber =  observerList.putIfAbsent(key, () => null);
 
-    subscriber.updateCount(count);
+    subscriber.updateValue(value);
   }
 }
 
 mixin CountObserver <T>{
-  void updateCount(double count);
+  void updateValue(var value);
 }
