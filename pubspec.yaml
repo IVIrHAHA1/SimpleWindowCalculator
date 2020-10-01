@@ -49,7 +49,10 @@ flutter:
     - assets/images/house.png
     - assets/images/minus_sign.png
     - assets/images/plus_sign.png
-  #   - images/a_dot_ham.jpeg
+    - assets/images/increment_btn.png
+    - assets/images/decrement_btn.png
+    - assets/images/french_window.png
+    - assets/images/standard_window.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

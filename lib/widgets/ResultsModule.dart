@@ -1,5 +1,4 @@
-import 'package:SimpleWindowCalculator/objects/CounterObsverver.dart';
-/**
+/*
  * Module displays overall results of vital information
  */
 
@@ -14,42 +13,44 @@ class ResultsModule extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ResultCircle priceCircle = ResultCircle(
-      height: height * .8,
+      height: height * .75,
       textView: children[0],
       label: 'price',
     );
 
-    ResultCircle approxCircle = ResultCircle(
-      height: height * .6,
+    ResultCircle timeCircle = ResultCircle(
+      height: height * .60,
       textView: children[1],
-      label: 'approx time',
+      label: 'time',
     );
 
     return Container(
-      height: height,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Card(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          elevation: 5,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Price Result Circle
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                child: priceCircle,
-              ),
+      child: Card(
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        elevation: 5,
+        child: Column(
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Price Result Circle
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                  child: priceCircle,
+                ),
 
-              // Approx Time Result Circle
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                child: approxCircle,
-              ),
-            ],
-          ),
+                // Approx Time Result Circle
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                  child: timeCircle,
+                ),
+              ],
+            ),
+
+            Icon(Icons.expand_more)
+          ],
         ),
       ),
     );
@@ -76,7 +77,7 @@ class ResultCircle extends StatelessWidget {
               side: BorderSide(
                 color: Colors.blue,
                 style: BorderStyle.solid,
-                width: 4,
+                width: 3,
               ),
             ),
             child: Container(
@@ -94,7 +95,7 @@ class ResultCircle extends StatelessWidget {
                   height: height * .2,
                   child: Text(
                     label,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                   ),
                 )
               : Container(),

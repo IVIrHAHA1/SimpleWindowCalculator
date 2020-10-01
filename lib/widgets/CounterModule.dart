@@ -164,45 +164,6 @@ class _CounterModuleState extends State<CounterModule> {
           child: Text('$_counter1'),
           height: _widgetHeight * .1,
         ),
-        Container(
-          padding: EdgeInsets.fromLTRB(0, 8, 0, 0),
-          height: _widgetHeight * .2,
-          child: Row(
-            children: [
-              // Item Title
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'Total Window Count',
-                  style: Theme.of(context).textTheme.headline6,
-                ),
-              ),
-
-              Flexible(
-                fit: FlexFit.tight,
-                child: Container(),
-              ),
-
-              // Item Value
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  color: Colors.blue,
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 8.0, horizontal: 24),
-                      child: Text('${_totalCounter.toString()}'),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
       ],
     );
   }

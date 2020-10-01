@@ -1,11 +1,6 @@
-import 'package:SimpleWindowCalculator/objects/CounterObsverver.dart';
-import 'package:flutter/foundation.dart';
-
-import 'widgets/CounterModule.dart';
 import 'widgets/ResultsModule.dart';
 import './objects/Window.dart';
 import 'package:flutter/material.dart';
-import 'widgets/OverviewModule.dart';
 
 void main() {
   runApp(MyApp());
@@ -85,41 +80,151 @@ class _MyHomePage extends State {
         mAppBar.preferredSize.height -
         MediaQuery.of(context).padding.top;
 
-    TextStyle a_style = TextStyle(fontWeight: FontWeight.bold, fontSize: 20);
+    TextStyle aStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 20);
 
     return Scaffold(
       appBar: mAppBar,
-      body: Column(
-        children: <Widget>[
-          ResultsModule(
-            height: screenSize * .35,
-            children: [
-              priceTotal != null
-                  ? Text(
-                      '\$$priceTotal',
-                      style: a_style,
-                    )
-                  : Text(
-                      '\$0',
-                      style: a_style,
+      body: Container(
+        height: screenSize,
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        child: Column(
+          children: <Widget>[
+            // Results ---------------------
+            ResultsModule(
+              height: screenSize * .3,
+              children: [
+                priceTotal != null
+                    ? Text(
+                        '\$$priceTotal',
+                        style: aStyle,
+                      )
+                    : Text(
+                        '\$0',
+                        style: aStyle,
+                      ),
+                timeTotal != null
+                    ? Text(
+                        '$timeTotal',
+                        style: aStyle,
+                      )
+                    : Text(
+                        '0:00',
+                        style: aStyle,
+                      ),
+              ],
+            ),
+
+            // Total Window Count -----------
+            ListTile(
+              leading: Text(
+                'Total Window Count',
+                style: Theme.of(context).textTheme.headline6,
+              ),
+              trailing: Container(
+                width: 75,
+                height: 50,
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  color: Colors.blue,
+                  child: Center(
+                    child: Text('0'),
+                  ),
+                ),
+              ),
+            ),
+
+            // Recently Used Module ---------
+            Container(
+              alignment: Alignment.topLeft,
+              child: Column(
+                children: [
+                  Text('Recently Used'),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        Icon(Icons.explicit),
+                        Icon(Icons.explicit),
+                        Icon(Icons.explicit)
+                      ],
                     ),
-              timeTotal != null
-                  ? Text(
-                      '$timeTotal',
-                      style: a_style,
-                    )
-                  : Text(
-                      '0:00',
-                      style: a_style,
+                  )
+                ],
+              ),
+            ),
+
+            // Divider  ---------------------
+            Divider(
+              height: 30,
+              thickness: 3,
+              color: Colors.black54,
+            ),
+
+            // Counter Module ---------------
+            Flexible(
+              fit: FlexFit.tight,
+              child: Container(
+                width: MediaQuery.of(context).size.width * .75,
+                child: Column(
+                  children: [
+                    Text('count'),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          child: GestureDetector(
+                            onTap: null,
+                            child: Image.asset(
+                              'assets/images/decrement_btn.png',
+                              height: 50,
+                              width: 50,
+                            ),
+                          ),
+                        ),
+                        Flexible(
+                          fit: FlexFit.tight,
+                          child: Image.asset(
+                            'assets/images/standard_window.png',
+                            height: 90,
+                          ),
+                        ),
+                        Container(
+                          child: GestureDetector(
+                            onTap: null,
+                            child: Image.asset(
+                              'assets/images/increment_btn.png',
+                              height: 50,
+                              width: 50,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-            ],
-          ),
-          CounterModule(
-            height: screenSize * .50,
-            windowList: windowList,
-            function: update,
-          ),
-        ],
+                    Text('Label')
+                  ],
+                ),
+              ),
+            ),
+
+            // Tags Module  -----------------
+            Container(
+              height: screenSize * .10,
+              child: Card(
+                color: Colors.blue,
+                child: Row(
+                  children: [
+                    Card(
+                      color: Colors.deepOrangeAccent,
+                      child: Text('1'),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

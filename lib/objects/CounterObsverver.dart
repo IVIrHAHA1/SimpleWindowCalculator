@@ -1,6 +1,5 @@
 import 'dart:collection';
 
-import 'package:flutter/foundation.dart';
 
 class CounterObserver {
   HashMap<String, CountObserver> observerList;
