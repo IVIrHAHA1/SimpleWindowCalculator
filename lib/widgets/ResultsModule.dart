@@ -12,47 +12,72 @@ class ResultsModule extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Price Circle
     ResultCircle priceCircle = ResultCircle(
       height: height * .75,
       textView: children[0],
       label: 'price',
     );
 
+    // Time Circle
     ResultCircle timeCircle = ResultCircle(
-      height: height * .60,
+      height: height * .65,
       textView: children[1],
       label: 'time',
     );
 
-    return Container(
-      child: Card(
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        elevation: 5,
-        child: Column(
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Price Result Circle
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                  child: priceCircle,
-                ),
+    return Column(
+      children: [
+        Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          elevation: 5,
+          child: Column(
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Price Result Circle
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                    child: priceCircle,
+                  ),
 
-                // Approx Time Result Circle
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                  child: timeCircle,
-                ),
-              ],
-            ),
-
-            Icon(Icons.expand_more)
-          ],
+                  // Approx Time Result Circle
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                    child: timeCircle,
+                  ),
+                ],
+              ),
+              Icon(Icons.expand_more)
+            ],
+          ),
         ),
-      ),
+
+        // Total Count Modulette
+        ListTile(
+              leading: Text(
+                'Total Window Count',
+                style: Theme.of(context).textTheme.headline6,
+              ),
+              trailing: Container(
+                width: 75,
+                height: 50,
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  color: Colors.blue,
+                  child: Center(
+                    child: Text('0'),
+                  ),
+                ),
+              ),
+            ),
+      ],
     );
   }
 }

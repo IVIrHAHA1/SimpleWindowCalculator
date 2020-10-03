@@ -1,3 +1,5 @@
+import 'package:SimpleWindowCalculator/widgets/WindowCounterV2.dart';
+
 import 'widgets/ResultsModule.dart';
 import './objects/Window.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +54,7 @@ class _MyHomePage extends State {
     // Add Drive time
     priceTotal = windowTotal + mDRIVETIME;
 
-    // Round for price simplicity
+    // Round up to increment of 5, for pricing simplicity
     var temp = priceTotal % 5;
     if (temp != 0) {
       priceTotal += (5 - temp);
@@ -114,27 +116,6 @@ class _MyHomePage extends State {
               ],
             ),
 
-            // Total Window Count -----------
-            ListTile(
-              leading: Text(
-                'Total Window Count',
-                style: Theme.of(context).textTheme.headline6,
-              ),
-              trailing: Container(
-                width: 75,
-                height: 50,
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  color: Colors.blue,
-                  child: Center(
-                    child: Text('0'),
-                  ),
-                ),
-              ),
-            ),
-
             // Recently Used Module ---------
             Container(
               alignment: Alignment.topLeft,
@@ -166,44 +147,9 @@ class _MyHomePage extends State {
             Flexible(
               fit: FlexFit.tight,
               child: Container(
-                width: MediaQuery.of(context).size.width * .75,
-                child: Column(
-                  children: [
-                    Text('count'),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          child: GestureDetector(
-                            onTap: null,
-                            child: Image.asset(
-                              'assets/images/decrement_btn.png',
-                              height: 50,
-                              width: 50,
-                            ),
-                          ),
-                        ),
-                        Flexible(
-                          fit: FlexFit.tight,
-                          child: Image.asset(
-                            'assets/images/standard_window.png',
-                            height: 90,
-                          ),
-                        ),
-                        Container(
-                          child: GestureDetector(
-                            onTap: null,
-                            child: Image.asset(
-                              'assets/images/increment_btn.png',
-                              height: 50,
-                              width: 50,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Text('Label')
-                  ],
+                child: WindowCounter(
+                  window: Window(),
+                  updater: update,
                 ),
               ),
             ),

@@ -9,12 +9,10 @@ class Window {
 
   double count;
 
-  Window({this.price, this.duration, this.name}) {
-    count = 0;
-  }
+  Window({this.price, this.duration, this.name});
 
   getName() {
-    return name != null ? name : mNAME; 
+    return name != null ? name : mNAME;
   }
 
   getPrice() {
@@ -38,6 +36,6 @@ class Window {
   }
 
   getCount() {
-    return count;
+    return count != null ? count : 0.0;
   }
 }
