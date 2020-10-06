@@ -3,59 +3,45 @@ import '../objects/Window.dart';
 
 class WindowCounter extends StatefulWidget {
   final Window window;
-  final Function updater;
+  final Function updater, selector;
 
-  WindowCounter({@required this.window, @required this.updater});
+  WindowCounter(
+      {@required this.window, @required this.updater, @required this.selector});
 
   @override
-  _WindowCounterState createState() => _WindowCounterState(window);
+  _WindowCounterState createState() =>
+      _WindowCounterState(window, updater, selector);
 }
 
 class _WindowCounterState extends State<WindowCounter> {
   final Window _window;
+  final Function _updater, _selector;
 
   var _windowCount;
 
-  _WindowCounterState(this._window) {
+  _WindowCounterState(this._window, this._updater, this._selector) {
     _windowCount = _window.getCount();
   }
 
   incrementCount() {
     setState(() {
       _windowCount += 1.0;
-      _window.setCount(_windowCount);
+      _window.setCount(count: _windowCount);
     });
+    _updater();
   }
 
   decrementCount() {
     setState(() {
       _windowCount -= 1.0;
-      _window.setCount(_windowCount);
+      _window.setCount(count: _windowCount);
     });
-  }
-
-// TODO: Move this function back into main
-  void _selectNewWindow(BuildContext ctx) {
-    showModalBottomSheet(
-        context: context,
-        builder: (_) {
-          return GestureDetector(
-            onTap: () {},
-            child: GridView.count(
-              crossAxisCount: 3,
-              children: [
-                Image.asset('assets/images/standard_window.png'),
-                Image.asset('assets/images/french_window.png'),
-              ],
-            ),
-            behavior: HitTestBehavior.opaque,
-          );
-        });
+    _updater();
   }
 
   @override
   Widget build(BuildContext context) {
-    var screenWidth =  MediaQuery.of(context).size.width * .8;
+    var screenWidth = MediaQuery.of(context).size.width * .8;
     return Container(
       width: screenWidth,
       child: Column(
@@ -79,7 +65,7 @@ class _WindowCounterState extends State<WindowCounter> {
                 fit: FlexFit.tight,
                 child: IconButton(
                   iconSize: screenWidth * .3,
-                  onPressed: () => _selectNewWindow(context),
+                  onPressed: () => _selector(context),
                   icon: Image.asset(
                     'assets/images/standard_window.png',
                   ),

@@ -7,8 +7,9 @@ import 'package:flutter/material.dart';
 class ResultsModule extends StatelessWidget {
   final double height;
   final List<Text> children;
+  final double count;
 
-  ResultsModule({this.height, this.children});
+  ResultsModule({this.height, this.children, this.count});
 
   @override
   Widget build(BuildContext context) {
@@ -58,25 +59,28 @@ class ResultsModule extends StatelessWidget {
         ),
 
         // Total Count Modulette
-        ListTile(
-              leading: Text(
-                'Total Window Count',
-                style: Theme.of(context).textTheme.headline6,
-              ),
-              trailing: Container(
-                width: 75,
-                height: 50,
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  color: Colors.blue,
-                  child: Center(
-                    child: Text('0'),
-                  ),
+        Container(
+          height: height * .35,
+          child: ListTile(
+            leading: Text(
+              'Total Window Count',
+              style: Theme.of(context).textTheme.headline6,
+            ),
+            trailing: Container(
+              width: 75,
+              height: 50,
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                color: Colors.blue,
+                child: Center(
+                  child: count != null ? Text('$count') : Text('0'),
                 ),
               ),
             ),
+          ),
+        ),
       ],
     );
   }

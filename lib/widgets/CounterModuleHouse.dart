@@ -30,7 +30,7 @@ class _CounterModuleState extends State<CounterModule> {
     setState(() {
       _counter2 += -1;
 
-      _list[1].setCount(_counter2);
+      _list[1].setCount(count: _counter2);
       _function();
     });
   }
@@ -39,7 +39,7 @@ class _CounterModuleState extends State<CounterModule> {
     setState(() {
       _counter2 += 1;
 
-      _list[1].setCount(_counter2);
+      _list[1].setCount(count: _counter2);
       _function();
     });
   }
@@ -48,7 +48,7 @@ class _CounterModuleState extends State<CounterModule> {
     setState(() {
       _counter1 += -1;
 
-      _list[0].setCount(_counter1);
+      _list[0].setCount(count: _counter1);
       _function();
     });
   }
@@ -57,7 +57,7 @@ class _CounterModuleState extends State<CounterModule> {
     setState(() {
       _counter1 += 1;
 
-      _list[0].setCount(_counter1);
+      _list[0].setCount(count: _counter1);
       _function();
     });
   }

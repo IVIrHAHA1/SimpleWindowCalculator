@@ -30,13 +30,12 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePage extends State {
   final List<Window> windowList = [
-    Window(
-        name: '1st Story Window', duration: Duration(minutes: 10), price: 12),
-    Window(duration: Duration(minutes: 12), price: 12.50),
+    Window(),
   ];
 
   var priceTotal;
   var timeTotal;
+  var countTotal;
 
   static const double mDRIVETIME = 25;
   static const double mMIN_PRICE = 150;
@@ -44,15 +43,36 @@ class _MyHomePage extends State {
   format(Duration d) =>
       d.toString().split('.').first.split(':').take(2).join(":");
 
+    void selectNewWindow(BuildContext ctx) {
+      print('trying to grab new window');
+    showModalBottomSheet(
+        context: context,
+        builder: (_) {
+          return GestureDetector(
+            onTap: () {},
+            child: GridView.count(
+              crossAxisCount: 3,
+              children: [
+                Image.asset('assets/images/standard_window.png'),
+                Image.asset('assets/images/french_window.png'),
+              ],
+            ),
+            behavior: HitTestBehavior.opaque,
+          );
+        });
+  }
+
   update() {
     // Calculate price before adjustments
-    var windowTotal = 0.0;
+    var windowPriceTotal = 0.0;
+    countTotal = 0.0;
     for (Window window in windowList) {
-      windowTotal += window.getTotal();
+      windowPriceTotal += window.getTotal();
+      countTotal += window.getCount();
     }
 
     // Add Drive time
-    priceTotal = windowTotal + mDRIVETIME;
+    priceTotal = windowPriceTotal + mDRIVETIME;
 
     // Round up to increment of 5, for pricing simplicity
     var temp = priceTotal % 5;
@@ -114,6 +134,7 @@ class _MyHomePage extends State {
                         style: aStyle,
                       ),
               ],
+              count: countTotal,
             ),
 
             // Recently Used Module ---------
@@ -148,8 +169,9 @@ class _MyHomePage extends State {
               fit: FlexFit.tight,
               child: Container(
                 child: WindowCounter(
-                  window: Window(),
+                  window: windowList[0],
                   updater: update,
+                  selector: selectNewWindow,
                 ),
               ),
             ),
@@ -160,10 +182,27 @@ class _MyHomePage extends State {
               child: Card(
                 color: Colors.blue,
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Card(
-                      color: Colors.deepOrangeAccent,
-                      child: Text('1'),
+                      child: IconButton(
+                        icon: Icon(Icons.flag),
+                      ),
+                    ),
+                    Card(
+                      child: IconButton(
+                        icon: Icon(Icons.flag),
+                      ),
+                    ),
+                    Card(
+                      child: IconButton(
+                        icon: Icon(Icons.flag),
+                      ),
+                    ),
+                    Card(
+                      child: IconButton(
+                        icon: Icon(Icons.flag),
+                      ),
                     ),
                   ],
                 ),
