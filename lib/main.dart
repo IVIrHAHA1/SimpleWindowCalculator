@@ -1,4 +1,3 @@
-import 'package:SimpleWindowCalculator/objects/WOManager.dart';
 import 'package:SimpleWindowCalculator/widgets/WindowCounterV2.dart';
 
 import 'widgets/ResultsModule.dart';
@@ -47,50 +46,15 @@ class _MyHomePage extends State {
     windowCounter = WindowCounter(
       window: windowList[0],
       updater: update,
-      selector: selectNewWindow,
+      windowAdded: windowAdded,
     );
   }
 
   format(Duration d) =>
       d.toString().split('.').first.split(':').take(2).join(":");
 
-  void selectNewWindow(BuildContext ctx) {
-    showModalBottomSheet(
-        context: context,
-        builder: (_) {
-          return GridView.count(
-            crossAxisCount: 3,
-            children: WOManager.windows.map((element) {
-              return GestureDetector(
-                child: Card(
-                  child: Column(
-                    children: [
-                      (element.getPicture()),
-                      Text(element.getName()),
-                    ],
-                  ),
-                ),
-                onTap: () {
-                  setState(() {
-                    addWindow(element);
-                  });
-                },
-              );
-            }).toList(),
-          );
-        });
-  }
-
-  addWindow(Window window) {
-    windowCounter = null;
-    // Save current window(if any were counted)
+  windowAdded(Window window) {
     windowList.add(window);
-    // Update Counter to include passed window
-    windowCounter = WindowCounter(
-      window: window,
-      selector: selectNewWindow,
-      updater: update,
-    );
   }
 
   update() {
@@ -171,16 +135,22 @@ class _MyHomePage extends State {
             Container(
               alignment: Alignment.topLeft,
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Recently Used'),
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
-                      children: [
-                        Icon(Icons.explicit),
-                        Icon(Icons.explicit),
-                        Icon(Icons.explicit)
-                      ],
+                      children: windowList.map((e) {
+                        return e.getPicture() != null
+                            ? Container(
+                                child: e.getPicture(),
+                                padding: EdgeInsets.symmetric(horizontal: 1),
+                                height: 50,
+                                width: 50,
+                              )
+                            : Icon(Icons.explicit);
+                      }).toList(),
                     ),
                   )
                 ],

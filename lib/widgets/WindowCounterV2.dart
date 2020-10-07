@@ -1,42 +1,68 @@
 import 'package:flutter/material.dart';
 import '../objects/Window.dart';
+import '../objects/WOManager.dart';
 
 class WindowCounter extends StatefulWidget {
   final Window window;
-  final Function updater, selector;
+  final Function updater, windowAdded;
 
   WindowCounter(
-      {@required this.window, @required this.updater, @required this.selector});
+      {@required this.window,
+      @required this.updater,
+      @required this.windowAdded});
 
   @override
   _WindowCounterState createState() =>
-      _WindowCounterState(window, updater, selector);
+      _WindowCounterState(window, updater, windowAdded);
 }
 
 class _WindowCounterState extends State<WindowCounter> {
-  final Window _window;
-  final Function _updater, _selector;
+  Window _window;
+  final Function _updater, _updateWindowList;
 
-  var _windowCount;
+  Image windowImage;
 
-  _WindowCounterState(this._window, this._updater, this._selector) {
-    _windowCount = _window.getCount();
+  _WindowCounterState(this._window, this._updater, this._updateWindowList) {
+    windowImage = this._window.getPicture();
   }
 
-  incrementCount() {
+  _addNewWindow(Window window) {
+    // Save current window(if any were counted <- do in windowList Updater method)
+    _updateWindowList(window);
+
+    // Update Counter to include passed window
     setState(() {
-      _windowCount += 1.0;
-      _window.setCount(count: _windowCount);
+      this._window = window;
     });
-    _updater();
   }
 
-  decrementCount() {
-    setState(() {
-      _windowCount -= 1.0;
-      _window.setCount(count: _windowCount);
-    });
-    _updater();
+  /*
+   * Modal sheet used to select new window
+   */
+  void selectNewWindow(BuildContext ctx) {
+    showModalBottomSheet(
+      context: context,
+      builder: (_) {
+        return GridView.count(
+          crossAxisCount: 3,
+          children: WOManager.windows.map((element) {
+            return GestureDetector(
+              child: Card(
+                child: Column(
+                  children: [
+                    (element.getPicture()),
+                    Text(element.getName()),
+                  ],
+                ),
+              ),
+              onTap: () {
+                _addNewWindow(element);
+              },
+            );
+          }).toList(),
+        );
+      },
+    );
   }
 
   @override
@@ -53,7 +79,12 @@ class _WindowCounterState extends State<WindowCounter> {
             children: [
               Container(
                 child: GestureDetector(
-                  onTap: decrementCount,
+                  onTap: () {
+                    setState(() {
+                      _window.setCount(count: (_window.getCount() - 1));
+                    });
+                    _updater();
+                  },
                   child: Image.asset(
                     'assets/images/decrement_btn.png',
                     height: screenWidth * .20,
@@ -65,13 +96,20 @@ class _WindowCounterState extends State<WindowCounter> {
                 fit: FlexFit.tight,
                 child: IconButton(
                   iconSize: screenWidth * .3,
-                  onPressed: () => _selector(context),
+                  onPressed: () {
+                    selectNewWindow(context);
+                  },
                   icon: _window.getPicture(),
                 ),
               ),
               Container(
                 child: GestureDetector(
-                  onTap: incrementCount,
+                  onTap: () {
+                    setState(() {
+                      _window.setCount(count: (_window.getCount() + 1));
+                    });
+                    _updater();
+                  },
                   child: Image.asset(
                     'assets/images/increment_btn.png',
                     height: screenWidth * .20,
