@@ -27,13 +27,15 @@ class _WindowCounterState extends State<WindowCounter> {
   }
 
   _addNewWindow(Window window) {
-    // Save current window(if any were counted <- do in windowList Updater method)
-    _updateWindowList(window);
+    // Save current window
+    Window windowExisted = _updateWindowList(window, _window);
 
-    // Update Counter to include passed window
+    // Update Counter to new window
     setState(() {
-      this._window = window;
+      this._window = windowExisted == null ? window : windowExisted;
     });
+
+    Navigator.of(context).pop();
   }
 
   /*
@@ -47,6 +49,7 @@ class _WindowCounterState extends State<WindowCounter> {
           crossAxisCount: 3,
           children: WOManager.windows.map((element) {
             return GestureDetector(
+              behavior: HitTestBehavior.opaque,
               child: Card(
                 child: Column(
                   children: [

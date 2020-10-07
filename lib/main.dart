@@ -46,15 +46,29 @@ class _MyHomePage extends State {
     windowCounter = WindowCounter(
       window: windowList[0],
       updater: update,
-      windowAdded: windowAdded,
+      windowAdded: updateWindowList,
     );
   }
 
   format(Duration d) =>
       d.toString().split('.').first.split(':').take(2).join(":");
 
-  windowAdded(Window window) {
-    windowList.add(window);
+  updateWindowList(Window newWindow, Window oldWindow) {
+    // Removing window with now count
+    if (oldWindow.getCount() == 0) {
+      windowList.remove(oldWindow);
+    }
+
+    // Check if window is already in the list
+    for(int i = 0; i<windowList.length; i++) {
+      // Found window already in list
+      if(windowList[i].getName() == newWindow.getName()) {
+        return windowList[i];
+      }
+    }
+
+    windowList.add(newWindow);
+    return null;
   }
 
   update() {
