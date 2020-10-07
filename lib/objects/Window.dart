@@ -1,16 +1,17 @@
-import 'dart:collection';
-
 import './ConstructionTag.dart';
 import './DifficultyTag.dart';
 import './DirtyTag.dart';
 import './OneSideTag.dart';
 import './Tag.dart';
 
+import 'package:flutter/material.dart';
+
 class Window {
   static const String ONESIDE_TAG = OneSideTag.mName;
   static const String DIRTY_TAG = DirtyTag.mName;
   static const String DIFFICULT_TAG = DifficultyTag.mName;
   static const String CONSTRUCTION_TAG = ConstructionTag.mName;
+  // TODO: add an 'image not found' image
 
   // Default Values
   static const double _mPRICE = 12;
@@ -20,12 +21,13 @@ class Window {
   final double price;
   final String name;
   final Duration duration;
+  final Image image;
 
   double count;
 
   Map<String, Tag> tagList;
 
-  Window({this.price, this.duration, this.name}) {
+  Window({this.price, this.duration, this.name, this.image}) {
     this.count = 0.0;
 
     this.tagList = {
@@ -55,11 +57,16 @@ class Window {
   getTotal() {
     var standardTotal = this.getPrice() * this.getCount();
 
-    tagList.forEach((key, value) {
-      standardTotal += value.getTotal();
-    });
+    // tagList.forEach((key, value) {
+    //   standardTotal += value.getTotal();
+    // });
 
     return standardTotal;
+  }
+
+  getPicture() {
+    return this.image != null ? this.image : Image.asset(
+                    'assets/images/standard_window.png');
   }
 
   /*
@@ -75,6 +82,6 @@ class Window {
   }
 
   getCount() {
-    return count != null ? count : 0.0;
+    return this.count != null ? this.count : 0.0;
   }
 }

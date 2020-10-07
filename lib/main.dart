@@ -1,3 +1,4 @@
+import 'package:SimpleWindowCalculator/objects/WOManager.dart';
 import 'package:SimpleWindowCalculator/widgets/WindowCounterV2.dart';
 
 import 'widgets/ResultsModule.dart';
@@ -37,29 +38,59 @@ class _MyHomePage extends State {
   var timeTotal;
   var countTotal;
 
+  WindowCounter windowCounter;
+
   static const double mDRIVETIME = 25;
   static const double mMIN_PRICE = 150;
+
+  _MyHomePage() {
+    windowCounter = WindowCounter(
+      window: windowList[0],
+      updater: update,
+      selector: selectNewWindow,
+    );
+  }
 
   format(Duration d) =>
       d.toString().split('.').first.split(':').take(2).join(":");
 
-    void selectNewWindow(BuildContext ctx) {
-      print('trying to grab new window');
+  void selectNewWindow(BuildContext ctx) {
     showModalBottomSheet(
         context: context,
         builder: (_) {
-          return GestureDetector(
-            onTap: () {},
-            child: GridView.count(
-              crossAxisCount: 3,
-              children: [
-                Image.asset('assets/images/standard_window.png'),
-                Image.asset('assets/images/french_window.png'),
-              ],
-            ),
-            behavior: HitTestBehavior.opaque,
+          return GridView.count(
+            crossAxisCount: 3,
+            children: WOManager.windows.map((element) {
+              return GestureDetector(
+                child: Card(
+                  child: Column(
+                    children: [
+                      (element.getPicture()),
+                      Text(element.getName()),
+                    ],
+                  ),
+                ),
+                onTap: () {
+                  setState(() {
+                    addWindow(element);
+                  });
+                },
+              );
+            }).toList(),
           );
         });
+  }
+
+  addWindow(Window window) {
+    windowCounter = null;
+    // Save current window(if any were counted)
+    windowList.add(window);
+    // Update Counter to include passed window
+    windowCounter = WindowCounter(
+      window: window,
+      selector: selectNewWindow,
+      updater: update,
+    );
   }
 
   update() {
@@ -85,8 +116,7 @@ class _MyHomePage extends State {
       priceTotal = mMIN_PRICE;
     }
 
-    timeTotal = format(
-        windowList[0].getTotalDuration() + windowList[1].getTotalDuration());
+    timeTotal = format(windowList[0].getTotalDuration());
 
     setState(() {});
   }
@@ -168,11 +198,7 @@ class _MyHomePage extends State {
             Flexible(
               fit: FlexFit.tight,
               child: Container(
-                child: WindowCounter(
-                  window: windowList[0],
-                  updater: update,
-                  selector: selectNewWindow,
-                ),
+                child: windowCounter,
               ),
             ),
 

@@ -66,9 +66,7 @@ class _WindowCounterState extends State<WindowCounter> {
                 child: IconButton(
                   iconSize: screenWidth * .3,
                   onPressed: () => _selector(context),
-                  icon: Image.asset(
-                    'assets/images/standard_window.png',
-                  ),
+                  icon: _window.getPicture(),
                 ),
               ),
               Container(
