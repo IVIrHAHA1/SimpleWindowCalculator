@@ -5,11 +5,13 @@ class WOManager {
   static final List<Window> windows = [
     // Standard Window
     Window(
-      name: 'Standard Window',
+      name: 'Sliding Window',
       duration: Duration(minutes: 10),
       price: 12,
-      image: Image.asset('assets/images/standard_window.png',
-        height: 100,),
+      image: Image.asset(
+        'assets/images/standard_window.png',
+        height: 100,
+      ),
     ),
 
     // French Window
@@ -28,8 +30,10 @@ class WOManager {
       name: 'Casement Window',
       duration: Duration(minutes: 6),
       price: 8,
-      image: Image.asset('assets/images/standard_window.png',
-        height: 100,),
+      image: Image.asset(
+        'assets/images/casement_window.png',
+        height: 100,
+      ),
     ),
 
     // Picture Window
@@ -37,21 +41,29 @@ class WOManager {
       name: 'Picture Window',
       duration: Duration(minutes: 5),
       price: 8,
-      image: Image.asset('assets/images/standard_window.png',
-        height: 100,),
+      image: Image.asset(
+        'assets/images/picture_window.png',
+        height: 100,
+      ),
     ),
 
-    // Louvers
+    // Garden Window
     Window(
-      name: 'Louvers',
-      duration: Duration(minutes: 20),
-      price: 16,
-      image: Image.asset('assets/images/standard_window.png',
-        height: 100,),
+      name: 'Garden Window',
+      duration: Duration(minutes: 5),
+      price: 8,
+      image: Image.asset(
+        'assets/images/garden_window.png',
+        height: 100,
+      ),
     ),
   ];
 
   static getAll() {
     return windows;
+  }
+
+  static Window getDefaultWindow() {
+    return windows[0];
   }
 }

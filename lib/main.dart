@@ -1,3 +1,4 @@
+import 'package:SimpleWindowCalculator/objects/WOManager.dart';
 import 'package:SimpleWindowCalculator/widgets/WindowCounterV2.dart';
 
 import 'widgets/ResultsModule.dart';
@@ -29,9 +30,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePage extends State {
-  final List<Window> windowList = [
-    Window(),
-  ];
+  final List<Window> windowList = List();
 
   var priceTotal;
   var timeTotal;
@@ -43,8 +42,11 @@ class _MyHomePage extends State {
   static const double mMIN_PRICE = 150;
 
   _MyHomePage() {
+    Window defaultWindow = WOManager.getDefaultWindow();
+    windowList.add(defaultWindow);
+
     windowCounter = WindowCounter(
-      window: windowList[0],
+      window: defaultWindow,
       updater: update,
       windowAdded: updateWindowList,
     );
@@ -56,13 +58,15 @@ class _MyHomePage extends State {
   updateWindowList(Window newWindow, Window oldWindow) {
     // Removing window with now count
     if (oldWindow.getCount() == 0) {
-      windowList.remove(oldWindow);
+      setState(() {
+        windowList.remove(oldWindow);
+      });
     }
 
     // Check if window is already in the list
-    for(int i = 0; i<windowList.length; i++) {
+    for (int i = 0; i < windowList.length; i++) {
       // Found window already in list
-      if(windowList[i].getName() == newWindow.getName()) {
+      if (windowList[i].getName() == newWindow.getName()) {
         return windowList[i];
       }
     }
@@ -94,6 +98,7 @@ class _MyHomePage extends State {
       priceTotal = mMIN_PRICE;
     }
 
+    // TODO: imiplement proper job duration updating
     timeTotal = format(windowList[0].getTotalDuration());
 
     setState(() {});

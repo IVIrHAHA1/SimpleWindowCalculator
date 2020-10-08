@@ -46,13 +46,13 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/images/house.png
-    - assets/images/minus_sign.png
-    - assets/images/plus_sign.png
     - assets/images/increment_btn.png
     - assets/images/decrement_btn.png
     - assets/images/french_window.png
     - assets/images/standard_window.png
+    - assets/images/casement_window.png
+    - assets/images/picture_window.png
+    - assets/images/garden_window.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
