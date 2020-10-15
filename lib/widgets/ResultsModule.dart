@@ -4,7 +4,8 @@
 
 import 'package:flutter/material.dart';
 
-class ResultsModule extends StatelessWidget {
+class ResultsModule extends StatefulWidget {
+  // Height is the complete available screen size
   final double height;
   final List<Text> children;
   final double count;
@@ -12,55 +13,78 @@ class ResultsModule extends StatelessWidget {
   ResultsModule({this.height, this.children, this.count});
 
   @override
+  _ResultsModuleState createState() => _ResultsModuleState();
+}
+
+class _ResultsModuleState extends State<ResultsModule> {
+  double _height;
+
+  _updateState() {
+    setState(() {
+      _height = 400;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final double sizeReference = widget.height * .3;
+    this._height = sizeReference;
+
     // Price Circle
     ResultCircle priceCircle = ResultCircle(
-      height: height * .75,
-      textView: children[0],
+      height: sizeReference * .75,
+      textView: widget.children[0],
       label: 'price',
     );
 
     // Time Circle
     ResultCircle timeCircle = ResultCircle(
-      height: height * .65,
-      textView: children[1],
+      height: sizeReference * .65,
+      textView: widget.children[1],
       label: 'time',
     );
 
     return Column(
       children: [
-        Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          elevation: 5,
-          child: Column(
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // Price Result Circle
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                    child: priceCircle,
-                  ),
+        AnimatedContainer(
+          duration: Duration(milliseconds: 400),
+          height: _height + 11,
+          child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            elevation: 5,
+            child: Column(
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Price Result Circle
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                      child: priceCircle,
+                    ),
 
-                  // Approx Time Result Circle
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                    child: timeCircle,
-                  ),
-                ],
-              ),
-              Icon(Icons.expand_more)
-            ],
+                    // Approx Time Result Circle
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                      child: timeCircle,
+                    ),
+                  ],
+                ),
+                IconButton(
+                  icon: Icon(Icons.expand_more),
+                  onPressed: () => _updateState(),
+                )
+              ],
+            ),
           ),
         ),
 
         // Total Count Modulette
         Container(
-          height: height * .35,
+          height: sizeReference * .35,
           child: ListTile(
             leading: Text(
               'Total Window Count',
@@ -75,7 +99,9 @@ class ResultsModule extends StatelessWidget {
                 ),
                 color: Colors.blue,
                 child: Center(
-                  child: count != null ? Text('$count') : Text('0'),
+                  child: widget.count != null
+                      ? Text('${widget.count}')
+                      : Text('0'),
                 ),
               ),
             ),

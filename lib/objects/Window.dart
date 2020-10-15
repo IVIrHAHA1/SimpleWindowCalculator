@@ -57,10 +57,6 @@ class Window {
   getTotal() {
     var standardTotal = this.getPrice() * this.getCount();
 
-    // tagList.forEach((key, value) {
-    //   standardTotal += value.getTotal();
-    // });
-
     return standardTotal;
   }
 

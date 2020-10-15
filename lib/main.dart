@@ -79,29 +79,31 @@ class _MyHomePage extends State {
     // Calculate price before adjustments
     var windowPriceTotal = 0.0;
     countTotal = 0.0;
-    for (Window window in windowList) {
-      windowPriceTotal += window.getTotal();
-      countTotal += window.getCount();
-    }
+    Duration time = Duration();
 
-    // Add Drive time
-    priceTotal = windowPriceTotal + mDRIVETIME;
+    setState(() {
+      for (Window window in windowList) {
+        windowPriceTotal += window.getTotal();
+        countTotal += window.getCount();
+        time += window.getTotalDuration();
+      }
 
-    // Round up to increment of 5, for pricing simplicity
-    var temp = priceTotal % 5;
-    if (temp != 0) {
-      priceTotal += (5 - temp);
-    }
+      // Add Drive time
+      priceTotal = windowPriceTotal + mDRIVETIME;
 
-    // Ensure price is not below minimum
-    if (priceTotal < mMIN_PRICE) {
-      priceTotal = mMIN_PRICE;
-    }
+      // Round up to increment of 5, for pricing simplicity
+      var temp = priceTotal % 5;
+      if (temp != 0) {
+        priceTotal += (5 - temp);
+      }
 
-    // TODO: imiplement proper job duration updating
-    timeTotal = format(windowList[0].getTotalDuration());
+      // Ensure price is not below minimum
+      if (priceTotal < mMIN_PRICE) {
+        priceTotal = mMIN_PRICE;
+      }
 
-    setState(() {});
+      timeTotal = format(time);
+    });
   }
 
   @override
@@ -111,7 +113,7 @@ class _MyHomePage extends State {
     );
 
 // Get available screen space
-    double screenSize = MediaQuery.of(context).size.height -
+    double availableScreen = MediaQuery.of(context).size.height -
         mAppBar.preferredSize.height -
         MediaQuery.of(context).padding.top;
 
@@ -120,13 +122,13 @@ class _MyHomePage extends State {
     return Scaffold(
       appBar: mAppBar,
       body: Container(
-        height: screenSize,
+        height: availableScreen,
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         child: Column(
           children: <Widget>[
             // Results ---------------------
             ResultsModule(
-              height: screenSize * .3,
+              height: availableScreen,
               children: [
                 priceTotal != null
                     ? Text(
@@ -193,7 +195,7 @@ class _MyHomePage extends State {
 
             // Tags Module  -----------------
             Container(
-              height: screenSize * .10,
+              height: availableScreen * .10,
               child: Card(
                 color: Colors.blue,
                 child: Row(
