@@ -138,6 +138,7 @@ class _MyHomePage extends State {
             ResultsModule(
               height: availableScreen,
               hideViews: hideWidgets,
+              windows: windowList,
               children: [
                 priceTotal != null
                     ? Text(

@@ -2,7 +2,9 @@
  * Module displays overall results of vital information
  */
 
+import 'package:SimpleWindowCalculator/widgets/OverviewModule.dart';
 import 'package:flutter/material.dart';
+import 'package:SimpleWindowCalculator/objects/Window.dart';
 
 class ResultsModule extends StatefulWidget {
   // Sets container height of both Card and Total Count Tile
@@ -11,10 +13,11 @@ class ResultsModule extends StatefulWidget {
   // Height is the available screen size (*Because of appBar access)
   final double height;
   final List<Text> children;
+  final List<Window> windows;
   final double count;
   final Function hideViews;
 
-  ResultsModule({this.height, this.children, this.count, this.hideViews});
+  ResultsModule({this.height, this.children, this.count, this.hideViews, this.windows});
 
   @override
   _ResultsModuleState createState() =>
@@ -28,9 +31,12 @@ class _ResultsModuleState extends State<ResultsModule> {
   double dynamicHeight, collapasedHeight;
   IconButton expansionControlBtn;
 
+  bool showItemList;
+
   _ResultsModuleState(this.widgetSize) {
     this.collapasedHeight = widgetSize * cardRatio;
     this.dynamicHeight = this.collapasedHeight;
+    this.showItemList = false;
 
     this.expansionControlBtn = IconButton(
       icon: Icon(Icons.expand_more),
@@ -44,6 +50,7 @@ class _ResultsModuleState extends State<ResultsModule> {
         icon: Icon(Icons.expand_less),
         onPressed: () => _collapseState(),
       );
+      showItemList = true;
       dynamicHeight = widget.height - (widgetSize - collapasedHeight) - 17;
       widget.hideViews(true);
     });
@@ -55,6 +62,7 @@ class _ResultsModuleState extends State<ResultsModule> {
         icon: Icon(Icons.expand_more),
         onPressed: () => _expandState(),
       );
+      showItemList = false;
       widget.hideViews(false);
       dynamicHeight = collapasedHeight;
     });
@@ -105,6 +113,16 @@ class _ResultsModuleState extends State<ResultsModule> {
                     ),
                   ],
                 ),
+
+                // OverviewList
+                Flexible(
+                  fit: FlexFit.loose,
+                  child: Visibility(
+                    visible: showItemList,
+                    child: OverviewModule(windowList: widget.windows,),
+                  ),
+                ),
+
                 Flexible(
                   fit: FlexFit.loose,
                   child: expansionControlBtn,
