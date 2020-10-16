@@ -5,41 +5,73 @@
 import 'package:flutter/material.dart';
 
 class ResultsModule extends StatefulWidget {
-  // Height is the complete available screen size
+  // Sets container height of both Card and Total Count Tile
+  static const double _widgetSizeRatio = .33;
+
+  // Height is the available screen size (*Because of appBar access)
   final double height;
   final List<Text> children;
   final double count;
+  final Function hideViews;
 
-  ResultsModule({this.height, this.children, this.count});
+  ResultsModule({this.height, this.children, this.count, this.hideViews});
 
   @override
-  _ResultsModuleState createState() => _ResultsModuleState();
+  _ResultsModuleState createState() =>
+      _ResultsModuleState(height * _widgetSizeRatio);
 }
 
 class _ResultsModuleState extends State<ResultsModule> {
-  double _height;
+  static const double cardRatio = .75;
 
-  _updateState() {
+  final double widgetSize;
+  double dynamicHeight, collapasedHeight;
+  IconButton expansionControlBtn;
+
+  _ResultsModuleState(this.widgetSize) {
+    this.collapasedHeight = widgetSize * cardRatio;
+    this.dynamicHeight = this.collapasedHeight;
+
+    this.expansionControlBtn = IconButton(
+      icon: Icon(Icons.expand_more),
+      onPressed: () => _expandState(),
+    );
+  }
+
+  _expandState() {
     setState(() {
-      _height = 400;
+      expansionControlBtn = IconButton(
+        icon: Icon(Icons.expand_less),
+        onPressed: () => _collapseState(),
+      );
+      dynamicHeight = widget.height - (widgetSize - collapasedHeight) - 17;
+      widget.hideViews(true);
+    });
+  }
+
+  _collapseState() {
+    setState(() {
+      expansionControlBtn = IconButton(
+        icon: Icon(Icons.expand_more),
+        onPressed: () => _expandState(),
+      );
+      widget.hideViews(false);
+      dynamicHeight = collapasedHeight;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final double sizeReference = widget.height * .3;
-    this._height = sizeReference;
-
     // Price Circle
     ResultCircle priceCircle = ResultCircle(
-      height: sizeReference * .75,
+      height: collapasedHeight * .75,
       textView: widget.children[0],
       label: 'price',
     );
 
     // Time Circle
     ResultCircle timeCircle = ResultCircle(
-      height: sizeReference * .65,
+      height: collapasedHeight * .6,
       textView: widget.children[1],
       label: 'time',
     );
@@ -48,7 +80,7 @@ class _ResultsModuleState extends State<ResultsModule> {
       children: [
         AnimatedContainer(
           duration: Duration(milliseconds: 400),
-          height: _height + 11,
+          height: dynamicHeight,
           child: Card(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
@@ -73,9 +105,9 @@ class _ResultsModuleState extends State<ResultsModule> {
                     ),
                   ],
                 ),
-                IconButton(
-                  icon: Icon(Icons.expand_more),
-                  onPressed: () => _updateState(),
+                Flexible(
+                  fit: FlexFit.loose,
+                  child: expansionControlBtn,
                 )
               ],
             ),
@@ -84,7 +116,7 @@ class _ResultsModuleState extends State<ResultsModule> {
 
         // Total Count Modulette
         Container(
-          height: sizeReference * .35,
+          height: widgetSize - collapasedHeight,
           child: ListTile(
             leading: Text(
               'Total Window Count',

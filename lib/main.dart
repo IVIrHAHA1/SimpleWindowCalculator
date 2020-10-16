@@ -37,11 +37,13 @@ class _MyHomePage extends State {
   var countTotal;
 
   WindowCounter windowCounter;
+  bool viewMods;
 
   static const double mDRIVETIME = 25;
   static const double mMIN_PRICE = 150;
 
   _MyHomePage() {
+    viewMods = true;
     Window defaultWindow = WOManager.getDefaultWindow();
     windowList.add(defaultWindow);
 
@@ -73,6 +75,12 @@ class _MyHomePage extends State {
 
     windowList.add(newWindow);
     return null;
+  }
+
+  hideWidgets(bool hide) {
+    setState(() {
+      viewMods = !hide;
+    });
   }
 
   update() {
@@ -129,6 +137,7 @@ class _MyHomePage extends State {
             // Results ---------------------
             ResultsModule(
               height: availableScreen,
+              hideViews: hideWidgets,
               children: [
                 priceTotal != null
                     ? Text(
@@ -153,75 +162,87 @@ class _MyHomePage extends State {
             ),
 
             // Recently Used Module ---------
-            Container(
-              alignment: Alignment.topLeft,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Recently Used'),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: windowList.map((e) {
-                        return e.getPicture() != null
-                            ? Container(
-                                child: e.getPicture(),
-                                padding: EdgeInsets.symmetric(horizontal: 1),
-                                height: 50,
-                                width: 50,
-                              )
-                            : Icon(Icons.explicit);
-                      }).toList(),
-                    ),
-                  )
-                ],
+            Visibility(
+              visible: viewMods,
+              child: Container(
+                alignment: Alignment.topLeft,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Recently Used'),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: windowList.map((e) {
+                          return e.getPicture() != null
+                              ? Container(
+                                  child: e.getPicture(),
+                                  padding: EdgeInsets.symmetric(horizontal: 1),
+                                  height: 50,
+                                  width: 50,
+                                )
+                              : Icon(Icons.explicit);
+                        }).toList(),
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
 
             // Divider  ---------------------
-            Divider(
-              height: 30,
-              thickness: 3,
-              color: Colors.black54,
+            Visibility(
+              visible: viewMods,
+              child: Divider(
+                height: 30,
+                thickness: 3,
+                color: Colors.black54,
+              ),
             ),
 
             // Counter Module ---------------
             Flexible(
               fit: FlexFit.tight,
-              child: Container(
-                child: windowCounter,
+              child: Visibility(
+                visible: viewMods,
+                child: Container(
+                  child: windowCounter,
+                ),
               ),
             ),
 
             // Tags Module  -----------------
-            Container(
-              height: availableScreen * .10,
-              child: Card(
-                color: Colors.blue,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Card(
-                      child: IconButton(
-                        icon: Icon(Icons.flag),
+            Visibility(
+              visible: viewMods,
+              child: Container(
+                height: availableScreen * .10,
+                child: Card(
+                  color: Colors.blue,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Card(
+                        child: IconButton(
+                          icon: Icon(Icons.flag),
+                        ),
                       ),
-                    ),
-                    Card(
-                      child: IconButton(
-                        icon: Icon(Icons.flag),
+                      Card(
+                        child: IconButton(
+                          icon: Icon(Icons.flag),
+                        ),
                       ),
-                    ),
-                    Card(
-                      child: IconButton(
-                        icon: Icon(Icons.flag),
+                      Card(
+                        child: IconButton(
+                          icon: Icon(Icons.flag),
+                        ),
                       ),
-                    ),
-                    Card(
-                      child: IconButton(
-                        icon: Icon(Icons.flag),
+                      Card(
+                        child: IconButton(
+                          icon: Icon(Icons.flag),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             )
