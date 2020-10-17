@@ -143,45 +143,60 @@ class _MyHomePage extends State {
         appBar: mAppBar,
         body: Container(
           height: availableScreen,
-          padding: const EdgeInsets.fromLTRB(10, 0, 10, 8),
           child: Column(
             children: <Widget>[
               // Results ---------------------
-              ResultsModule(
-                height: availableScreen,
-                hideViews: hideWidgets,
-                windows: windowList,
-                children: [
-                  priceTotal != null
-                      ? Text(
-                          '\$$priceTotal',
-                          style: aStyle,
-                        )
-                      : Text(
-                          '\$0',
-                          style: aStyle,
-                        ),
-                  timeTotal != null
-                      ? Text(
-                          '$timeTotal',
-                          style: aStyle,
-                        )
-                      : Text(
-                          '0:00',
-                          style: aStyle,
-                        ),
-                ],
-                count: countTotal,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: ResultsModule(
+                  height: availableScreen,
+                  hideViews: hideWidgets,
+                  windows: windowList,
+                  children: [
+                    priceTotal != null
+                        ? Text(
+                            '\$$priceTotal',
+                            style: aStyle,
+                          )
+                        : Text(
+                            '\$0',
+                            style: aStyle,
+                          ),
+                    timeTotal != null
+                        ? Text(
+                            '$timeTotal',
+                            style: aStyle,
+                          )
+                        : Text(
+                            '0:00',
+                            style: aStyle,
+                          ),
+                  ],
+                  count: countTotal,
+                ),
               ),
 
-              // Counter Module ---------------
               Flexible(
                 fit: FlexFit.tight,
-                child: Visibility(
-                  visible: viewMods,
-                  child: Container(
-                    child: windowCounter,
+                child: Container(),
+              ),
+              // Counter Module ---------------
+              Visibility(
+                visible: viewMods,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border(
+                      top: BorderSide(
+                        style: BorderStyle.solid,
+                        width: 2,
+                        color: Colors.grey,
+                      ),
+                    ),
                   ),
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 32),
+                  width: double.infinity,
+                  child: windowCounter,
                 ),
               ),
             ],
