@@ -1,4 +1,5 @@
 import 'package:SimpleWindowCalculator/objects/WOManager.dart';
+import 'package:SimpleWindowCalculator/widgets/FactorModule.dart';
 import 'package:SimpleWindowCalculator/widgets/WindowCounterV2.dart';
 
 import 'widgets/ResultsModule.dart';
@@ -180,6 +181,9 @@ class _MyHomePage extends State {
                 fit: FlexFit.tight,
                 child: Container(),
               ),
+
+              FactorModule(),
+
               // Counter Module ---------------
               Visibility(
                 visible: viewMods,

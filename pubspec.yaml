@@ -53,6 +53,10 @@ flutter:
     - assets/images/casement_window.png
     - assets/images/picture_window.png
     - assets/images/garden_window.png
+    - assets/images/construction_factor.png
+    - assets/images/filthy_factor.png
+    - assets/images/hazard_factor.png
+    - assets/images/sided_factor.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
