@@ -46,7 +46,7 @@ class _FactorCircle extends StatelessWidget {
   final Alignment alignment;
   final Widget child;
 
-  static const double iconRatio = 1 / 6;
+  static const double iconRatio = 1/6;
 
   _FactorCircle(
       {@required this.size,

@@ -115,6 +115,17 @@ class _MyHomePage extends State {
     });
   }
 
+ /* 
+  * Method used to convert Hex color codes into usable colors.
+  */
+  Color fromHex(String colorCode) {
+    String colorNew = '0xff' + colorCode;
+    colorNew = colorNew.replaceAll('#', '');
+    int colorInt = int.parse(colorNew);
+
+    return Color(colorInt);
+  }
+
   @override
   Widget build(BuildContext context) {
     AppBar mAppBar = AppBar(
@@ -136,7 +147,7 @@ class _MyHomePage extends State {
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [Colors.blue, Colors.white],
+          colors: [fromHex('#1C85DF'), Colors.white],
         ),
       ),
       child: Scaffold(
