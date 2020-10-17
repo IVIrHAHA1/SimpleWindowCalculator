@@ -102,7 +102,20 @@ class _WindowCounterState extends State<WindowCounter> {
                   onPressed: () {
                     selectNewWindow(context);
                   },
-                  icon: _window.getPicture(),
+                  icon: Card(
+                    borderOnForeground: true,
+                    shape: RoundedRectangleBorder(
+                        side: BorderSide(
+                          color: Colors.grey,
+                          style: BorderStyle.solid,
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(12)),
+                    child: Container(
+                      child: _window.getPicture(),
+                      padding: EdgeInsets.all(8),
+                    ),
+                  ),
                 ),
               ),
               Container(

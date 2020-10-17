@@ -117,7 +117,10 @@ class _MyHomePage extends State {
   @override
   Widget build(BuildContext context) {
     AppBar mAppBar = AppBar(
-      title: Text('Simple Window Calculator'),
+      leading: Icon(Icons.menu),
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      title: Text('The Window Calculator'),
     );
 
 // Get available screen space
@@ -127,127 +130,62 @@ class _MyHomePage extends State {
 
     TextStyle aStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 20);
 
-    return Scaffold(
-      appBar: mAppBar,
-      body: Container(
-        height: availableScreen,
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-        child: Column(
-          children: <Widget>[
-            // Results ---------------------
-            ResultsModule(
-              height: availableScreen,
-              hideViews: hideWidgets,
-              windows: windowList,
-              children: [
-                priceTotal != null
-                    ? Text(
-                        '\$$priceTotal',
-                        style: aStyle,
-                      )
-                    : Text(
-                        '\$0',
-                        style: aStyle,
-                      ),
-                timeTotal != null
-                    ? Text(
-                        '$timeTotal',
-                        style: aStyle,
-                      )
-                    : Text(
-                        '0:00',
-                        style: aStyle,
-                      ),
-              ],
-              count: countTotal,
-            ),
-
-            // Recently Used Module ---------
-            Visibility(
-              visible: viewMods,
-              child: Container(
-                alignment: Alignment.topLeft,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Recently Used'),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: windowList.map((e) {
-                          return e.getPicture() != null
-                              ? Container(
-                                  child: e.getPicture(),
-                                  padding: EdgeInsets.symmetric(horizontal: 1),
-                                  height: 50,
-                                  width: 50,
-                                )
-                              : Icon(Icons.explicit);
-                        }).toList(),
-                      ),
-                    )
-                  ],
-                ),
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Colors.blue, Colors.white],
+        ),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: mAppBar,
+        body: Container(
+          height: availableScreen,
+          padding: const EdgeInsets.fromLTRB(10, 0, 10, 8),
+          child: Column(
+            children: <Widget>[
+              // Results ---------------------
+              ResultsModule(
+                height: availableScreen,
+                hideViews: hideWidgets,
+                windows: windowList,
+                children: [
+                  priceTotal != null
+                      ? Text(
+                          '\$$priceTotal',
+                          style: aStyle,
+                        )
+                      : Text(
+                          '\$0',
+                          style: aStyle,
+                        ),
+                  timeTotal != null
+                      ? Text(
+                          '$timeTotal',
+                          style: aStyle,
+                        )
+                      : Text(
+                          '0:00',
+                          style: aStyle,
+                        ),
+                ],
+                count: countTotal,
               ),
-            ),
 
-            // Divider  ---------------------
-            Visibility(
-              visible: viewMods,
-              child: Divider(
-                height: 30,
-                thickness: 3,
-                color: Colors.black54,
-              ),
-            ),
-
-            // Counter Module ---------------
-            Flexible(
-              fit: FlexFit.tight,
-              child: Visibility(
-                visible: viewMods,
-                child: Container(
-                  child: windowCounter,
-                ),
-              ),
-            ),
-
-            // Tags Module  -----------------
-            Visibility(
-              visible: viewMods,
-              child: Container(
-                height: availableScreen * .10,
-                child: Card(
-                  color: Colors.blue,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Card(
-                        child: IconButton(
-                          icon: Icon(Icons.flag),
-                        ),
-                      ),
-                      Card(
-                        child: IconButton(
-                          icon: Icon(Icons.flag),
-                        ),
-                      ),
-                      Card(
-                        child: IconButton(
-                          icon: Icon(Icons.flag),
-                        ),
-                      ),
-                      Card(
-                        child: IconButton(
-                          icon: Icon(Icons.flag),
-                        ),
-                      ),
-                    ],
+              // Counter Module ---------------
+              Flexible(
+                fit: FlexFit.tight,
+                child: Visibility(
+                  visible: viewMods,
+                  child: Container(
+                    child: windowCounter,
                   ),
                 ),
               ),
-            )
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -17,7 +17,8 @@ class ResultsModule extends StatefulWidget {
   final double count;
   final Function hideViews;
 
-  ResultsModule({this.height, this.children, this.count, this.hideViews, this.windows});
+  ResultsModule(
+      {this.height, this.children, this.count, this.hideViews, this.windows});
 
   @override
   _ResultsModuleState createState() =>
@@ -119,7 +120,9 @@ class _ResultsModuleState extends State<ResultsModule> {
                   fit: FlexFit.loose,
                   child: Visibility(
                     visible: showItemList,
-                    child: OverviewModule(windowList: widget.windows,),
+                    child: OverviewModule(
+                      windowList: widget.windows,
+                    ),
                   ),
                 ),
 
@@ -145,13 +148,18 @@ class _ResultsModuleState extends State<ResultsModule> {
               height: 50,
               child: Card(
                 shape: RoundedRectangleBorder(
+                  side: BorderSide(
+                    width: 2,
+                    style: BorderStyle.solid,
+                    color: Colors.blue,
+                  ),
                   borderRadius: BorderRadius.circular(20),
                 ),
-                color: Colors.blue,
+                color: Colors.white,
                 child: Center(
                   child: widget.count != null
-                      ? Text('${widget.count}')
-                      : Text('0'),
+                      ? Text('${widget.count}', style: TextStyle(fontWeight: FontWeight.bold),)
+                      : Text('0', style: TextStyle(fontWeight: FontWeight.bold),),
                 ),
               ),
             ),
