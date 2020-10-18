@@ -38,12 +38,34 @@ class Window {
     };
   }
 
+  incrementTag(String tagName) {
+    // print('found: ' + (tagList[tagName] != null ? tagList[tagName].getName() : ' element became null'));
+    // tagList.update(tagName, (value) => value.setCount(value.getCount() + 1));
+  }
+
+  decrementTag(String tagName) {
+    tagList.update(tagName, (value) => value.setCount(value.getCount() - 1));
+  }
+
+  clearTag(String tagName) {
+    tagList.update(tagName, (value) => value.setCount(0));
+  }
+
+  getTagCount(String tagName) {
+    return tagList[tagName].getCount();
+  }
+
   getName() {
     return name != null ? name : _mNAME;
   }
 
   getPrice() {
     return price != null ? price : _mPRICE;
+  }
+
+  getTotal() {
+    var standardTotal = this.getPrice() * this.getCount();
+    return standardTotal;
   }
 
   getDuration() {
@@ -54,15 +76,10 @@ class Window {
     return this.getDuration() * count;
   }
 
-  getTotal() {
-    var standardTotal = this.getPrice() * this.getCount();
-
-    return standardTotal;
-  }
-
   getPicture() {
-    return this.image != null ? this.image : Image.asset(
-                    'assets/images/standard_window.png');
+    return this.image != null
+        ? this.image
+        : Image.asset('assets/images/standard_window.png');
   }
 
   /*

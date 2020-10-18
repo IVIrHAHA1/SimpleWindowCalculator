@@ -1,3 +1,4 @@
+import 'package:SimpleWindowCalculator/Tools/HexColors.dart';
 import 'package:SimpleWindowCalculator/objects/WOManager.dart';
 import 'package:SimpleWindowCalculator/widgets/FactorModule.dart';
 import 'package:SimpleWindowCalculator/widgets/WindowCounterV2.dart';
@@ -43,15 +44,18 @@ class _MyHomePage extends State {
   static const double mDRIVETIME = 25;
   static const double mMIN_PRICE = 150;
 
+  Window activeWindow;
+
   _MyHomePage() {
     viewMods = true;
     Window defaultWindow = WOManager.getDefaultWindow();
     windowList.add(defaultWindow);
 
+    activeWindow = defaultWindow;
     windowCounter = WindowCounter(
       window: defaultWindow,
       updater: update,
-      windowAdded: updateWindowList,
+      windowAddedFunction: updateWindowList,
     );
   }
 
@@ -59,23 +63,25 @@ class _MyHomePage extends State {
       d.toString().split('.').first.split(':').take(2).join(":");
 
   updateWindowList(Window newWindow, Window oldWindow) {
-    // Removing window with now count
-    if (oldWindow.getCount() == 0) {
-      setState(() {
+    setState(() {
+      // Removing window with now count
+      if (oldWindow.getCount() == 0) {
         windowList.remove(oldWindow);
-      });
-    }
-
-    // Check if window is already in the list
-    for (int i = 0; i < windowList.length; i++) {
-      // Found window already in list
-      if (windowList[i].getName() == newWindow.getName()) {
-        return windowList[i];
       }
-    }
 
-    windowList.add(newWindow);
-    return null;
+      // Check if window is already in the list
+      for (int i = 0; i < windowList.length; i++) {
+        // Found window already in list
+        if (windowList[i].getName() == newWindow.getName()) {
+          activeWindow = windowList[i];
+          return windowList[i];
+        }
+      }
+
+      activeWindow = newWindow;
+      windowList.add(newWindow);
+      return null;
+    });
   }
 
   hideWidgets(bool hide) {
@@ -115,17 +121,6 @@ class _MyHomePage extends State {
     });
   }
 
- /* 
-  * Method used to convert Hex color codes into usable colors.
-  */
-  Color fromHex(String colorCode) {
-    String colorNew = '0xff' + colorCode;
-    colorNew = colorNew.replaceAll('#', '');
-    int colorInt = int.parse(colorNew);
-
-    return Color(colorInt);
-  }
-
   @override
   Widget build(BuildContext context) {
     AppBar mAppBar = AppBar(
@@ -147,7 +142,7 @@ class _MyHomePage extends State {
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [fromHex('#1C85DF'), Colors.white],
+          colors: [HexColors.fromHex('#1C85DF'), Colors.white],
         ),
       ),
       child: Scaffold(
@@ -193,7 +188,7 @@ class _MyHomePage extends State {
                 child: Container(),
               ),
 
-              FactorModule(),
+              FactorModule(activeWindow),
 
               // Counter Module ---------------
               Visibility(

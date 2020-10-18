@@ -4,16 +4,16 @@ import '../objects/WOManager.dart';
 
 class WindowCounter extends StatefulWidget {
   final Window window;
-  final Function updater, windowAdded;
+  final Function updater, windowAddedFunction;
 
   WindowCounter(
       {@required this.window,
       @required this.updater,
-      @required this.windowAdded});
+      @required this.windowAddedFunction});
 
   @override
   _WindowCounterState createState() =>
-      _WindowCounterState(window, updater, windowAdded);
+      _WindowCounterState(window, updater, windowAddedFunction);
 }
 
 class _WindowCounterState extends State<WindowCounter> {
@@ -76,7 +76,6 @@ class _WindowCounterState extends State<WindowCounter> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('${_window.getCount()}'),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

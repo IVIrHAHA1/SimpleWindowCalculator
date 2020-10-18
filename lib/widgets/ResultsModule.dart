@@ -75,14 +75,12 @@ class _ResultsModuleState extends State<ResultsModule> {
     ResultCircle priceCircle = ResultCircle(
       height: collapasedHeight * .75,
       textView: widget.children[0],
-      label: 'price',
     );
 
     // Time Circle
     ResultCircle timeCircle = ResultCircle(
       height: collapasedHeight * .6,
       textView: widget.children[1],
-      label: 'time',
     );
 
     return Column(
