@@ -1,5 +1,4 @@
 import 'package:SimpleWindowCalculator/Tools/HexColors.dart';
-import 'package:SimpleWindowCalculator/objects/OneSideTag.dart';
 import 'package:SimpleWindowCalculator/objects/Window.dart';
 import 'package:flutter/material.dart';
 
@@ -42,12 +41,9 @@ class FactorModule extends StatelessWidget {
           child: Image.asset('assets/images/construction_factor.png'),
           backgroundColor: HexColors.fromHex('#FFB9B9'),
         ),
-        GestureDetector(
-          onTap: () => print('hello'),
-          child: _FactorCircle(
-            size: _size * _sizeRatio,
-            child: Image.asset('assets/images/sided_factor.png'),
-          ),
+        _FactorCircle(
+          size: _size * _sizeRatio,
+          child: Image.asset('assets/images/sided_factor.png'),
         ),
       ],
     );
