@@ -10,7 +10,6 @@ class WOManager {
       price: 12,
       image: Image.asset(
         'assets/images/standard_window.png',
-        height: 100,
       ),
     ),
 
@@ -21,7 +20,6 @@ class WOManager {
       price: 16,
       image: Image.asset(
         'assets/images/french_window.png',
-        height: 100,
       ),
     ),
 
@@ -32,7 +30,6 @@ class WOManager {
       price: 8,
       image: Image.asset(
         'assets/images/casement_window.png',
-        height: 100,
       ),
     ),
 
@@ -43,7 +40,6 @@ class WOManager {
       price: 8,
       image: Image.asset(
         'assets/images/picture_window.png',
-        height: 100,
       ),
     ),
 
@@ -54,7 +50,6 @@ class WOManager {
       price: 8,
       image: Image.asset(
         'assets/images/garden_window.png',
-        height: 100,
       ),
     ),
   ];

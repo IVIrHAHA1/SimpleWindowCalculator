@@ -1,3 +1,4 @@
+import 'package:SimpleWindowCalculator/Tools/Format.dart';
 import 'package:SimpleWindowCalculator/Tools/HexColors.dart';
 import 'package:SimpleWindowCalculator/objects/Window.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,7 @@ class FactorModule extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double _size = 75;
+    double _size = 50;
     const double _sizeRatio = 3 / 4;
 
     return Row(
@@ -32,7 +33,10 @@ class FactorModule extends StatelessWidget {
         // Window specific counter
         _FactorCircle(
           size: _size,
-          child: Text('${activeWindow.getCount()}'),
+          child: Text(
+            '${Format.format(activeWindow.getCount())}',
+            style: Theme.of(context).textTheme.headline5,
+          ),
         ),
 
         _FactorCircle(
@@ -78,7 +82,7 @@ class __FactorCircleState extends State<_FactorCircle> {
       shape: CircleBorder(
         side: BorderSide(
           color: Colors.blueGrey,
-          width: 3,
+          width: 2,
           style: BorderStyle.solid,
         ),
       ),

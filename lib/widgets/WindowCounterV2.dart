@@ -95,7 +95,7 @@ class _WindowCounterState extends State<WindowCounter> {
                 ),
               ),
               Flexible(
-                fit: FlexFit.tight,
+                fit: FlexFit.loose,
                 child: IconButton(
                   iconSize: screenWidth * .3,
                   onPressed: () {
@@ -112,7 +112,7 @@ class _WindowCounterState extends State<WindowCounter> {
                         borderRadius: BorderRadius.circular(12)),
                     child: Container(
                       child: _window.getPicture(),
-                      padding: EdgeInsets.all(8),
+                      padding: EdgeInsets.all(4),
                     ),
                   ),
                 ),
@@ -134,7 +134,7 @@ class _WindowCounterState extends State<WindowCounter> {
               ),
             ],
           ),
-          Text(_window.getName()),
+          Text(_window.getName(), style: Theme.of(context).textTheme.bodyText1),
         ],
       ),
     );

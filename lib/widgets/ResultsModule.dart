@@ -2,13 +2,14 @@
  * Module displays overall results of vital information
  */
 
+import 'package:SimpleWindowCalculator/Tools/Format.dart';
 import 'package:SimpleWindowCalculator/widgets/OverviewModule.dart';
 import 'package:flutter/material.dart';
 import 'package:SimpleWindowCalculator/objects/Window.dart';
 
 class ResultsModule extends StatefulWidget {
   // Sets container height of both Card and Total Count Tile
-  static const double _widgetSizeRatio = .33;
+  static const double _widgetSizeRatio = .4;
 
   // Height is the available screen size (*Because of appBar access)
   final double height;
@@ -156,8 +157,14 @@ class _ResultsModuleState extends State<ResultsModule> {
                 color: Colors.white,
                 child: Center(
                   child: widget.count != null
-                      ? Text('${widget.count}', style: TextStyle(fontWeight: FontWeight.bold),)
-                      : Text('0', style: TextStyle(fontWeight: FontWeight.bold),),
+                      ? Text(
+                          '${Format.format(widget.count)}',
+                          style: Theme.of(context).textTheme.headline5,
+                        )
+                      : Text(
+                          '0',
+                          style: Theme.of(context).textTheme.headline5,
+                        ),
                 ),
               ),
             ),

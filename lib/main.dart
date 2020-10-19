@@ -3,6 +3,7 @@ import 'package:SimpleWindowCalculator/objects/WOManager.dart';
 import 'package:SimpleWindowCalculator/widgets/FactorModule.dart';
 import 'package:SimpleWindowCalculator/widgets/WindowCounterV2.dart';
 
+import 'Tools/Format.dart';
 import 'widgets/ResultsModule.dart';
 import './objects/Window.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,21 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
+        fontFamily: 'OpenSans',
+        textTheme: ThemeData.light().textTheme.copyWith(
+              headline6: TextStyle(
+                fontFamily: 'OpenSans',
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+              headline5: TextStyle(
+                fontFamily: 'Lato',
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+              bodyText1: TextStyle(fontFamily: 'OpenSans', fontWeight: FontWeight.normal),
+            ),
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
@@ -135,7 +151,7 @@ class _MyHomePage extends State {
         mAppBar.preferredSize.height -
         MediaQuery.of(context).padding.top;
 
-    TextStyle aStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 20);
+    TextStyle aStyle = Theme.of(context).textTheme.headline5;
 
     return Container(
       decoration: BoxDecoration(
@@ -162,7 +178,7 @@ class _MyHomePage extends State {
                   children: [
                     priceTotal != null
                         ? Text(
-                            '\$$priceTotal',
+                            '\$${Format.format(priceTotal)}',
                             style: aStyle,
                           )
                         : Text(
@@ -193,20 +209,27 @@ class _MyHomePage extends State {
               // Counter Module ---------------
               Visibility(
                 visible: viewMods,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border(
-                      top: BorderSide(
-                        style: BorderStyle.solid,
-                        width: 2,
-                        color: Colors.grey,
+                child: GestureDetector(
+                  onPanUpdate: (details) {
+                    if (details.delta.dx > 0) {
+                      print('swiped right');
+                    }
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border(
+                        top: BorderSide(
+                          style: BorderStyle.solid,
+                          width: 2,
+                          color: Colors.grey,
+                        ),
                       ),
                     ),
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 32),
+                    width: double.infinity,
+                    child: windowCounter,
                   ),
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 32),
-                  width: double.infinity,
-                  child: windowCounter,
                 ),
               ),
             ],
