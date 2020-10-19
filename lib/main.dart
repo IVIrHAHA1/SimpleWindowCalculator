@@ -32,7 +32,8 @@ class MyApp extends StatelessWidget {
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
-              bodyText1: TextStyle(fontFamily: 'OpenSans', fontWeight: FontWeight.normal),
+              bodyText1: TextStyle(
+                  fontFamily: 'OpenSans', fontWeight: FontWeight.normal),
             ),
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -204,7 +205,10 @@ class _MyHomePage extends State {
                 child: Container(),
               ),
 
-              FactorModule(activeWindow),
+              Visibility(
+                visible: viewMods,
+                child: FactorModule(activeWindow),
+              ),
 
               // Counter Module ---------------
               Visibility(

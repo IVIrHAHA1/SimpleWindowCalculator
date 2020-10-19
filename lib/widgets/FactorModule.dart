@@ -11,7 +11,7 @@ class FactorModule extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double _size = 50;
+    double _size = MediaQuery.of(context).size.width / 6;
     const double _sizeRatio = 3 / 4;
 
     return Row(
