@@ -3,6 +3,7 @@
  */
 
 import 'package:SimpleWindowCalculator/Tools/Format.dart';
+import 'package:SimpleWindowCalculator/Tools/HexColors.dart';
 import 'package:SimpleWindowCalculator/widgets/OverviewModule.dart';
 import 'package:flutter/material.dart';
 import 'package:SimpleWindowCalculator/objects/Window.dart';
@@ -13,6 +14,7 @@ class ResultsModule extends StatefulWidget {
 
   // Height is the available screen size (*Because of appBar access)
   final double height;
+
   final List<Text> children;
   final List<Window> windows;
   final double count;
@@ -41,7 +43,9 @@ class _ResultsModuleState extends State<ResultsModule> {
     this.showItemList = false;
 
     this.expansionControlBtn = IconButton(
-      icon: Icon(Icons.expand_more),
+      icon: Icon(
+        Icons.expand_more
+      ),
       onPressed: () => _expandState(),
     );
   }
@@ -74,13 +78,13 @@ class _ResultsModuleState extends State<ResultsModule> {
   Widget build(BuildContext context) {
     // Price Circle
     ResultCircle priceCircle = ResultCircle(
-      height: collapasedHeight * .75,
+      height: (collapasedHeight * .8),
       textView: widget.children[0],
     );
 
     // Time Circle
     ResultCircle timeCircle = ResultCircle(
-      height: collapasedHeight * .6,
+      height: (collapasedHeight * .6),
       textView: widget.children[1],
     );
 
@@ -94,42 +98,40 @@ class _ResultsModuleState extends State<ResultsModule> {
               borderRadius: BorderRadius.circular(20),
             ),
             elevation: 5,
-            child: Column(
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // Price Result Circle
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                      child: priceCircle,
-                    ),
+            child: Container(
+              height: collapasedHeight,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // Price Result Circle
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                        child: priceCircle,
+                      ),
 
-                    // Approx Time Result Circle
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                      child: timeCircle,
-                    ),
-                  ],
-                ),
-
-                // OverviewList
-                Flexible(
-                  fit: FlexFit.loose,
-                  child: Visibility(
-                    visible: showItemList,
-                    child: OverviewModule(
-                      windowList: widget.windows,
-                    ),
+                      // Approx Time Result Circle
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                        child: timeCircle,
+                      ),
+                    ],
                   ),
-                ),
 
-                Flexible(
-                  fit: FlexFit.loose,
-                  child: expansionControlBtn,
-                )
-              ],
+                  // // OverviewList
+                  // Flexible(
+                  //   fit: FlexFit.tight,
+                  //   child: Visibility(
+                  //     visible: showItemList,
+                  //     child: OverviewModule(
+                  //       windowList: widget.windows,
+                  //     ),
+                  //   ),
+                  // ),
+                ],
+              ),
             ),
           ),
         ),
@@ -177,47 +179,27 @@ class _ResultsModuleState extends State<ResultsModule> {
 
 class ResultCircle extends StatelessWidget {
   final double height;
-  final String label;
   final Text textView;
 
-  ResultCircle({this.height, this.label, this.textView});
+  ResultCircle({this.height, this.textView});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: height,
-      child: Column(
-        children: [
-          // Circle
-          Card(
-            borderOnForeground: true,
-            shape: CircleBorder(
-              side: BorderSide(
-                color: Colors.blue,
-                style: BorderStyle.solid,
-                width: 3,
-              ),
-            ),
-            child: Container(
-              height: (height * .8) - 8,
-              width: (height * .8) - 8,
-              child: Center(
-                child: textView,
-              ),
-            ),
+      width: height,
+      child: Card(
+        elevation: 2,
+        shape: CircleBorder(
+          side: BorderSide(
+            color: Colors.blue,
+            style: BorderStyle.solid,
+            width: 2,
           ),
-
-          // Label
-          (label != null)
-              ? Container(
-                  height: height * .2,
-                  child: Text(
-                    label,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                  ),
-                )
-              : Container(),
-        ],
+        ),
+        child: Center(
+          child: textView,
+        ),
       ),
     );
   }
