@@ -32,45 +32,30 @@ class _ResultsModuleState extends State<ResultsModule> {
   static const double cardRatio = .75;
 
   final double widgetSize;
-  double dynamicHeight, collapasedHeight;
+  double dynamicHeight, collapsedHeight;
   IconButton expansionControlBtn;
 
-  bool showItemList;
+  bool expanded;
 
   _ResultsModuleState(this.widgetSize) {
-    this.collapasedHeight = widgetSize * cardRatio;
-    this.dynamicHeight = this.collapasedHeight;
-    this.showItemList = false;
-
-    this.expansionControlBtn = IconButton(
-      icon: Icon(
-        Icons.expand_more
-      ),
-      onPressed: () => _expandState(),
-    );
+    this.collapsedHeight = widgetSize * cardRatio;
+    this.dynamicHeight = this.collapsedHeight;
+    this.expanded = false;
   }
 
   _expandState() {
     setState(() {
-      expansionControlBtn = IconButton(
-        icon: Icon(Icons.expand_less),
-        onPressed: () => _collapseState(),
-      );
-      showItemList = true;
-      dynamicHeight = widget.height - (widgetSize - collapasedHeight) - 17;
+      expanded = true;
+      dynamicHeight = widget.height - (widgetSize - collapsedHeight) - 17;
       widget.hideViews(true);
     });
   }
 
   _collapseState() {
     setState(() {
-      expansionControlBtn = IconButton(
-        icon: Icon(Icons.expand_more),
-        onPressed: () => _expandState(),
-      );
-      showItemList = false;
+      expanded = false;
       widget.hideViews(false);
-      dynamicHeight = collapasedHeight;
+      dynamicHeight = collapsedHeight;
     });
   }
 
@@ -78,13 +63,13 @@ class _ResultsModuleState extends State<ResultsModule> {
   Widget build(BuildContext context) {
     // Price Circle
     ResultCircle priceCircle = ResultCircle(
-      height: (collapasedHeight * .8),
+      height: (collapsedHeight * .8),
       textView: widget.children[0],
     );
 
     // Time Circle
     ResultCircle timeCircle = ResultCircle(
-      height: (collapasedHeight * .6),
+      height: (collapsedHeight * .6),
       textView: widget.children[1],
     );
 
@@ -98,39 +83,42 @@ class _ResultsModuleState extends State<ResultsModule> {
               borderRadius: BorderRadius.circular(20),
             ),
             elevation: 5,
-            child: Container(
-              height: collapasedHeight,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // Price Result Circle
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                        child: priceCircle,
-                      ),
+            child: GestureDetector(
+              onTap: expanded ? _collapseState : _expandState,
+              child: Container(
+                height: collapsedHeight,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // Price Result Circle
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                          child: priceCircle,
+                        ),
 
-                      // Approx Time Result Circle
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                        child: timeCircle,
-                      ),
-                    ],
-                  ),
+                        // Approx Time Result Circle
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                          child: timeCircle,
+                        ),
+                      ],
+                    ),
 
-                  // // OverviewList
-                  // Flexible(
-                  //   fit: FlexFit.tight,
-                  //   child: Visibility(
-                  //     visible: showItemList,
-                  //     child: OverviewModule(
-                  //       windowList: widget.windows,
-                  //     ),
-                  //   ),
-                  // ),
-                ],
+                    // OverviewList
+                    Flexible(
+                      fit: FlexFit.loose,
+                      child: Visibility(
+                        visible: expanded,
+                        child: OverviewModule(
+                          windowList: widget.windows,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -138,7 +126,7 @@ class _ResultsModuleState extends State<ResultsModule> {
 
         // Total Count Modulette
         Container(
-          height: widgetSize - collapasedHeight,
+          height: widgetSize - collapsedHeight,
           child: ListTile(
             leading: Text(
               'Total Window Count',
