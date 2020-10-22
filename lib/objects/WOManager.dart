@@ -7,7 +7,7 @@ class WOManager {
     Window(
       name: 'Sliding Window',
       duration: Duration(minutes: 10),
-      price: 12,
+      price: 12.50,
       image: Image.asset(
         'assets/images/standard_window.png',
       ),

@@ -4,11 +4,13 @@ class WindowPallet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue,
+      backgroundColor: Colors.white,
       body: Container(
-        color: Colors.white,
+        color: Colors.blue,
         width: MediaQuery.of(context).size.width / 2,
+        child: Text('hello there gorgous!'),
       ),
+      resizeToAvoidBottomPadding: false,
     );
   }
 }

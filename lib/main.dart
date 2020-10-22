@@ -3,6 +3,7 @@ import 'package:SimpleWindowCalculator/objects/WOManager.dart';
 import 'package:SimpleWindowCalculator/widgets/FactorModule.dart';
 import 'package:SimpleWindowCalculator/widgets/WindowCounterV2.dart';
 import 'package:SimpleWindowCalculator/widgets/WindowPallet.dart';
+import 'package:SimpleWindowCalculator/widgets/WindowPallet_pu.dart';
 
 import 'Tools/Format.dart';
 import 'widgets/ResultsModule.dart';
@@ -109,9 +110,16 @@ class _MyHomePage extends State {
   }
 
   showPallet() {
-    Navigator.of(context).push(MaterialPageRoute(builder:(_) {
-      return WindowPallet();
-    }));
+    Navigator.push(
+      context,
+      WindowPalletPU(
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: MediaQuery.of(context).size.width/2,
+        child: WindowPallet(),
+      ),
+    );
   }
 
   update() {
