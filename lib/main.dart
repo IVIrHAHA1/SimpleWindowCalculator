@@ -2,6 +2,7 @@ import 'package:SimpleWindowCalculator/Tools/HexColors.dart';
 import 'package:SimpleWindowCalculator/objects/WOManager.dart';
 import 'package:SimpleWindowCalculator/widgets/FactorModule.dart';
 import 'package:SimpleWindowCalculator/widgets/WindowCounterV2.dart';
+import 'package:SimpleWindowCalculator/widgets/WindowPallet.dart';
 
 import 'Tools/Format.dart';
 import 'widgets/ResultsModule.dart';
@@ -105,6 +106,12 @@ class _MyHomePage extends State {
     setState(() {
       viewMods = !hide;
     });
+  }
+
+  showPallet() {
+    Navigator.of(context).push(MaterialPageRoute(builder:(_) {
+      return WindowPallet();
+    }));
   }
 
   update() {
@@ -216,7 +223,7 @@ class _MyHomePage extends State {
                 child: GestureDetector(
                   onPanUpdate: (details) {
                     if (details.delta.dx > 0) {
-                      print('swiped right');
+                      showPallet();
                     }
                   },
                   child: Container(
