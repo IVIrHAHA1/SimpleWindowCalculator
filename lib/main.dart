@@ -117,7 +117,7 @@ class _MyHomePage extends State {
         bottom: 0,
         left: 0,
         right: MediaQuery.of(context).size.width/2,
-        child: WindowPallet(),
+        child: WindowPallet(windowList),
       ),
     );
   }
