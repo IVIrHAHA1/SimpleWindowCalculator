@@ -1,6 +1,7 @@
-import 'package:SimpleWindowCalculator/Tools/Format.dart';
-import 'package:SimpleWindowCalculator/Tools/HexColors.dart';
-import 'package:SimpleWindowCalculator/objects/Window.dart';
+import '../Tools/Format.dart';
+import '../Tools/HexColors.dart';
+import '../objects/OneSideTag.dart';
+import '../objects/Window.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
@@ -45,9 +46,14 @@ class FactorModule extends StatelessWidget {
           child: Image.asset('assets/images/construction_factor.png'),
           backgroundColor: HexColors.fromHex('#FFB9B9'),
         ),
-        _FactorCircle(
-          size: _size * _sizeRatio,
-          child: Image.asset('assets/images/sided_factor.png'),
+        InkWell(
+          onTap: () {
+            activeWindow.incrementTag(OneSideTag.mName);
+          },
+          child: _FactorCircle(
+            size: _size * _sizeRatio,
+            child: Image.asset('assets/images/sided_factor.png'),
+          ),
         ),
       ],
     );

@@ -5,7 +5,7 @@ class WOManager {
   static final List<Window> windows = [
     // Standard Window
     Window(
-      name: 'Sliding Window',
+      name: 'Sliding',
       duration: Duration(minutes: 10),
       price: 12.50,
       image: Image.asset(
@@ -15,7 +15,7 @@ class WOManager {
 
     // French Window
     Window(
-      name: 'French Window',
+      name: 'French',
       duration: Duration(minutes: 15),
       price: 16,
       image: Image.asset(
@@ -25,7 +25,7 @@ class WOManager {
 
     // Casement Window
     Window(
-      name: 'Casement Window',
+      name: 'Casement',
       duration: Duration(minutes: 6),
       price: 8,
       image: Image.asset(
@@ -35,7 +35,7 @@ class WOManager {
 
     // Picture Window
     Window(
-      name: 'Picture Window',
+      name: 'Picture',
       duration: Duration(minutes: 5),
       price: 8,
       image: Image.asset(
@@ -45,9 +45,9 @@ class WOManager {
 
     // Garden Window
     Window(
-      name: 'Garden Window',
-      duration: Duration(minutes: 5),
-      price: 8,
+      name: 'Garden',
+      duration: Duration(minutes: 20),
+      price: 20,
       image: Image.asset(
         'assets/images/garden_window.png',
       ),

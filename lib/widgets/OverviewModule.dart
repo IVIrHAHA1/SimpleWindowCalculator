@@ -1,4 +1,5 @@
-import 'package:SimpleWindowCalculator/objects/Window.dart';
+import '../Tools/Format.dart';
+import '../objects/Window.dart';
 import 'package:flutter/material.dart';
 
 class OverviewModule extends StatelessWidget {
@@ -36,8 +37,15 @@ class WindowCard extends StatelessWidget {
               // Tile Header
               Row(
                 children: [
-                  Text('${window.getName()}',
-                      style: Theme.of(context).textTheme.headline6),
+                  Text(
+                    '${window.getName()}',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontFamily: 'OpenSans',
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                   Flexible(fit: FlexFit.tight, child: Container()),
                   Container(
                     width: 75,
@@ -47,7 +55,7 @@ class WindowCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(20),
                       ),
                       color: Colors.blue,
-                      child: Center(child: Text('${window.getCount()}')),
+                      child: Center(child: Text('${Format.format(window.getCount())}')),
                     ),
                   ),
                 ],

@@ -39,16 +39,15 @@ class Window {
   }
 
   incrementTag(String tagName) {
-    // print('found: ' + (tagList[tagName] != null ? tagList[tagName].getName() : ' element became null'));
-    // tagList.update(tagName, (value) => value.setCount(value.getCount() + 1));
+    tagList[tagName].setCount(tagList[tagName].getCount() + 1);
   }
 
   decrementTag(String tagName) {
-    tagList.update(tagName, (value) => value.setCount(value.getCount() - 1));
+    tagList[tagName].setCount(tagList[tagName].getCount() - 1);
   }
 
   clearTag(String tagName) {
-    tagList.update(tagName, (value) => value.setCount(0));
+    tagList[tagName].setCount(0);
   }
 
   getTagCount(String tagName) {
@@ -64,7 +63,7 @@ class Window {
   }
 
   getTotal() {
-    var standardTotal = this.getPrice() * this.getCount();
+    var standardTotal = (this.getPrice() * this.getCount());  // TODO: Add factor multipliers
     return standardTotal;
   }
 
