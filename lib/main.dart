@@ -1,7 +1,7 @@
 import 'package:SimpleWindowCalculator/Tools/HexColors.dart';
 import 'package:SimpleWindowCalculator/objects/WOManager.dart';
 import 'package:SimpleWindowCalculator/widgets/FactorModule.dart';
-import 'package:SimpleWindowCalculator/widgets/WindowCounterV2.dart';
+import 'package:SimpleWindowCalculator/widgets/WindowCounter.dart';
 import 'package:SimpleWindowCalculator/widgets/WindowPallet.dart';
 import 'package:SimpleWindowCalculator/widgets/WindowPallet_pu.dart';
 

@@ -53,7 +53,10 @@ class _WindowCounterState extends State<WindowCounter> {
               child: Card(
                 child: Column(
                   children: [
-                    (element.getPicture()),
+                    Container(
+                      child: element.getPicture(),
+                      width: MediaQuery.of(ctx).size.width / 4,
+                    ),
                     Text(element.getName()),
                   ],
                 ),
