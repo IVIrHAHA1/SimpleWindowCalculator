@@ -47,22 +47,30 @@ class FactorModule extends StatelessWidget {
           child: Image.asset('assets/images/construction_factor.png'),
           backgroundColor: HexColors.fromHex('#FFB9B9'),
         ),
-        InkWell(
-          onTap: () {
-            incQA
-                ? activeWindow.incrementTag(OneSideTag.mName)
-                : activeWindow.decrementTag(OneSideTag.mName);
-          },
-          onLongPress: () {
-            print('switching modes');
-            incQA ? incQA = false : incQA = true;
-          },
-          child: _FactorCircle(
-            size: _size * _sizeRatio,
-            child: Image.asset('assets/images/sided_factor.png'),
+        
+        Draggable(
+          feedback: buildFactorCircle(_size, _sizeRatio * .75),
+          child: InkWell(
+            onTap: () {
+              incQA
+                  ? activeWindow.incrementTag(OneSideTag.mName)
+                  : activeWindow.decrementTag(OneSideTag.mName);
+            },
+            onLongPress: () {
+              print('switching modes');
+              incQA ? incQA = false : incQA = true;
+            },
+            child: buildFactorCircle(_size, _sizeRatio),
           ),
         ),
       ],
+    );
+  }
+
+  _FactorCircle buildFactorCircle(double _size, double _sizeRatio) {
+    return _FactorCircle(
+      size: _size * _sizeRatio,
+      child: Image.asset('assets/images/sided_factor.png'),
     );
   }
 }

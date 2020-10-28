@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../objects/Window.dart';
-import '../objects/WOManager.dart';
+import '../objects/OManager.dart';
 
 class WindowCounter extends StatefulWidget {
   final Window window;
