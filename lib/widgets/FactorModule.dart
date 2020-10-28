@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 // ignore: must_be_immutable
 class FactorModule extends StatelessWidget {
   Window activeWindow;
+  bool incQA = true;
 
   FactorModule(this.activeWindow);
 
@@ -48,7 +49,13 @@ class FactorModule extends StatelessWidget {
         ),
         InkWell(
           onTap: () {
-            activeWindow.incrementTag(OneSideTag.mName);
+            incQA
+                ? activeWindow.incrementTag(OneSideTag.mName)
+                : activeWindow.decrementTag(OneSideTag.mName);
+          },
+          onLongPress: () {
+            print('switching modes');
+            incQA ? incQA = false : incQA = true;
           },
           child: _FactorCircle(
             size: _size * _sizeRatio,

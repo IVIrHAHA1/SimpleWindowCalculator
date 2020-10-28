@@ -40,10 +40,20 @@ class Window {
 
   incrementTag(String tagName) {
     tagList[tagName].setCount(tagList[tagName].getCount() + 1);
+    print(name +
+        ' now has ' +
+        '${tagList[tagName].getCount()} ' +
+        tagList[tagName].getName() +
+        ' factors');
   }
 
   decrementTag(String tagName) {
     tagList[tagName].setCount(tagList[tagName].getCount() - 1);
+        print(name +
+        ' now has ' +
+        '${tagList[tagName].getCount()} ' +
+        tagList[tagName].getName() +
+        ' factors');
   }
 
   clearTag(String tagName) {
@@ -62,8 +72,14 @@ class Window {
     return price != null ? price : _mPRICE;
   }
 
+  // TODO: In the interest of performance look into making an update() method.
+  // Currently, when getTotal is called the process is fairly extensive. 
+  // Therefore, if there is a way to determine the total without having to
+  // iterate through each tag, the performance of the app will improve. 
+
   getTotal() {
-    var standardTotal = (this.getPrice() * this.getCount());  // TODO: Add factor multipliers
+    var standardTotal =
+        (this.getPrice() * this.getCount());
     return standardTotal;
   }
 

@@ -3,6 +3,7 @@ abstract class Tag {
   final double priceMultiplier;
   final Duration duration;
 
+  bool active = false;
   double count;
   final double windowPrice;
 
@@ -29,4 +30,8 @@ abstract class Tag {
   setCount(double count) {
     this.count = count;
   }
+
+  enable(bool activate) => active = activate;
+
+  bool isActive() {return this.active;}
 }
