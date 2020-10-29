@@ -47,7 +47,7 @@ class _WindowCounterState extends State<WindowCounter> {
       builder: (_) {
         return GridView.count(
           crossAxisCount: 3,
-          children: WOManager.windows.map((element) {
+          children: OManager.windows.map((element) {
             return GestureDetector(
               behavior: HitTestBehavior.opaque,
               child: Card(

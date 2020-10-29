@@ -1,6 +1,7 @@
+import '../objects/Factor.dart';
+
 import '../Tools/Format.dart';
 import '../Tools/HexColors.dart';
-import '../objects/OneSideTag.dart';
 import '../objects/Window.dart';
 import 'package:flutter/material.dart';
 
@@ -22,20 +23,20 @@ class FactorModule extends StatelessWidget {
       children: [
         _FactorCircle(
           size: _size * _sizeRatio,
-          child: Image.asset('assets/images/filthy_factor.png'),
+          image: Image.asset('assets/images/filthy_factor.png'),
           backgroundColor: HexColors.fromHex('#DCA065'),
         ),
         _FactorCircle(
           size: _size * _sizeRatio,
           alignment: Alignment.topCenter,
-          child: Image.asset('assets/images/hazard_factor.png'),
+          image: Image.asset('assets/images/hazard_factor.png'),
           backgroundColor: HexColors.fromHex('#FFEDA5'),
         ),
 
         // Window specific counter
         _FactorCircle(
           size: _size,
-          child: Text(
+          image: Text(
             '${Format.format(activeWindow.getCount())}',
             style: Theme.of(context).textTheme.headline5,
           ),
@@ -44,10 +45,10 @@ class FactorModule extends StatelessWidget {
         _FactorCircle(
           size: _size * _sizeRatio,
           alignment: Alignment.topCenter,
-          child: Image.asset('assets/images/construction_factor.png'),
+          image: Image.asset('assets/images/construction_factor.png'),
           backgroundColor: HexColors.fromHex('#FFB9B9'),
         ),
-        
+
         Draggable(
           feedback: buildFactorCircle(_size, _sizeRatio * .75),
           child: InkWell(
@@ -67,39 +68,36 @@ class FactorModule extends StatelessWidget {
     );
   }
 
-  _FactorCircle buildFactorCircle(double _size, double _sizeRatio) {
+  _FactorCircle buildFactorCircle(double size, Factor factor) {
     return _FactorCircle(
-      size: _size * _sizeRatio,
-      child: Image.asset('assets/images/sided_factor.png'),
+      size: size,
+      image: factor.getImage(),
     );
   }
 }
 
-class _FactorCircle extends StatefulWidget {
+// creates factor aesthetics
+class _FactorCircle extends StatelessWidget {
   final double size;
   final Color backgroundColor;
   final Alignment alignment;
-  final Widget child;
+  final Widget image;
+  final Factor factor;
 
   static const double iconRatio = 1 / 6;
 
-  _FactorCircle(
-      {@required this.size,
-      @required this.child,
-      this.backgroundColor,
-      this.alignment});
+  _FactorCircle({
+    @required this.size,
+    @required this.image,
+    this.backgroundColor,
+    this.alignment,
+    this.factor,
+  });
 
-  @override
-  __FactorCircleState createState() => __FactorCircleState();
-}
-
-class __FactorCircleState extends State<_FactorCircle> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: widget.backgroundColor == null
-          ? Colors.white
-          : widget.backgroundColor,
+      color: backgroundColor == null ? Colors.white : backgroundColor,
       shape: CircleBorder(
         side: BorderSide(
           color: Colors.blueGrey,
@@ -108,12 +106,11 @@ class __FactorCircleState extends State<_FactorCircle> {
         ),
       ),
       child: Container(
-        height: widget.size,
-        width: widget.size,
-        padding: EdgeInsets.all(widget.size * _FactorCircle.iconRatio),
-        alignment:
-            widget.alignment == null ? Alignment.center : widget.alignment,
-        child: this.widget.child,
+        height: size,
+        width: size,
+        padding: EdgeInsets.all(size * _FactorCircle.iconRatio),
+        alignment: alignment == null ? Alignment.center : alignment,
+        child: this.image,
       ),
     );
   }

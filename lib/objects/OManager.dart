@@ -1,7 +1,9 @@
+import '../objects/Factor.dart';
+
 import 'Window.dart';
 import 'package:flutter/material.dart';
 
-class WOManager {
+class OManager {
   static final List<Window> windows = [
     // Standard Window
     Window(
@@ -61,4 +63,49 @@ class WOManager {
   static Window getDefaultWindow() {
     return windows[0];
   }
+
+  getFactorInstance(Factors type) {
+    return factorList[type].copy();
+  }
+
+  static final Map<Factors, Factor> factorList = {
+    // construction clean up
+    Factors.construction: Factor(
+      name: 'Construction Clean Up',
+      priceMultiplier: 2.0,
+      durationMultiplier: 2.0,
+      image: Image.asset('assets/images/construction_factor.png'),
+    ),
+
+    // one side being cleaned
+    Factors.sided: Factor(
+      name: 'Sided',
+      priceMultiplier: .6,
+      durationMultiplier: .6,
+      image: Image.asset('assets/images/sided_factor.png'),
+    ),
+
+    // difficult to clean
+    Factors.difficult: Factor(
+      name: 'Difficult',
+      priceMultiplier: 1.5,
+      durationMultiplier: 2.0,
+      image: Image.asset('assets/images/hazard_factor.png'),
+    ),
+
+    // filthy
+    Factors.filthy: Factor(
+      name: 'Filthy',
+      priceMultiplier: 1.5,
+      durationMultiplier: 2.0,
+      image: Image.asset('assets/images/filthy_factor.png'),
+    ),
+  };
+}
+
+enum Factors {
+  construction,
+  sided,
+  difficult,
+  filthy,
 }
