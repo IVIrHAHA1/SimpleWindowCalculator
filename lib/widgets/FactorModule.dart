@@ -23,16 +23,23 @@ class FactorModule extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.end,
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        _FactorCircle(
-          size: _size * _sizeRatio,
-          image: Image.asset('assets/images/filthy_factor.png'),
-          backgroundColor: HexColors.fromHex('#DCA065'),
+        buildFactor(
+          factorKey: Factors.filthy,
+          circle: _FactorCircle(
+            size: _size * _sizeRatio,
+            image: OManager.factorList[Factors.filthy].getImage(),
+            backgroundColor: HexColors.fromHex('#DCA065'),
+          ),
         ),
-        _FactorCircle(
-          size: _size * _sizeRatio,
-          alignment: Alignment.topCenter,
-          image: Image.asset('assets/images/hazard_factor.png'),
-          backgroundColor: HexColors.fromHex('#FFEDA5'),
+
+        buildFactor(
+          factorKey: Factors.difficult,
+          circle: _FactorCircle(
+            size: _size * _sizeRatio,
+            alignment: Alignment.topCenter,
+            image: OManager.factorList[Factors.difficult].getImage(),
+            backgroundColor: HexColors.fromHex('#FFEDA5'),
+          ),
         ),
 
         // Window specific counter
@@ -44,29 +51,36 @@ class FactorModule extends StatelessWidget {
           ),
         ),
 
-        _FactorCircle(
-          size: _size * _sizeRatio,
-          alignment: Alignment.topCenter,
-          image: Image.asset('assets/images/construction_factor.png'),
-          backgroundColor: HexColors.fromHex('#FFB9B9'),
+        buildFactor(
+          factorKey: Factors.construction,
+          circle: _FactorCircle(
+            size: _size * _sizeRatio,
+            alignment: Alignment.topCenter,
+            image: OManager.factorList[Factors.construction].getImage(),
+            backgroundColor: HexColors.fromHex('#FFB9B9'),
+          ),
         ),
 
         buildFactor(
-          size: _size * _sizeRatio,
           factorKey: Factors.sided,
+          circle: _FactorCircle(
+            size: _size * _sizeRatio,
+            image: OManager.factorList[Factors.sided].getImage(),
+          ),
         ),
       ],
     );
   }
 
-  Draggable buildFactor(
-      {@required double size,
-      @required Factors factorKey}) {
+  Draggable buildFactor({
+    @required Factors factorKey,
+    @required _FactorCircle circle,
+  }) {
+    Factor factor = activeWindow.getFactor(factorKey);
+
     return Draggable(
-      feedback: buildFactorCircle(
-        size: size * .75,
-        factor: OManager.factorList[factorKey],
-      ),
+      data: factor,
+      feedback: circle.resize(.75),
       child: InkWell(
         onTap: () {
           incQA
@@ -77,18 +91,8 @@ class FactorModule extends StatelessWidget {
           print('switching modes');
           incQA ? incQA = false : incQA = true;
         },
-        child: buildFactorCircle(
-          size: size,
-          factor: OManager.factorList[factorKey],
-        ),
+        child: circle,
       ),
-    );
-  }
-
-  _FactorCircle buildFactorCircle({double size, Factor factor}) {
-    return _FactorCircle(
-      size: size,
-      image: factor.getImage(),
     );
   }
 }
@@ -99,7 +103,6 @@ class _FactorCircle extends StatelessWidget {
   final Color backgroundColor;
   final Alignment alignment;
   final Widget image;
-  final Factor factor;
 
   static const double iconRatio = 1 / 6;
 
@@ -108,8 +111,16 @@ class _FactorCircle extends StatelessWidget {
     @required this.image,
     this.backgroundColor,
     this.alignment,
-    this.factor,
   });
+
+  _FactorCircle resize(double altSizeRatio) {
+    return _FactorCircle(
+      size: size * altSizeRatio,
+      image: image,
+      alignment: alignment,
+      backgroundColor: backgroundColor,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {

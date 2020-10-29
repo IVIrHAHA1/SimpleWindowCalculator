@@ -52,6 +52,7 @@ class Factor {
       name: name,
       priceMultiplier: priceMultiplier,
       durationMultiplier: durationMultiplier,
+      image: image
     );
   }
 }
