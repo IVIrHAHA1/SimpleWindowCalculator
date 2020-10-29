@@ -9,6 +9,8 @@ class Factor {
 
   bool active = false;
 
+  double count;
+
   Factor(
       {@required this.name,
       @required this.priceMultiplier,
@@ -31,10 +33,18 @@ class Factor {
     return image == null ? Icons.not_interested : image;
   }
 
-  enable(bool activate) => active = activate;
+  void enable(bool activate) => active = activate;
 
   bool isActive() {
     return this.active;
+  }
+
+  void setCount(double count) {
+    this.count = count;
+  }
+
+  double getCount() {
+    return this.count != null ? count : 0;
   }
 
   Factor copy() {

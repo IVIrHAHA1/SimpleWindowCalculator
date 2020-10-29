@@ -1,4 +1,5 @@
-import 'Factor.dart';
+import '../objects/Factor.dart';
+import '../objects/OManager.dart';
 
 import 'package:flutter/material.dart';
 
@@ -17,39 +18,45 @@ class Window {
 
   double count;
 
-  Map<Factor, double> tagList;
+  Map<Factors, Factor> tagList = Map();
 
   Window({this.price, this.duration, this.name, this.image}) {
     this.count = 0.0;
+    _initFactors();
   }
 
-  incrementTag(Factor factor) {
-    tagList.containsKey(factor)
-        ? tagList.update(factor, (value) => value + 1)
-        : tagList.putIfAbsent(factor, () => 1);
-        
+  _initFactors() {
+    for(Factors value in Factors.values) {
+      addFactor(value);
+    }
+  }
+
+  incrementTag(Factors factor) {
+    tagList[factor].setCount(tagList[factor].getCount() + 1);
+
     print(name +
         ' now has ' +
-        '${tagList[factor]} ' +
-        factor.getName() +
+        '${tagList[factor].getCount()} ' +
+        tagList[factor].getName() +
         ' factors');
   }
 
-  // TODO: Logic for negative count
-  decrementTag(Factor factor) {
-    tagList.containsKey(factor)
-        ? tagList.update(factor, (value) => value - 1)
-        : tagList.putIfAbsent(factor, () => 0);
-        
+  decrementTag(Factors factor) {
+     tagList[factor].setCount(tagList[factor].getCount() - 1);
+
     print(name +
         ' now has ' +
-        '${tagList[factor]} ' +
-        factor.getName() +
+        '${tagList[factor].getCount()} ' +
+        tagList[factor].getName() +
         ' factors');
   }
 
-  getTagCount(Factor factor) {
-    return tagList[factor];
+  addFactor(Factors factorKey) {
+    tagList.putIfAbsent(factorKey, () => OManager.getFactorInstance(factorKey));
+  }
+
+  getFactor(Factors factorKey) {
+    return tagList[factorKey];
   }
 
   getName() {

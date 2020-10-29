@@ -1,3 +1,5 @@
+import 'package:SimpleWindowCalculator/objects/OManager.dart';
+
 import '../objects/Factor.dart';
 
 import '../Tools/Format.dart';
@@ -50,25 +52,31 @@ class FactorModule extends StatelessWidget {
         ),
 
         Draggable(
-          feedback: buildFactorCircle(_size, _sizeRatio * .75),
+          feedback: buildFactorCircle(
+            size: _size * _sizeRatio * .75,
+            factor: OManager.factorList[Factors.sided],
+          ),
           child: InkWell(
             onTap: () {
               incQA
-                  ? activeWindow.incrementTag(OneSideTag.mName)
-                  : activeWindow.decrementTag(OneSideTag.mName);
+                  ? activeWindow.incrementTag(Factors.sided)
+                  : activeWindow.decrementTag(Factors.sided);
             },
             onLongPress: () {
               print('switching modes');
               incQA ? incQA = false : incQA = true;
             },
-            child: buildFactorCircle(_size, _sizeRatio),
+            child: buildFactorCircle(
+              size: _size * _sizeRatio,
+              factor: OManager.factorList[Factors.sided],
+            ),
           ),
         ),
       ],
     );
   }
 
-  _FactorCircle buildFactorCircle(double size, Factor factor) {
+  _FactorCircle buildFactorCircle({double size, Factor factor}) {
     return _FactorCircle(
       size: size,
       image: factor.getImage(),

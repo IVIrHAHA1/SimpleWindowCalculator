@@ -64,7 +64,7 @@ class OManager {
     return windows[0];
   }
 
-  getFactorInstance(Factors type) {
+  static getFactorInstance(Factors type) {
     return factorList[type].copy();
   }
 

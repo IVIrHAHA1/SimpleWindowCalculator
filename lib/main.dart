@@ -67,7 +67,7 @@ class _MyHomePage extends State {
 
   _MyHomePage() {
     viewMods = true;
-    Window defaultWindow = WOManager.getDefaultWindow();
+    Window defaultWindow = OManager.getDefaultWindow();
     windowList.add(defaultWindow);
 
     activeWindow = defaultWindow;
