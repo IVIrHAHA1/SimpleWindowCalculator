@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 // ignore: must_be_immutable
 class FactorModule extends StatelessWidget {
   Window activeWindow;
-  bool incQA = true;
+  bool modeOnIncrement = true;
 
   FactorModule(this.activeWindow);
 
@@ -23,6 +23,7 @@ class FactorModule extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.end,
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
+        // Filthy Factor
         buildFactor(
           factorKey: Factors.filthy,
           circle: _FactorCircle(
@@ -32,6 +33,7 @@ class FactorModule extends StatelessWidget {
           ),
         ),
 
+        // Difficult Factor
         buildFactor(
           factorKey: Factors.difficult,
           circle: _FactorCircle(
@@ -51,6 +53,7 @@ class FactorModule extends StatelessWidget {
           ),
         ),
 
+        // Construction Factor
         buildFactor(
           factorKey: Factors.construction,
           circle: _FactorCircle(
@@ -61,6 +64,7 @@ class FactorModule extends StatelessWidget {
           ),
         ),
 
+        // Sided Factor
         buildFactor(
           factorKey: Factors.sided,
           circle: _FactorCircle(
@@ -85,13 +89,13 @@ class FactorModule extends StatelessWidget {
       childWhenDragging: circle.passify(),
       child: InkWell(
         onTap: () {
-          incQA
+          modeOnIncrement
               ? activeWindow.incrementTag(factorKey)
               : activeWindow.decrementTag(factorKey);
         },
         onLongPress: () {
           print('switching modes');
-          incQA ? incQA = false : incQA = true;
+          modeOnIncrement ? modeOnIncrement = false : modeOnIncrement = true;
         },
         child: circle,
       ),
@@ -99,12 +103,13 @@ class FactorModule extends StatelessWidget {
   }
 }
 
-// creates factor aesthetics
 class _FactorCircle extends StatelessWidget {
   final double size;
-  final Color backgroundColor;
+  final Color backgroundColor, borderColor;
   final Alignment alignment;
   final Widget image;
+
+  final bool activated;
 
   static const double iconRatio = 1 / 6;
 
@@ -113,6 +118,8 @@ class _FactorCircle extends StatelessWidget {
     @required this.image,
     this.backgroundColor,
     this.alignment,
+    this.borderColor,
+    this.activated = false,
   });
 
   _FactorCircle resize(double altSizeRatio) {
@@ -125,38 +132,56 @@ class _FactorCircle extends StatelessWidget {
   }
 
   passify() {
-    return ColorFiltered(
-      colorFilter: ColorFilter.mode(
-        Colors.grey,
-        BlendMode.saturation,
-      ),
-      child: _FactorCircle(
-        size: size,
-        image: image,
-        alignment: alignment,
-        backgroundColor: backgroundColor,
-      ),
+    return _FactorCircle(
+      size: size,
+      image: image,
+      alignment: alignment,
+      backgroundColor: backgroundColor,
+      borderColor: Colors.blueGrey,
+      activated: true,
     );
+  }
+
+  Color factorCircleBKG() {
+    if (activated) {
+      return Colors.grey;
+    } else {
+      return backgroundColor == null ? Colors.white : backgroundColor;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: backgroundColor == null ? Colors.white : backgroundColor,
+      color: factorCircleBKG(),
       shape: CircleBorder(
         side: BorderSide(
-          color: Theme.of(context).primaryColor,
+          color: borderColor == null
+              ? Theme.of(context).primaryColor
+              : borderColor,
           width: 2,
           style: BorderStyle.solid,
         ),
       ),
-      child: Container(
-        height: size,
-        width: size,
-        padding: EdgeInsets.all(size * _FactorCircle.iconRatio),
-        alignment: alignment == null ? Alignment.center : alignment,
-        child: this.image,
-      ),
+      child: activated
+          ? ColorFiltered(
+              colorFilter: ColorFilter.mode(
+                Colors.grey,
+                BlendMode.saturation,
+              ),
+              child: buildIMGContainer(),
+            )
+          : buildIMGContainer(),
+    );
+  }
+
+  Container buildIMGContainer() {
+    return Container(
+      height: size,
+      width: size,
+      padding: EdgeInsets.all(size * _FactorCircle.iconRatio),
+      alignment: alignment == null ? Alignment.center : alignment,
+      child: this.image,
     );
   }
 }

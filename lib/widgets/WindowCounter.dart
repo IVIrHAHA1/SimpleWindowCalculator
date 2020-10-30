@@ -163,28 +163,3 @@ class _WindowCounterState extends State<WindowCounter> {
     );
   }
 }
-
-//  DragTarget<Factor>(
-//                       onWillAccept: (data) => true,
-//                       onAccept: (data) {
-//                         print('excepted: ' + data.getName());
-//                       },
-//                       onLeave: (data) {
-//                         if (data == null) {
-//                           print('data was null');
-//                         } else
-//                           print('data is idk');
-//                       },
-//                       builder: (context, candidates, rejects) {
-//                         return candidates.length > 0
-//                             ? Container(
-//                                 color: Colors.purple,
-//                                 child: _window.getPicture(),
-//                                 padding: EdgeInsets.all(4),
-//                               )
-//                             : Container(
-//                                 child: _window.getPicture(),
-//                                 padding: EdgeInsets.all(4),
-//                               );
-//                       },
-//                     ),
