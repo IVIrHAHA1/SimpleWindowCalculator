@@ -82,6 +82,7 @@ class FactorModule extends StatelessWidget {
     return Draggable<Factor>(
       data: factor,
       feedback: circle.resize(1.1),
+      childWhenDragging: circle.passify(),
       child: InkWell(
         onTap: () {
           incQA
@@ -123,13 +124,28 @@ class _FactorCircle extends StatelessWidget {
     );
   }
 
+  passify() {
+    return ColorFiltered(
+      colorFilter: ColorFilter.mode(
+        Colors.grey,
+        BlendMode.saturation,
+      ),
+      child: _FactorCircle(
+        size: size,
+        image: image,
+        alignment: alignment,
+        backgroundColor: backgroundColor,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
       color: backgroundColor == null ? Colors.white : backgroundColor,
       shape: CircleBorder(
         side: BorderSide(
-          color: Colors.blueGrey,
+          color: Theme.of(context).primaryColor,
           width: 2,
           style: BorderStyle.solid,
         ),

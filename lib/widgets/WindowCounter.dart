@@ -98,32 +98,29 @@ class _WindowCounterState extends State<WindowCounter> {
                   ),
                 ),
               ),
-              Flexible(
-                fit: FlexFit.loose,
-                child: DragTarget<Factor>(
-                  onWillAccept: (data) => data != null,
-                  onAccept: (data) {
+              DragTarget<Factor>(
+                onWillAccept: (data) => data != null,
+                onAccept: (data) {
 
-                    print('accepted: ' + data.getName());
-                  },
-                  builder: (ctx, candidates, rejects) {
-                    return candidates.length > 0
-                        ? IconButton(
-                            iconSize: screenWidth * .3,
-                            onPressed: () {
-                              selectNewWindow(context);
-                            },
-                            icon: buildCard(Theme.of(context).primaryColor),
-                          )
-                        : IconButton(
-                            iconSize: screenWidth * .3,
-                            onPressed: () {
-                              selectNewWindow(context);
-                            },
-                            icon: buildCard(Colors.white),
-                          );
-                  },
-                ),
+                  print('accepted: ' + data.getName());
+                },
+                builder: (ctx, candidates, rejects) {
+                  return candidates.length > 0
+                      ? IconButton(
+                          iconSize: screenWidth * .3,
+                          onPressed: () {
+                            selectNewWindow(context);
+                          },
+                          icon: buildCard(Theme.of(context).primaryColor),
+                        )
+                      : IconButton(
+                          iconSize: screenWidth * .3,
+                          onPressed: () {
+                            selectNewWindow(context);
+                          },
+                          icon: buildCard(Colors.white),
+                        );
+                },
               ),
               Container(
                 child: GestureDetector(
