@@ -72,15 +72,16 @@ class FactorModule extends StatelessWidget {
     );
   }
 
+  // Implements behaviour
   Draggable buildFactor({
     @required Factors factorKey,
     @required _FactorCircle circle,
   }) {
     Factor factor = activeWindow.getFactor(factorKey);
 
-    return Draggable(
+    return Draggable<Factor>(
       data: factor,
-      feedback: circle.resize(.75),
+      feedback: circle.resize(1.1),
       child: InkWell(
         onTap: () {
           incQA

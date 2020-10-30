@@ -1,3 +1,4 @@
+import '../objects/Factor.dart';
 import 'package:flutter/material.dart';
 import '../objects/Window.dart';
 import '../objects/OManager.dart';
@@ -99,25 +100,29 @@ class _WindowCounterState extends State<WindowCounter> {
               ),
               Flexible(
                 fit: FlexFit.loose,
-                child: IconButton(
-                  iconSize: screenWidth * .3,
-                  onPressed: () {
-                    selectNewWindow(context);
+                child: DragTarget<Factor>(
+                  onWillAccept: (data) => data != null,
+                  onAccept: (data) {
+
+                    print('accepted: ' + data.getName());
                   },
-                  icon: Card(
-                    borderOnForeground: true,
-                    shape: RoundedRectangleBorder(
-                        side: BorderSide(
-                          color: Colors.grey,
-                          style: BorderStyle.solid,
-                          width: 1,
-                        ),
-                        borderRadius: BorderRadius.circular(12)),
-                    child: Container(
-                      child: _window.getPicture(),
-                      padding: EdgeInsets.all(4),
-                    ),
-                  ),
+                  builder: (ctx, candidates, rejects) {
+                    return candidates.length > 0
+                        ? IconButton(
+                            iconSize: screenWidth * .3,
+                            onPressed: () {
+                              selectNewWindow(context);
+                            },
+                            icon: buildCard(Theme.of(context).primaryColor),
+                          )
+                        : IconButton(
+                            iconSize: screenWidth * .3,
+                            onPressed: () {
+                              selectNewWindow(context);
+                            },
+                            icon: buildCard(Colors.white),
+                          );
+                  },
                 ),
               ),
               Container(
@@ -142,4 +147,47 @@ class _WindowCounterState extends State<WindowCounter> {
       ),
     );
   }
+
+  Card buildCard(Color color) {
+    return Card(
+      borderOnForeground: true,
+      shape: RoundedRectangleBorder(
+          side: BorderSide(
+            color: Colors.grey,
+            style: BorderStyle.solid,
+            width: 1,
+          ),
+          borderRadius: BorderRadius.circular(12)),
+      child: Container(
+        color: color,
+        child: _window.getPicture(),
+        padding: EdgeInsets.all(4),
+      ),
+    );
+  }
 }
+
+//  DragTarget<Factor>(
+//                       onWillAccept: (data) => true,
+//                       onAccept: (data) {
+//                         print('excepted: ' + data.getName());
+//                       },
+//                       onLeave: (data) {
+//                         if (data == null) {
+//                           print('data was null');
+//                         } else
+//                           print('data is idk');
+//                       },
+//                       builder: (context, candidates, rejects) {
+//                         return candidates.length > 0
+//                             ? Container(
+//                                 color: Colors.purple,
+//                                 child: _window.getPicture(),
+//                                 padding: EdgeInsets.all(4),
+//                               )
+//                             : Container(
+//                                 child: _window.getPicture(),
+//                                 padding: EdgeInsets.all(4),
+//                               );
+//                       },
+//                     ),
