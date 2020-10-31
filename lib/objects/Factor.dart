@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Factor {
+  final factorKey;
   final String name;
   final double priceMultiplier;
   final double durationMultiplier;
@@ -12,7 +13,8 @@ class Factor {
   double count;
 
   Factor(
-      {@required this.name,
+      {@required this.factorKey,
+      @required this.name,
       @required this.priceMultiplier,
       @required this.durationMultiplier,
       this.image});
@@ -47,12 +49,16 @@ class Factor {
     return this.count != null ? count : 0;
   }
 
+  getKey() {
+    return factorKey;
+  }
+
   Factor copy() {
     return new Factor(
-      name: name,
-      priceMultiplier: priceMultiplier,
-      durationMultiplier: durationMultiplier,
-      image: image
-    );
+        factorKey: factorKey,
+        name: name,
+        priceMultiplier: priceMultiplier,
+        durationMultiplier: durationMultiplier,
+        image: image);
   }
 }

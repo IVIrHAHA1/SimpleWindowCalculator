@@ -1,3 +1,5 @@
+import 'package:SimpleWindowCalculator/widgets/FactorCoin.dart';
+
 import '../objects/Factor.dart';
 import 'package:flutter/material.dart';
 import '../objects/Window.dart';
@@ -98,11 +100,10 @@ class _WindowCounterState extends State<WindowCounter> {
                   ),
                 ),
               ),
-              DragTarget<Factor>(
-                onWillAccept: (data) => data != null,
-                onAccept: (data) {
-
-                  print('accepted: ' + data.getName());
+              DragTarget<FactorCoin>(
+                onWillAccept: (coin) => coin != null,
+                onAccept: (coin) {
+                  coin.disable(coin);
                 },
                 builder: (ctx, candidates, rejects) {
                   return candidates.length > 0

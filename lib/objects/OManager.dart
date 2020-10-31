@@ -71,6 +71,7 @@ class OManager {
   static final Map<Factors, Factor> factorList = {
     // construction clean up
     Factors.construction: Factor(
+      factorKey: Factors.construction,
       name: 'Construction Clean Up',
       priceMultiplier: 2.0,
       durationMultiplier: 2.0,
@@ -79,6 +80,7 @@ class OManager {
 
     // one side being cleaned
     Factors.sided: Factor(
+      factorKey: Factors.sided,
       name: 'Sided',
       priceMultiplier: .6,
       durationMultiplier: .6,
@@ -87,6 +89,7 @@ class OManager {
 
     // difficult to clean
     Factors.difficult: Factor(
+      factorKey: Factors.difficult,
       name: 'Difficult',
       priceMultiplier: 1.5,
       durationMultiplier: 2.0,
@@ -95,6 +98,7 @@ class OManager {
 
     // filthy
     Factors.filthy: Factor(
+      factorKey: Factors.filthy,
       name: 'Filthy',
       priceMultiplier: 1.5,
       durationMultiplier: 2.0,

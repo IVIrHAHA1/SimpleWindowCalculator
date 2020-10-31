@@ -81,12 +81,10 @@ class FactorModule extends StatelessWidget {
     @required Factors factorKey,
     @required FactorCoin circle,
   }) {
-    Factor factor = activeWindow.getFactor(factorKey);
-
-    return Draggable<Factor>(
-      data: factor,
-      feedback: circle.resize(1.1),
-      childWhenDragging: circle.passify(),
+    return Draggable<FactorCoin>(
+      data: circle,
+      feedback: circle.draggingCoin(1.1),
+      childWhenDragging: circle.stasisCoin(),
       child: InkWell(
         onTap: () {
           modeOnIncrement
@@ -94,7 +92,7 @@ class FactorModule extends StatelessWidget {
               : activeWindow.decrementTag(factorKey);
         },
         onLongPress: () {
-          print('switching modes');
+          circle.changeMode();
           modeOnIncrement ? modeOnIncrement = false : modeOnIncrement = true;
         },
         child: circle,
