@@ -1,21 +1,23 @@
-import '../objects/Factor.dart';
+import '../objects/OManager.dart';
+import '../objects/Window.dart';
 import 'package:flutter/material.dart';
 
 class FactorCoin extends StatefulWidget {
   final double size;
   final Color backgroundColor;
   final Alignment alignment;
-  final Factor factor;
-  final Widget child;
+  final Factors factorKey;
+  final Widget child; // TODO: Remove when redesign occurs
+  final Window window;
 
   final bool activated;
-  _FactorCoinState instance;
 
   static const double iconRatio = 1 / 6;
 
   FactorCoin({
     @required this.size,
-    @required this.factor,
+    this.factorKey,
+    this.window,
     this.child,
     this.backgroundColor = Colors.white,
     this.alignment = Alignment.center,
@@ -25,51 +27,45 @@ class FactorCoin extends StatefulWidget {
   /*
    * Method used as childWhenDragging (Draggable)
    */
-  FactorCoin stasisCoin() {
-    return FactorCoin(
-      size: size,
-      factor: factor,
-      alignment: alignment,
-      backgroundColor: backgroundColor,
-      activated: true,
+  stasisCoin() {
+    return Container(
+      child: FactorCoin(
+        size: size,
+        factorKey: factorKey,
+        window: window,
+        alignment: alignment,
+        backgroundColor: backgroundColor,
+        activated: true,
+      ),
     );
   }
 
   /*
    * Method used as feedback (Draggable)
    */
-  FactorCoin draggingCoin(double altSizeRatio) {
-    return FactorCoin(
-      size: size * altSizeRatio,
-      factor: factor,
-      alignment: alignment,
-      backgroundColor: backgroundColor,
+  draggingCoin(double altSizeRatio) {
+    return Container(
+      child: FactorCoin(
+        size: size * altSizeRatio,
+        factorKey: factorKey,
+        alignment: alignment,
+        window: window,
+        backgroundColor: backgroundColor,
+      ),
     );
-  }
-
-  FactorCoin disable(FactorCoin coin) {
-    coin.instance.disable();
-    return coin;
-  }
-
-  enable() {
-    instance.enable();
-  }
-
-  changeMode() {
-    instance.changeMode();
   }
 
   @override
   _FactorCoinState createState() {
-    instance = _FactorCoinState(activated);
-    return instance;
+    return _FactorCoinState(activated);
   }
 }
 
-/*
+/*  STATE !!!
+ *  --------------------------------------------------------------------
  *  FactorCoin, stateful widget because the border changes color
  *  indicated to the user whether they are incrmenting or decrementing. 
+ *  --------------------------------------------------------------------
  */
 class _FactorCoinState extends State<FactorCoin> {
   bool disabled = false;
@@ -77,17 +73,11 @@ class _FactorCoinState extends State<FactorCoin> {
 
   _FactorCoinState(this.disabled);
 
-  disable() {
-    setState(() {
-      disabled = true;
-    });
-  }
-
-  enable() {
-    setState(() {
-      disabled = false;
-    });
-  }
+  // amend(Factors key, Function function) {
+  //   setState(() {
+  //     disabled ? disabled = false : disabled = true;
+  //   });
+  // }
 
   changeMode() {
     setState(() {
@@ -97,8 +87,30 @@ class _FactorCoinState extends State<FactorCoin> {
 
   @override
   Widget build(BuildContext context) {
+    return Draggable<Factors>(
+      data: widget.factorKey,
+      feedback: mintCoin(context, false, widget.size * 1.1),
+      childWhenDragging: mintCoin(context, true, widget.size),
+      child: InkWell(
+        onTap: () {
+          modeIncrement
+              ? widget.window.incrementTag(widget.factorKey)
+              : widget.window.decrementTag(widget.factorKey);
+        },
+        onLongPress: () {
+          changeMode();
+        },
+        child: mintCoin(context, disabled, widget.size),
+      ),
+    );
+  }
+
+  /*
+   *  Builds the coin aesthetics 
+   */
+  Card mintCoin(BuildContext context, bool greyed, double coinSize) {
     return Card(
-      color: disabled ? Colors.grey : widget.backgroundColor,
+      color: greyed ? Colors.grey : widget.backgroundColor,
       shape: CircleBorder(
         side: BorderSide(
           color: styleBorder(context),
@@ -106,44 +118,47 @@ class _FactorCoinState extends State<FactorCoin> {
           style: BorderStyle.solid,
         ),
       ),
-      child: disabled
+      child: greyed
           ? ColorFiltered(
               colorFilter: ColorFilter.mode(
                 Colors.grey,
                 BlendMode.saturation,
               ),
-              child: _buildIMGContainer(),
+              child: _buildIMGContainer(coinSize),
             )
-          : _buildIMGContainer(),
+          : _buildIMGContainer(coinSize),
     );
-  }
-
-  /*
-   * Used for immutable circles
-   */
-  Color styleBorder(BuildContext ctx) {
-    if (widget.factor == null) {
-      return Theme.of(ctx).primaryColor;
-    } else {
-      return disabled
-          ? Colors.grey
-          : (modeIncrement ? Colors.green : Colors.red);
-    }
   }
 
   /*
    *  Builds the inner image of the coin, needed as a method because
    *  when attached or dragged the entire image is grey-scaled.
    */
-  Container _buildIMGContainer() {
+  Container _buildIMGContainer(double coinSize) {
     return Container(
-      height: widget.size,
-      width: widget.size,
-      padding: EdgeInsets.all(widget.size * FactorCoin.iconRatio),
+      height: coinSize,
+      width: coinSize,
+      padding: EdgeInsets.all(coinSize * FactorCoin.iconRatio),
       alignment: widget.alignment,
       // Takes the factor image. Otherwise takes any widget child and builds the circle
       // around it. Used for Window Specific Counter.
-      child: widget.factor != null ? widget.factor.getImage() : widget.child,
+      child: widget.window != null
+          ? widget.window.getFactor(widget.factorKey).getImage()
+          : widget.child,
     );
+  }
+
+  /*
+   * Used for immutable circles
+   *  ** TODO: Remove when design occurs.
+   */
+  Color styleBorder(BuildContext ctx) {
+    if (widget.child != null) {
+      return Theme.of(ctx).primaryColor;
+    } else {
+      return disabled
+          ? Colors.grey
+          : (modeIncrement ? Colors.green : Colors.red);
+    }
   }
 }

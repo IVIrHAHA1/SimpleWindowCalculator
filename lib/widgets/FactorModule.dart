@@ -23,30 +23,25 @@ class FactorModule extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         // Filthy Factor
-        buildFactor(
+        FactorCoin(
+          size: _size * _sizeRatio,
           factorKey: Factors.filthy,
-          circle: FactorCoin(
-            size: _size * _sizeRatio,
-            factor: OManager.factorList[Factors.filthy],
-            backgroundColor: HexColors.fromHex('#DCA065'),
-          ),
+          window: activeWindow,
+          backgroundColor: HexColors.fromHex('#DCA065'),
         ),
 
         // Difficult Factor
-        buildFactor(
+        FactorCoin(
           factorKey: Factors.difficult,
-          circle: FactorCoin(
-            size: _size * _sizeRatio,
-            alignment: Alignment.topCenter,
-            factor: OManager.factorList[Factors.difficult],
-            backgroundColor: HexColors.fromHex('#FFEDA5'),
-          ),
+          window: activeWindow,
+          size: _size * _sizeRatio,
+          alignment: Alignment.topCenter,
+          backgroundColor: HexColors.fromHex('#FFEDA5'),
         ),
 
         // Window specific counter
         FactorCoin(
           size: _size,
-          factor: null,
           child: Text(
             '${Format.format(activeWindow.getCount())}',
             style: Theme.of(context).textTheme.headline5,
@@ -54,49 +49,21 @@ class FactorModule extends StatelessWidget {
         ),
 
         // Construction Factor
-        buildFactor(
+        FactorCoin(
           factorKey: Factors.construction,
-          circle: FactorCoin(
-            size: _size * _sizeRatio,
-            alignment: Alignment.topCenter,
-            factor: OManager.factorList[Factors.construction],
-            backgroundColor: HexColors.fromHex('#FFB9B9'),
-          ),
+          window: activeWindow,
+          size: _size * _sizeRatio,
+          alignment: Alignment.topCenter,
+          backgroundColor: HexColors.fromHex('#FFB9B9'),
         ),
 
         // Sided Factor
-        buildFactor(
+        FactorCoin(
           factorKey: Factors.sided,
-          circle: FactorCoin(
-            size: _size * _sizeRatio,
-            factor: OManager.factorList[Factors.sided],
-          ),
+          window: activeWindow,
+          size: _size * _sizeRatio,
         ),
       ],
-    );
-  }
-
-  // Implements behaviour
-  Draggable buildFactor({
-    @required Factors factorKey,
-    @required FactorCoin circle,
-  }) {
-    return Draggable<FactorCoin>(
-      data: circle,
-      feedback: circle.draggingCoin(1.1),
-      childWhenDragging: circle.stasisCoin(),
-      child: InkWell(
-        onTap: () {
-          modeOnIncrement
-              ? activeWindow.incrementTag(factorKey)
-              : activeWindow.decrementTag(factorKey);
-        },
-        onLongPress: () {
-          circle.changeMode();
-          modeOnIncrement ? modeOnIncrement = false : modeOnIncrement = true;
-        },
-        child: circle,
-      ),
     );
   }
 }
