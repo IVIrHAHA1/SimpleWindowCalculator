@@ -100,11 +100,10 @@ class _WindowCounterState extends State<WindowCounter> {
                   ),
                 ),
               ),
-              DragTarget<Factors>(
+              DragTarget<Function>(
                 onWillAccept: (fun) => fun != null,
                 onAccept: (fun) {
-                  print('works');
-                  
+                  fun();
                 },
                 builder: (ctx, candidates, rejects) {
                   return candidates.length > 0

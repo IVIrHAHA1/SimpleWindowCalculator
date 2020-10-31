@@ -73,11 +73,11 @@ class _FactorCoinState extends State<FactorCoin> {
 
   _FactorCoinState(this.disabled);
 
-  // amend(Factors key, Function function) {
-  //   setState(() {
-  //     disabled ? disabled = false : disabled = true;
-  //   });
-  // }
+  changeAttachmentStatus() {
+    setState(() {
+      disabled ? disabled = false : disabled = true;
+    });
+  }
 
   changeMode() {
     setState(() {
@@ -87,22 +87,29 @@ class _FactorCoinState extends State<FactorCoin> {
 
   @override
   Widget build(BuildContext context) {
-    return Draggable<Factors>(
-      data: widget.factorKey,
-      feedback: mintCoin(context, false, widget.size * 1.1),
-      childWhenDragging: mintCoin(context, true, widget.size),
-      child: InkWell(
-        onTap: () {
-          modeIncrement
-              ? widget.window.incrementTag(widget.factorKey)
-              : widget.window.decrementTag(widget.factorKey);
-        },
-        onLongPress: () {
-          changeMode();
-        },
-        child: mintCoin(context, disabled, widget.size),
-      ),
-    );
+    return disabled
+        ? InkWell(
+            onLongPress: () {
+              changeAttachmentStatus();
+            },
+            child: mintCoin(context, true, widget.size),
+          )
+        : Draggable<Function>(
+            data: changeAttachmentStatus,
+            feedback: mintCoin(context, false, widget.size * 1.1),
+            childWhenDragging: mintCoin(context, true, widget.size),
+            child: InkWell(
+              onTap: () {
+                modeIncrement
+                    ? widget.window.incrementTag(widget.factorKey)
+                    : widget.window.decrementTag(widget.factorKey);
+              },
+              onLongPress: () {
+                changeMode();
+              },
+              child: mintCoin(context, disabled, widget.size),
+            ),
+          );
   }
 
   /*
