@@ -18,7 +18,7 @@ class Window {
 
   double count;
 
-  Map<Factors, Factor> tagList = Map();
+  Map<Factors, Factor> factorList = Map();
 
   Window({this.price, this.duration, this.name, this.image}) {
     this.count = 0.0;
@@ -26,37 +26,46 @@ class Window {
   }
 
   _initFactors() {
-    for(Factors value in Factors.values) {
+    for (Factors value in Factors.values) {
       addFactor(value);
     }
   }
 
-  incrementFactor(Factors factor) {
-    tagList[factor].setCount(tagList[factor].getCount() + 1);
+  /*
+   * Quick-Action - increment factor count
+   */
+  incrementFactor(Factors factorKey) {
+    Factor factor = factorList[factorKey];
 
-    print(name +
-        ' now has ' +
-        '${tagList[factor].getCount()} ' +
-        tagList[factor].getName() +
-        ' factors');
+    // Only increment if factor count is less than the number of windows.
+    if (factor.getCount() < this.getCount())
+      factor.setCount(factor.getCount() + 1);
   }
 
-  decrementFactor(Factors factor) {
-     tagList[factor].setCount(tagList[factor].getCount() - 1);
+  /*
+   * Quick-Action - decrement factor count
+   */
+  decrementFactor(Factors factorKey) {
+    Factor factor = factorList[factorKey];
 
-    print(name +
-        ' now has ' +
-        '${tagList[factor].getCount()} ' +
-        tagList[factor].getName() +
-        ' factors');
+    // Only decrement if factor count is greater than 0
+    if (factor.getCount() > 0) factor.setCount(factor.getCount() - 1);
+  }
+
+  /*
+   * affix Factor allows the factor to count along with the window count.
+   */
+  affixFactor(Factors factorKey, bool affix) {
+    factorList[factorKey].affix(affix);
   }
 
   addFactor(Factors factorKey) {
-    tagList.putIfAbsent(factorKey, () => OManager.getFactorInstance(factorKey));
+    factorList.putIfAbsent(
+        factorKey, () => OManager.getFactorInstance(factorKey));
   }
 
-  getFactor(Factors factorKey) {
-    return tagList[factorKey];
+  Factor getFactor(Factors factorKey) {
+    return factorList[factorKey];
   }
 
   getName() {
@@ -70,11 +79,35 @@ class Window {
   // TODO: In the interest of performance look into making an update() method.
   // Currently, when getTotal is called the process is fairly extensive.
   // Therefore, if there is a way to determine the total without having to
-  // iterate through each tag, the performance of the app will improve.
+  // iterate through each factor, the performance of the app will improve.
+
+  void update() {
+    var standardWindowCount;
+    var totalPrice = 0.0;
+    var totalTime = Duration();
+
+    factorList.forEach((key, value) {
+      // Step 1: Update to correct numbers
+      if (value.getCount() > this.getCount()) {
+        value.setCount(this.getCount());
+      }
+    });
+  }
 
   getTotal() {
-    var standardTotal = (this.getPrice() * this.getCount());
-    return standardTotal;
+    var standardWindowCount = this.getCount();
+    var totalPrice = 0.0;
+
+    // Subtract amount of modified windows and replace with modified price
+    // factorList.forEach((key, value) {
+    //   standardWindowCount -= value.getCount();
+    //   totalPrice += value.getUpdatedPrice(this.getPrice());
+    // });
+
+    // Take remaining window count and charge at standard rate
+    totalPrice += standardWindowCount * this.getPrice();
+
+    return totalPrice;
   }
 
   getDuration() {
@@ -82,7 +115,19 @@ class Window {
   }
 
   getTotalDuration() {
-    return this.getDuration() * count;
+    var standardWindowCount = this.getCount();
+    var totalTime = Duration(minutes: 0);
+
+    // Subtract amount of modified windows, and replace with modified price
+    // factorList.forEach((key, value) {
+    //   standardWindowCount -= value.getCount();
+    //   totalTime += value.getDuration(this.getDuration()) * value.getCount();
+    // });
+
+    // Take remaining window count and charge at standard rate
+    totalTime += this.getDuration() * standardWindowCount;
+
+    return totalTime;
   }
 
   getPicture() {
@@ -94,9 +139,10 @@ class Window {
   /*
    * Indicate what tag if any is also being added
    */
-  setCount({double count, String tagName}) {
+  setCount({double count}) {
     // Keep window count updating here
     this.count = count;
+    if (this.count < 0) this.count = 0;
   }
 
   getCount() {

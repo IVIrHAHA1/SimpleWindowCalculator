@@ -1,6 +1,3 @@
-import 'package:SimpleWindowCalculator/widgets/FactorCoin.dart';
-
-import '../objects/Factor.dart';
 import 'package:flutter/material.dart';
 import '../objects/Window.dart';
 import '../objects/OManager.dart';
@@ -85,6 +82,7 @@ class _WindowCounterState extends State<WindowCounter> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              // Window Count Decrementing Button
               Container(
                 child: GestureDetector(
                   onTap: () {
@@ -100,6 +98,8 @@ class _WindowCounterState extends State<WindowCounter> {
                   ),
                 ),
               ),
+
+              // Window Preview
               DragTarget<Function>(
                 onWillAccept: (fun) => fun != null,
                 onAccept: (fun) {
@@ -123,6 +123,8 @@ class _WindowCounterState extends State<WindowCounter> {
                         );
                 },
               ),
+
+              // Window Count Incrementing Button
               Container(
                 child: GestureDetector(
                   onTap: () {

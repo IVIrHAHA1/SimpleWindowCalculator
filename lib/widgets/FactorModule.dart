@@ -1,6 +1,5 @@
 import '../objects/OManager.dart';
 import './FactorCoin.dart';
-import '../objects/Factor.dart';
 import '../Tools/Format.dart';
 import '../Tools/HexColors.dart';
 import '../objects/Window.dart';
@@ -10,8 +9,9 @@ import 'package:flutter/material.dart';
 class FactorModule extends StatelessWidget {
   Window activeWindow;
   bool modeOnIncrement = true;
+  final Function updateTotalFun;
 
-  FactorModule(this.activeWindow);
+  FactorModule(this.activeWindow, this.updateTotalFun);
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +28,7 @@ class FactorModule extends StatelessWidget {
           factorKey: Factors.filthy,
           window: activeWindow,
           backgroundColor: HexColors.fromHex('#DCA065'),
+          updateTotal: updateTotalFun,
         ),
 
         // Difficult Factor
@@ -37,6 +38,7 @@ class FactorModule extends StatelessWidget {
           size: _size * _sizeRatio,
           alignment: Alignment.topCenter,
           backgroundColor: HexColors.fromHex('#FFEDA5'),
+          updateTotal: updateTotalFun,
         ),
 
         // Window specific counter
@@ -55,6 +57,7 @@ class FactorModule extends StatelessWidget {
           size: _size * _sizeRatio,
           alignment: Alignment.topCenter,
           backgroundColor: HexColors.fromHex('#FFB9B9'),
+          updateTotal: updateTotalFun,
         ),
 
         // Sided Factor
@@ -62,6 +65,7 @@ class FactorModule extends StatelessWidget {
           factorKey: Factors.sided,
           window: activeWindow,
           size: _size * _sizeRatio,
+          updateTotal: updateTotalFun,
         ),
       ],
     );

@@ -78,9 +78,6 @@ class _MyHomePage extends State {
     );
   }
 
-  format(Duration d) =>
-      d.toString().split('.').first.split(':').take(2).join(":");
-
   updateWindowList(Window newWindow, Window oldWindow) {
     setState(() {
       // Removing window with now count
@@ -116,7 +113,7 @@ class _MyHomePage extends State {
         top: 0,
         bottom: 0,
         left: 0,
-        right: MediaQuery.of(context).size.width/2,
+        right: MediaQuery.of(context).size.width / 2,
         child: WindowPallet(windowList),
       ),
     );
@@ -130,26 +127,32 @@ class _MyHomePage extends State {
 
     setState(() {
       for (Window window in windowList) {
+        window.update();
         windowPriceTotal += window.getTotal();
         countTotal += window.getCount();
         time += window.getTotalDuration();
       }
 
-      // Add Drive time
-      priceTotal = windowPriceTotal + mDRIVETIME;
+      if (windowPriceTotal == 0.0) {
+        priceTotal = 0.0;
+        timeTotal = Format.formatTime(Duration());
+      } else {
+        // Add Drive time
+        priceTotal = windowPriceTotal + mDRIVETIME;
 
-      // Round up to increment of 5, for pricing simplicity
-      var temp = priceTotal % 5;
-      if (temp != 0) {
-        priceTotal += (5 - temp);
+        // Round up to increment of 5, for pricing simplicity
+        var temp = priceTotal % 5;
+        if (temp != 0) {
+          priceTotal += (5 - temp);
+        }
+
+        // Ensure price is not below minimum
+        if (priceTotal < mMIN_PRICE) {
+          priceTotal = mMIN_PRICE;
+        }
+
+        timeTotal = Format.formatTime(time);
       }
-
-      // Ensure price is not below minimum
-      if (priceTotal < mMIN_PRICE) {
-        priceTotal = mMIN_PRICE;
-      }
-
-      timeTotal = format(time);
     });
   }
 
@@ -222,7 +225,7 @@ class _MyHomePage extends State {
 
               Visibility(
                 visible: viewMods,
-                child: FactorModule(activeWindow),
+                child: FactorModule(activeWindow, update),
               ),
 
               // Counter Module ---------------

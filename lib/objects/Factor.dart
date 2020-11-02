@@ -8,23 +8,27 @@ class Factor {
 
   final Widget image;
 
-  bool active = false;
+  bool affixed = false;
 
-  double count;
+  double count = 0;
 
-  Factor(
-      {@required this.factorKey,
-      @required this.name,
-      @required this.priceMultiplier,
-      @required this.durationMultiplier,
-      this.image});
+  Factor({
+    @required this.factorKey,
+    @required this.name,
+    @required this.priceMultiplier,
+    @required this.durationMultiplier,
+    this.image,
+  });
 
   String getName() {
     return name;
   }
 
+  /*
+   * Returns the total price this factor produces
+   */
   double getUpdatedPrice(double windowPrice) {
-    return windowPrice * priceMultiplier;
+    return (windowPrice * priceMultiplier) * count;
   }
 
   Duration getDuration(Duration windowDuration) {
@@ -35,14 +39,16 @@ class Factor {
     return image == null ? Icons.not_interested : image;
   }
 
-  void enable(bool activate) => active = activate;
+  void affix(bool affix) => affixed = affix;
 
-  bool isActive() {
-    return this.active;
+  bool isAffixed() {
+    return this.affixed;
   }
 
   void setCount(double count) {
     this.count = count;
+
+    if (this.count <= 0) this.count = 0;
   }
 
   double getCount() {
