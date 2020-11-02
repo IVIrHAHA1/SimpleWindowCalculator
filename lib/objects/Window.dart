@@ -145,6 +145,15 @@ class Window {
     if (this.count < 0) this.count = 0;
   }
 
+  amendCount(double count) {
+    this.count = this.getCount() + count;
+    if (this.count < 0) this.count = 0;
+
+    factorList.forEach((key, value) {
+      if (value.isAffixed()) value.setCount(value.getCount() + count);
+    });
+  }
+
   getCount() {
     return this.count != null ? this.count : 0.0;
   }

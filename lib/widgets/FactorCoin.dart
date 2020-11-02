@@ -49,8 +49,10 @@ class _FactorCoinState extends State<FactorCoin> {
 // ** Factor counting occurs inside the window object
   changeAttachmentStatus() {
     setState(() {
+      // If disable is true then factor is affixed
       disabled ? disabled = false : disabled = true;
     });
+    widget.window.affixFactor(widget.factorKey, disabled);
   }
 
 // Changes mode from incrementing to decrementing and vice-versa
@@ -81,7 +83,7 @@ class _FactorCoinState extends State<FactorCoin> {
             // (!disabled) -> Coin is draggable and increments
             : Draggable<Function>(
                 data: changeAttachmentStatus,
-                feedback: mintCoin(context, false, widget.size * 1.1),
+                feedback: mintCoin(context, false, widget.size * 2.5),
                 childWhenDragging: mintCoin(context, true, widget.size),
                 child: InkWell(
                   onTap: () {

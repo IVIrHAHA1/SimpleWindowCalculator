@@ -87,7 +87,7 @@ class _WindowCounterState extends State<WindowCounter> {
                 child: GestureDetector(
                   onTap: () {
                     setState(() {
-                      _window.setCount(count: (_window.getCount() - 1));
+                      _window.amendCount(-1);
                     });
                     _updater();
                   },
@@ -102,8 +102,10 @@ class _WindowCounterState extends State<WindowCounter> {
               // Window Preview
               DragTarget<Function>(
                 onWillAccept: (fun) => fun != null,
-                onAccept: (fun) {
-                  fun();
+                onAccept: (updateVisuals) {
+                  // Updates the FactorCoin visuals
+                  updateVisuals();
+
                 },
                 builder: (ctx, candidates, rejects) {
                   return candidates.length > 0
@@ -129,7 +131,7 @@ class _WindowCounterState extends State<WindowCounter> {
                 child: GestureDetector(
                   onTap: () {
                     setState(() {
-                      _window.setCount(count: (_window.getCount() + 1));
+                      _window.amendCount(1);
                     });
                     _updater();
                   },
