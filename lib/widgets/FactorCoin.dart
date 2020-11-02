@@ -10,8 +10,6 @@ class FactorCoin extends StatefulWidget {
   final Widget child; // TODO: Remove when redesign occurs
   final Window window;
 
-  final bool activated;
-
   static const double iconRatio = 1 / 6;
 
   FactorCoin({
@@ -21,43 +19,11 @@ class FactorCoin extends StatefulWidget {
     this.child,
     this.backgroundColor = Colors.white,
     this.alignment = Alignment.center,
-    this.activated = false,
   });
-
-  /*
-   * Method used as childWhenDragging (Draggable)
-   */
-  stasisCoin() {
-    return Container(
-      child: FactorCoin(
-        size: size,
-        factorKey: factorKey,
-        window: window,
-        alignment: alignment,
-        backgroundColor: backgroundColor,
-        activated: true,
-      ),
-    );
-  }
-
-  /*
-   * Method used as feedback (Draggable)
-   */
-  draggingCoin(double altSizeRatio) {
-    return Container(
-      child: FactorCoin(
-        size: size * altSizeRatio,
-        factorKey: factorKey,
-        alignment: alignment,
-        window: window,
-        backgroundColor: backgroundColor,
-      ),
-    );
-  }
 
   @override
   _FactorCoinState createState() {
-    return _FactorCoinState(activated);
+    return _FactorCoinState();
   }
 }
 
@@ -71,14 +37,18 @@ class _FactorCoinState extends State<FactorCoin> {
   bool disabled = false;
   bool modeIncrement = true;
 
-  _FactorCoinState(this.disabled);
+  _FactorCoinState();
 
+// Makes the Factor count along with the window count
+// ** Does not necessarily mean they have the same count
+// ** Factor counting occurs inside the window object
   changeAttachmentStatus() {
     setState(() {
       disabled ? disabled = false : disabled = true;
     });
   }
 
+// Changes mode from incrementing to decrementing and vice-versa
   changeMode() {
     setState(() {
       modeIncrement ? modeIncrement = false : modeIncrement = true;
@@ -88,12 +58,15 @@ class _FactorCoinState extends State<FactorCoin> {
   @override
   Widget build(BuildContext context) {
     return disabled
+        // (disabled) -> Coin is grayed out and has to be held to re-enable
+        //  * while disabled cannot drag or increment/decrement
         ? InkWell(
             onLongPress: () {
               changeAttachmentStatus();
             },
             child: mintCoin(context, true, widget.size),
           )
+        // (!disabled) -> Coin is draggable and increments
         : Draggable<Function>(
             data: changeAttachmentStatus,
             feedback: mintCoin(context, false, widget.size * 1.1),
@@ -101,8 +74,8 @@ class _FactorCoinState extends State<FactorCoin> {
             child: InkWell(
               onTap: () {
                 modeIncrement
-                    ? widget.window.incrementTag(widget.factorKey)
-                    : widget.window.decrementTag(widget.factorKey);
+                    ? widget.window.incrementFactor(widget.factorKey)
+                    : widget.window.decrementFactor(widget.factorKey);
               },
               onLongPress: () {
                 changeMode();
@@ -120,7 +93,7 @@ class _FactorCoinState extends State<FactorCoin> {
       color: greyed ? Colors.grey : widget.backgroundColor,
       shape: CircleBorder(
         side: BorderSide(
-          color: styleBorder(context),
+          color: styleBorder(context, greyed),
           width: 2,
           style: BorderStyle.solid,
         ),
@@ -140,6 +113,7 @@ class _FactorCoinState extends State<FactorCoin> {
   /*
    *  Builds the inner image of the coin, needed as a method because
    *  when attached or dragged the entire image is grey-scaled.
+   *  ** IconImage and container holder
    */
   Container _buildIMGContainer(double coinSize) {
     return Container(
@@ -159,12 +133,13 @@ class _FactorCoinState extends State<FactorCoin> {
    * Used for immutable circles
    *  ** TODO: Remove when design occurs.
    */
-  Color styleBorder(BuildContext ctx) {
+  Color styleBorder(BuildContext ctx, bool gray) {
+
     if (widget.child != null) {
       return Theme.of(ctx).primaryColor;
     } else {
-      return disabled
-          ? Colors.grey
+      return disabled || gray
+          ? Colors.blueGrey
           : (modeIncrement ? Colors.green : Colors.red);
     }
   }

@@ -31,7 +31,7 @@ class Window {
     }
   }
 
-  incrementTag(Factors factor) {
+  incrementFactor(Factors factor) {
     tagList[factor].setCount(tagList[factor].getCount() + 1);
 
     print(name +
@@ -41,7 +41,7 @@ class Window {
         ' factors');
   }
 
-  decrementTag(Factors factor) {
+  decrementFactor(Factors factor) {
      tagList[factor].setCount(tagList[factor].getCount() - 1);
 
     print(name +
