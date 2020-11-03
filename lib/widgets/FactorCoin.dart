@@ -99,7 +99,7 @@ class _FactorCoinState extends State<FactorCoin> {
                 ),
               ),
         Text(factor != null
-            ? '\$${Format.format((factor.getUpdatedPrice(widget.window.getPrice())))}'
+            ? '\$${Format.format((factor.calculatePrice(widget.window.getPrice())))}'
             : ''),
       ],
     );

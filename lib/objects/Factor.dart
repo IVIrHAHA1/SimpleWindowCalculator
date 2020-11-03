@@ -27,11 +27,11 @@ class Factor {
   /*
    * Returns the total price this factor produces
    */
-  double getUpdatedPrice(double windowPrice) {
+  double calculatePrice(double windowPrice) {
     return windowPrice * (priceMultiplier - 1.0) * count;
   }
 
-  Duration getDuration(Duration windowDuration) {
+  Duration calculateDuration(Duration windowDuration) {
     return windowDuration * durationMultiplier;
   }
 

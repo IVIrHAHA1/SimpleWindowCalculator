@@ -128,7 +128,7 @@ class _MyHomePage extends State {
     setState(() {
       for (Window window in windowList) {
         window.update();
-        windowPriceTotal += window.getTotal();
+        windowPriceTotal += window.grandTotal();
         countTotal += window.getCount();
         time += window.getTotalDuration();
       }
