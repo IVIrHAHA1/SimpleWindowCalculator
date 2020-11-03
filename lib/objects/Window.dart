@@ -16,13 +16,15 @@ class Window {
   final Duration duration;
   final Image image;
 
-  double count;
-  double _grandTotal;
+  var count;
+  var _grandTotal;
+  var _grandDuration;
 
   Map<Factors, Factor> factorList = Map();
 
   Window({this.price = 0.0, this.duration, this.name, this.image}) {
     this._grandTotal = 0.0;
+    this._grandDuration = Duration();
     _initFactors();
   }
 
@@ -33,7 +35,7 @@ class Window {
  */
   void update() {
     var totalPrice = 0.0;
-    var totalTime = Duration(); // TODO: Implement Duration calculations
+    var totalTime = Duration();
 
     factorList.forEach((factorKey, factor) {
       // Step 1: Ensure accurate factor quantaties
@@ -43,11 +45,14 @@ class Window {
 
       // Step 2: Calculate Factor price modifier
       totalPrice += factor.calculatePrice(this.getPrice());
+      totalTime += factor.calculateDuration(this.getDuration());
     });
 
     // Step 3: Add total standard price
     totalPrice += this.getPrice() * this.getCount();
+    totalTime += this.getDuration() * this.getCount();
     _grandTotal = totalPrice;
+    _grandDuration = totalTime;
   }
 
   /*
@@ -82,7 +87,7 @@ class Window {
       if (factor.isAffixed() && !countingExt ||
           factor.isAffixed() && factor == factorList[Factors.sided])
         factor.setCount(factor.getCount() + count);
-      else if (factor.isAffixed() && !countingExt)
+      else if (factor.isAffixed() && countingExt)
         factor.setCount(factor.getCount() + (count / 2));
     });
   }
@@ -117,13 +122,7 @@ class Window {
   }
 
   getTotalDuration() {
-    var standardWindowCount = this.getCount();
-    var totalTime = Duration(minutes: 0);
-
-    // Take remaining window count and charge at standard rate
-    totalTime += this.getDuration() * standardWindowCount;
-
-    return totalTime;
+    return _grandDuration;
   }
 
   /*  -----------------------------------------------------------------------

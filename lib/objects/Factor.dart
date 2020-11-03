@@ -32,7 +32,7 @@ class Factor {
   }
 
   Duration calculateDuration(Duration windowDuration) {
-    return windowDuration * durationMultiplier;
+    return windowDuration * (durationMultiplier - 1.0) * count;
   }
 
   Widget getImage() {
