@@ -38,7 +38,9 @@ class Window {
     Factor factor = factorList[factorKey];
 
     // Only increment if factor count is less than the number of windows.
-    if (factor.getCount() < this.getCount())
+    if (factor.getCount() < this.getCount() && factorKey != Factors.sided)
+      factor.setCount(factor.getCount() + .5);
+    else if (factor.getCount() < this.getCount() && factorKey == Factors.sided)
       factor.setCount(factor.getCount() + 1);
   }
 
@@ -49,7 +51,10 @@ class Window {
     Factor factor = factorList[factorKey];
 
     // Only decrement if factor count is greater than 0
-    if (factor.getCount() > 0) factor.setCount(factor.getCount() - 1);
+    if (factor.getCount() > 0 && factorKey != Factors.sided)
+      factor.setCount(factor.getCount() - .5);
+    else if (factor.getCount() > 0 && factorKey == Factors.sided)
+      factor.setCount(factor.getCount() - 1);
   }
 
   /*
@@ -82,29 +87,29 @@ class Window {
   // iterate through each factor, the performance of the app will improve.
 
   void update() {
-    var standardWindowCount;
+    var factorPriceHolder;
     var totalPrice = 0.0;
     var totalTime = Duration();
 
-    factorList.forEach((key, value) {
-      // Step 1: Update to correct numbers
-      if (value.getCount() > this.getCount()) {
-        value.setCount(this.getCount());
+    factorList.forEach((factorKey, factor) {
+      // Step 1: Ensure accurate factor quantaties
+      if (factor.getCount() > this.getCount()) {
+        factor.setCount(this.getCount());
       }
+
+      // Step 2: Calculate Factor price modifier
+      totalPrice += factor.getUpdatedPrice(this.getPrice());
     });
+
+    // Step 3: Add total price
+    totalPrice += this.getPrice() * this.getCount();
+    print('This is the total price: ' + '$totalPrice');
   }
 
   getTotal() {
     var standardWindowCount = this.getCount();
     var totalPrice = 0.0;
 
-    // Subtract amount of modified windows and replace with modified price
-    // factorList.forEach((key, value) {
-    //   standardWindowCount -= value.getCount();
-    //   totalPrice += value.getUpdatedPrice(this.getPrice());
-    // });
-
-    // Take remaining window count and charge at standard rate
     totalPrice += standardWindowCount * this.getPrice();
 
     return totalPrice;
@@ -117,12 +122,6 @@ class Window {
   getTotalDuration() {
     var standardWindowCount = this.getCount();
     var totalTime = Duration(minutes: 0);
-
-    // Subtract amount of modified windows, and replace with modified price
-    // factorList.forEach((key, value) {
-    //   standardWindowCount -= value.getCount();
-    //   totalTime += value.getDuration(this.getDuration()) * value.getCount();
-    // });
 
     // Take remaining window count and charge at standard rate
     totalTime += this.getDuration() * standardWindowCount;
@@ -149,8 +148,21 @@ class Window {
     this.count = this.getCount() + count;
     if (this.count < 0) this.count = 0;
 
-    factorList.forEach((key, value) {
-      if (value.isAffixed()) value.setCount(value.getCount() + count);
+    bool countingExt = false;
+
+    factorList.forEach((factorKey, factor) {
+      // When sided is affixed all factors will count by .5 as
+      // any other factor should only apply to one side of the window
+      // and not the whole window.
+      // ** The only exception to this is when the Sided Factor itself
+      //    is being counted.
+      countingExt = factorList[Factors.sided].isAffixed();
+
+      if (factor.isAffixed() && !countingExt ||
+          factor.isAffixed() && factor == factorList[Factors.sided])
+        factor.setCount(factor.getCount() + count);
+      else if (factor.isAffixed() && !countingExt)
+        factor.setCount(factor.getCount() + (count / 2));
     });
   }
 

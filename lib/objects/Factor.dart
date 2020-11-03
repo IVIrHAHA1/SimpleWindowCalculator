@@ -28,7 +28,7 @@ class Factor {
    * Returns the total price this factor produces
    */
   double getUpdatedPrice(double windowPrice) {
-    return (windowPrice * priceMultiplier) * count;
+    return windowPrice * (priceMultiplier - 1.0) * count;
   }
 
   Duration getDuration(Duration windowDuration) {
@@ -53,6 +53,10 @@ class Factor {
 
   double getCount() {
     return this.count != null ? count : 0;
+  }
+
+  getMultiplier() {
+    return this.priceMultiplier;
   }
 
   getKey() {

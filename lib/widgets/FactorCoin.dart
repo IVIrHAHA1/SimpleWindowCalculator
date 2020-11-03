@@ -83,7 +83,7 @@ class _FactorCoinState extends State<FactorCoin> {
             // (!disabled) -> Coin is draggable and increments
             : Draggable<Function>(
                 data: changeAttachmentStatus,
-                feedback: mintCoin(context, false, widget.size * 2.5),
+                feedback: mintCoin(context, false, widget.size * 1.5),
                 childWhenDragging: mintCoin(context, true, widget.size),
                 child: InkWell(
                   onTap: () {
@@ -98,6 +98,9 @@ class _FactorCoinState extends State<FactorCoin> {
                   child: mintCoin(context, disabled, widget.size),
                 ),
               ),
+        Text(factor != null
+            ? '\$${Format.format((factor.getUpdatedPrice(widget.window.getPrice())))}'
+            : ''),
       ],
     );
   }
