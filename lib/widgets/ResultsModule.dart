@@ -3,7 +3,6 @@
  */
 
 import 'package:SimpleWindowCalculator/Tools/Format.dart';
-import 'package:SimpleWindowCalculator/Tools/HexColors.dart';
 import 'package:SimpleWindowCalculator/widgets/OverviewModule.dart';
 import 'package:flutter/material.dart';
 import 'package:SimpleWindowCalculator/objects/Window.dart';

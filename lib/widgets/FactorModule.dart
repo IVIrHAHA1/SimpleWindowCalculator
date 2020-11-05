@@ -5,10 +5,8 @@ import '../Tools/HexColors.dart';
 import '../objects/Window.dart';
 import 'package:flutter/material.dart';
 
-// ignore: must_be_immutable
 class FactorModule extends StatelessWidget {
-  Window activeWindow;
-  bool modeOnIncrement = true;
+  final Window activeWindow;
   final Function updateTotalFun;
 
   FactorModule(this.activeWindow, this.updateTotalFun);
