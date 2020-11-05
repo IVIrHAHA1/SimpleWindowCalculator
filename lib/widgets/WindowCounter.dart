@@ -91,12 +91,6 @@ class _WindowCounterState extends State<WindowCounter> {
                     });
                     _updater();
                   },
-                  onLongPress: () {
-                    setState(() {
-                      _window.amendCount(-.5);
-                    });
-                    _updater();
-                  },
                   child: Image.asset(
                     'assets/images/decrement_btn.png',
                     height: screenWidth * .20,
@@ -111,6 +105,7 @@ class _WindowCounterState extends State<WindowCounter> {
                 onAccept: (updateVisuals) {
                   // Updates the FactorCoin visuals
                   updateVisuals();
+
                 },
                 builder: (ctx, candidates, rejects) {
                   return candidates.length > 0
@@ -137,12 +132,6 @@ class _WindowCounterState extends State<WindowCounter> {
                   onTap: () {
                     setState(() {
                       _window.amendCount(1);
-                    });
-                    _updater();
-                  },
-                  onLongPress: () {
-                    setState(() {
-                      _window.amendCount(.5);
                     });
                     _updater();
                   },

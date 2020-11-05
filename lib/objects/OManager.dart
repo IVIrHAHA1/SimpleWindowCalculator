@@ -54,6 +54,14 @@ class OManager {
         'assets/images/garden_window.png',
       ),
     ),
+
+    // Solar Panel
+    Window(
+      name: 'Solar Panel',
+      duration: Duration(minutes: 5),
+      price: 5,
+      image: Image.asset('assets/images/solar_panel.png'),
+    )
   ];
 
   static getAll() {

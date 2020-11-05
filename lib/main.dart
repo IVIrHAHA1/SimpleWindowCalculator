@@ -248,9 +248,12 @@ class _MyHomePage extends State {
                         ),
                       ),
                     ),
-                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 32),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                     width: double.infinity,
-                    child: windowCounter,
+                    child: Container(
+                      child: windowCounter,
+                    ),
                   ),
                 ),
               ),
