@@ -73,28 +73,31 @@ class _WindowCounterState extends State<WindowCounter> {
 
   @override
   Widget build(BuildContext context) {
+    const double buttonSize = .3;
+
     var screenWidth = MediaQuery.of(context).size.width * .8;
     return Container(
       width: screenWidth,
+      padding: EdgeInsets.symmetric(horizontal: 12),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               // Window Count Decrementing Button
               Container(
                 child: GestureDetector(
                   onTap: () {
                     setState(() {
-                      _window.amendCount(-1);
+                      _window.amendCount(-1.0);
                     });
                     _updater();
                   },
                   child: Image.asset(
                     'assets/images/decrement_btn.png',
-                    height: screenWidth * .20,
-                    width: screenWidth * .20,
+                    height: screenWidth * buttonSize,
+                    width: screenWidth * buttonSize,
                   ),
                 ),
               ),
@@ -131,14 +134,14 @@ class _WindowCounterState extends State<WindowCounter> {
                 child: GestureDetector(
                   onTap: () {
                     setState(() {
-                      _window.amendCount(1);
+                      _window.amendCount(1.0);
                     });
                     _updater();
                   },
                   child: Image.asset(
                     'assets/images/increment_btn.png',
-                    height: screenWidth * .20,
-                    width: screenWidth * .20,
+                    height: screenWidth * buttonSize,
+                    width: screenWidth * buttonSize,
                   ),
                 ),
               ),

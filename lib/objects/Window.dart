@@ -16,7 +16,7 @@ class Window {
   final Duration duration;
   final Image image;
 
-  var count;
+  double count;
   var _grandTotal;
   var _grandDuration;
 

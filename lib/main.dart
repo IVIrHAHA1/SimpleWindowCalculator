@@ -162,7 +162,7 @@ class _MyHomePage extends State {
       leading: Icon(Icons.menu),
       elevation: 0,
       backgroundColor: Colors.transparent,
-      title: Text('The Window Calculator'),
+      title: Text('The Window Calculator', style: Theme.of(context).textTheme.headline6,),
     );
 
 // Get available screen space
