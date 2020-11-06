@@ -19,6 +19,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         fontFamily: 'OpenSans',
@@ -159,13 +160,24 @@ class _MyHomePage extends State {
   @override
   Widget build(BuildContext context) {
     AppBar mAppBar = AppBar(
-      leading: Icon(Icons.menu),
+      actions: [
+        IconButton(
+          onPressed: _clearProject(),
+          icon: Icon(
+            Icons.delete_forever,
+            color: Colors.white,
+          ),
+        )
+      ],
+      textTheme: Theme.of(context).textTheme,
       elevation: 0,
       backgroundColor: Colors.transparent,
-      title: Text('The Window Calculator', style: Theme.of(context).textTheme.headline6,),
+      title: Text(
+        'The Window Calculator',
+      ),
     );
 
-// Get available screen space
+    // Get available screen space
     double availableScreen = MediaQuery.of(context).size.height -
         mAppBar.preferredSize.height -
         MediaQuery.of(context).padding.top;
@@ -248,8 +260,7 @@ class _MyHomePage extends State {
                         ),
                       ),
                     ),
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                     width: double.infinity,
                     child: Container(
                       child: windowCounter,
@@ -262,5 +273,9 @@ class _MyHomePage extends State {
         ),
       ),
     );
+  }
+
+  _clearProject() {
+    // TODO: clear project
   }
 }
