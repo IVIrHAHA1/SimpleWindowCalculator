@@ -69,10 +69,148 @@ class _MyHomePage extends State {
     windowList.add(activeWindow);
   }
 
-/*
- *  This method updates the master list appropriately and assigns 
- *  activeWindow if needed.
- */
+  @override
+  Widget build(BuildContext context) {
+    // Needs to be here because of clear onPressed
+    AppBar mAppBar = AppBar(
+      actions: [
+        IconButton(
+          onPressed: _clearProject,
+          icon: Icon(
+            Icons.delete_forever,
+            color: Colors.white,
+          ),
+        )
+      ],
+      textTheme: Theme.of(context).textTheme,
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      title: Text(
+        'The Window Calculator',
+      ),
+    );
+
+    // Get available screen space
+    double availableScreen = MediaQuery.of(context).size.height -
+        mAppBar.preferredSize.height -
+        MediaQuery.of(context).padding.top;
+
+    return Container(
+      // This is to allow linear gradient behind the appBar
+      // block begin:
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [HexColors.fromHex('#1C85DF'), Colors.white],
+        ),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: mAppBar,
+        // block end:
+
+        body: buildModules(
+            availableScreen, Theme.of(context).textTheme.headline5),
+      ),
+    );
+  }
+
+  /*  -----------------------------------------------------------------------
+   *                        BUILD CONTENT/MODULES
+   *  -------------------------------------------------------------------- */
+  Container buildModules(double availableScreen, TextStyle numberStyle) {
+    return Container(
+      height: availableScreen,
+      child: Column(
+        children: <Widget>[
+          // Results
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: ResultsModule(
+              height: availableScreen,
+              hideViews: hideWidgets,
+              windows: windowList,
+              children: [
+                priceTotal != null
+                    ? Text(
+                        '\$${Format.format(priceTotal)}',
+                        style: numberStyle,
+                      )
+                    : Text(
+                        '\$0',
+                        style: numberStyle,
+                      ),
+                timeTotal != null
+                    ? Text(
+                        '$timeTotal',
+                        style: numberStyle,
+                      )
+                    : Text(
+                        '0:00',
+                        style: numberStyle,
+                      ),
+              ],
+              count: countTotal,
+            ),
+          ),
+
+          // Empty space seperator
+          Flexible(
+            fit: FlexFit.tight,
+            child: Container(),
+          ),
+
+          // Factors
+          Visibility(
+            visible: viewMods,
+            child: FactorModule(activeWindow, calculateResults),
+          ),
+
+          // Counter Module
+          Visibility(
+            visible: viewMods,
+            child: GestureDetector(
+              onPanUpdate: (details) {
+                if (details.delta.dx > 0) {
+                  showPallet();
+                }
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border(
+                    top: BorderSide(
+                      style: BorderStyle.solid,
+                      width: 2,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                width: double.infinity,
+                child: Container(
+                  child: WindowCounter(
+                    window: activeWindow,
+                    totalsUpdater: calculateResults,
+                    selectNewWindowFun: selectNewWindow,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /*  -----------------------------------------------------------------------
+   *                            DATA MUNIPS
+   *  -------------------------------------------------------------------- */
+  /*
+   *  This method updates the master list appropriately and assigns 
+   *  activeWindow if needed.
+   */
   _updateWindowList(Window newWindow, Window oldWindow) {
     setState(() {
       // STEP 1: Remove window with a zero count value
@@ -96,25 +234,9 @@ class _MyHomePage extends State {
     });
   }
 
-  hideWidgets(bool hide) {
-    setState(() {
-      viewMods = !hide;
-    });
-  }
-
-  showPallet() {
-    Navigator.push(
-      context,
-      WindowPalletPU(
-        top: 0,
-        bottom: 0,
-        left: 0,
-        right: MediaQuery.of(context).size.width / 2,
-        child: WindowPallet(windowList),
-      ),
-    );
-  }
-
+  /*
+   *  Calculates and updates results 
+   */
   calculateResults() {
     // Calculate price before adjustments
     var windowPriceTotal = 0.0;
@@ -152,131 +274,34 @@ class _MyHomePage extends State {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    AppBar mAppBar = AppBar(
-      actions: [
-        IconButton(
-          onPressed: _clearProject,
-          icon: Icon(
-            Icons.delete_forever,
-            color: Colors.white,
-          ),
-        )
-      ],
-      textTheme: Theme.of(context).textTheme,
-      elevation: 0,
-      backgroundColor: Colors.transparent,
-      title: Text(
-        'The Window Calculator',
-      ),
-    );
+  _addNewWindow(Window newWindow) {
+    // Save current window
+    Window existingWindow = _updateWindowList(newWindow, activeWindow);
 
-    // Get available screen space
-    double availableScreen = MediaQuery.of(context).size.height -
-        mAppBar.preferredSize.height -
-        MediaQuery.of(context).padding.top;
+    // Update Counter to new window
+    setState(() {
+      activeWindow = existingWindow == null ? newWindow : existingWindow;
+    });
 
-    TextStyle aStyle = Theme.of(context).textTheme.headline5;
-
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [HexColors.fromHex('#1C85DF'), Colors.white],
-        ),
-      ),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: mAppBar,
-        body: Container(
-          height: availableScreen,
-          child: Column(
-            children: <Widget>[
-              // Results ---------------------
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: ResultsModule(
-                  height: availableScreen,
-                  hideViews: hideWidgets,
-                  windows: windowList,
-                  children: [
-                    priceTotal != null
-                        ? Text(
-                            '\$${Format.format(priceTotal)}',
-                            style: aStyle,
-                          )
-                        : Text(
-                            '\$0',
-                            style: aStyle,
-                          ),
-                    timeTotal != null
-                        ? Text(
-                            '$timeTotal',
-                            style: aStyle,
-                          )
-                        : Text(
-                            '0:00',
-                            style: aStyle,
-                          ),
-                  ],
-                  count: countTotal,
-                ),
-              ),
-
-              Flexible(
-                fit: FlexFit.tight,
-                child: Container(),
-              ),
-
-              Visibility(
-                visible: viewMods,
-                child: FactorModule(activeWindow, calculateResults),
-              ),
-
-              // Counter Module ---------------
-              Visibility(
-                visible: viewMods,
-                child: GestureDetector(
-                  onPanUpdate: (details) {
-                    if (details.delta.dx > 0) {
-                      showPallet();
-                    }
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border(
-                        top: BorderSide(
-                          style: BorderStyle.solid,
-                          width: 2,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                    width: double.infinity,
-                    child: Container(
-                      child: WindowCounter(
-                        window: activeWindow,
-                        totalsUpdater: calculateResults,
-                        selectNewWindowFun: selectNewWindow,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+    Navigator.of(context).pop();
   }
 
-  /*
-   * Modal sheet used to select new window
-   */
+  _clearProject() {
+    setState(() {
+      windowList.forEach((window) {
+        window.setCount(count: 0);
+        window = null;
+      });
+      windowList.clear();
+      activeWindow = OManager.getDefaultWindow();
+      windowList.add(activeWindow);
+      calculateResults();
+    });
+  }
+
+  /*  -----------------------------------------------------------------------
+   *                        GUI POP UPS/MUNIPS
+   *  -------------------------------------------------------------------- */
   void selectNewWindow(BuildContext ctx) {
     showModalBottomSheet(
       context: context,
@@ -307,28 +332,22 @@ class _MyHomePage extends State {
     );
   }
 
-  _addNewWindow(Window newWindow) {
-    // Save current window
-    Window existingWindow = _updateWindowList(newWindow, activeWindow);
-
-    // Update Counter to new window
+  hideWidgets(bool hide) {
     setState(() {
-     activeWindow = existingWindow == null ? newWindow : existingWindow;
+      viewMods = !hide;
     });
-
-    Navigator.of(context).pop();
   }
 
-  _clearProject() {
-    setState(() {
-      windowList.forEach((window) {
-        window.setCount(count: 0);
-        window = null;
-      });
-      windowList.clear();
-      activeWindow = OManager.getDefaultWindow();
-      windowList.add(activeWindow);
-      calculateResults();
-    });
+  showPallet() {
+    Navigator.push(
+      context,
+      WindowPalletPU(
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: MediaQuery.of(context).size.width / 2,
+        child: WindowPallet(windowList),
+      ),
+    );
   }
 }
