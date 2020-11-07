@@ -1,25 +1,20 @@
 import 'package:flutter/material.dart';
 import '../objects/Window.dart';
-import '../objects/OManager.dart';
 
 class WindowCounter extends StatelessWidget {
   final Window window;
-  final Function totalsUpdater, selectWindowFun;
+  
+  // Updates ResultsModule from main
+  final Function totalsUpdater;
+
+  // Promps the bottom sheet modal allowing user to select
+  // a new window. Needed for Window Preview button.
+  final Function selectNewWindowFun;
 
   WindowCounter(
       {@required this.window,
       @required this.totalsUpdater,
-      @required this.selectWindowFun});
-
-// class _WindowCounterState extends State<WindowCounter> {
-//   Window _window;
-//   final Function _updater, _updateWindowList;
-
-//   Image windowImage;
-
-//   _WindowCounterState(this._window, this._updater, this._updateWindowList) {
-//     windowImage = this._window.getPicture();
-//   }
+      @required this.selectNewWindowFun});
 
   @override
   Widget build(BuildContext context) {
@@ -28,14 +23,14 @@ class WindowCounter extends StatelessWidget {
     var screenWidth = MediaQuery.of(context).size.width * .8;
     return Container(
       width: screenWidth,
-      padding: EdgeInsets.symmetric(horizontal: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 12),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // Window Count Decrementing Button
+              // DECREMENTING BUTTON
               Container(
                 child: GestureDetector(
                   onTap: () {
@@ -50,7 +45,7 @@ class WindowCounter extends StatelessWidget {
                 ),
               ),
 
-              // Window Preview
+              // WINDOW PREVIEW
               DragTarget<Function>(
                 onWillAccept: (fun) => fun != null,
                 onAccept: (updateVisuals) {
@@ -60,23 +55,25 @@ class WindowCounter extends StatelessWidget {
                 builder: (ctx, candidates, rejects) {
                   return candidates.length > 0
                       ? IconButton(
-                          iconSize: screenWidth * .3,
+                          iconSize:
+                              screenWidth * .3, // TODO: Make this more dynamic
                           onPressed: () {
-                            selectWindowFun(context);
+                            selectNewWindowFun(context);
                           },
                           icon: buildCard(Theme.of(context).primaryColor),
                         )
                       : IconButton(
-                          iconSize: screenWidth * .3,
+                          iconSize:
+                              screenWidth * .3, // TODO: Make this more dynamic
                           onPressed: () {
-                            selectWindowFun(context);
+                            selectNewWindowFun(context);
                           },
                           icon: buildCard(Colors.white),
                         );
                 },
               ),
 
-              // Window Count Incrementing Button
+              // INCREMENTING BUTTON
               Container(
                 child: GestureDetector(
                   onTap: () {
@@ -98,20 +95,24 @@ class WindowCounter extends StatelessWidget {
     );
   }
 
+/*
+ * Builds window preview card. Needed because of dragging.
+ */
   Card buildCard(Color color) {
     return Card(
       borderOnForeground: true,
       shape: RoundedRectangleBorder(
-          side: BorderSide(
-            color: Colors.grey,
-            style: BorderStyle.solid,
-            width: 1,
-          ),
-          borderRadius: BorderRadius.circular(12)),
+        side: BorderSide(
+          color: Colors.grey,
+          style: BorderStyle.solid,
+          width: 1,
+        ),
+        borderRadius: BorderRadius.circular(12),
+      ),
       child: Container(
         color: color,
         child: window.getPicture(),
-        padding: EdgeInsets.all(4),
+        padding: const EdgeInsets.all(4),
       ),
     );
   }

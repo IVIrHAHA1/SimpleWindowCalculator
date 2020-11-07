@@ -15,7 +15,6 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -53,6 +52,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePage extends State {
   final List<Window> windowList = List();
+  Window activeWindow;
 
   var priceTotal;
   var timeTotal;
@@ -63,8 +63,6 @@ class _MyHomePage extends State {
   static const double mDRIVETIME = 25;
   static const double mMIN_PRICE = 150;
 
-  Window activeWindow;
-
   _MyHomePage() {
     viewMods = true;
     activeWindow = OManager.getDefaultWindow();
@@ -72,17 +70,17 @@ class _MyHomePage extends State {
   }
 
 /*
- *  Method first checks to see if current window should be saved
- * to masterWindowList. If so,  
+ *  This method updates the master list appropriately and assigns 
+ *  activeWindow if needed.
  */
-  updateWindowList(Window newWindow, Window oldWindow) {
+  _updateWindowList(Window newWindow, Window oldWindow) {
     setState(() {
-      // Removing window with now count
+      // STEP 1: Remove window with a zero count value
       if (oldWindow.getCount() == 0) {
         windowList.remove(oldWindow);
       }
 
-      // Check if window is already in the list
+      // STEP 2: Get window if it already exists in the master list
       for (int i = 0; i < windowList.length; i++) {
         // Found window already in list
         if (windowList[i].getName() == newWindow.getName()) {
@@ -91,6 +89,7 @@ class _MyHomePage extends State {
         }
       }
 
+      // STEP 3: If the window is in fact "new" then add it to the master list
       activeWindow = newWindow;
       windowList.add(activeWindow);
       return null;
@@ -116,7 +115,7 @@ class _MyHomePage extends State {
     );
   }
 
-  update() {
+  calculateResults() {
     // Calculate price before adjustments
     var windowPriceTotal = 0.0;
     countTotal = 0.0;
@@ -151,10 +150,6 @@ class _MyHomePage extends State {
         timeTotal = Format.formatTime(time);
       }
     });
-  }
-
-  setActiveWindow(Window window) {
-    activeWindow = window;
   }
 
   @override
@@ -237,7 +232,7 @@ class _MyHomePage extends State {
 
               Visibility(
                 visible: viewMods,
-                child: FactorModule(activeWindow, update),
+                child: FactorModule(activeWindow, calculateResults),
               ),
 
               // Counter Module ---------------
@@ -265,8 +260,8 @@ class _MyHomePage extends State {
                     child: Container(
                       child: WindowCounter(
                         window: activeWindow,
-                        totalsUpdater: update,
-                        selectWindowFun: selectNewWindow,
+                        totalsUpdater: calculateResults,
+                        selectNewWindowFun: selectNewWindow,
                       ),
                     ),
                   ),
@@ -314,7 +309,7 @@ class _MyHomePage extends State {
 
   _addNewWindow(Window newWindow) {
     // Save current window
-    Window existingWindow = updateWindowList(newWindow, activeWindow);
+    Window existingWindow = _updateWindowList(newWindow, activeWindow);
 
     // Update Counter to new window
     setState(() {
@@ -333,7 +328,7 @@ class _MyHomePage extends State {
       windowList.clear();
       activeWindow = OManager.getDefaultWindow();
       windowList.add(activeWindow);
-      update();
+      calculateResults();
     });
   }
 }
