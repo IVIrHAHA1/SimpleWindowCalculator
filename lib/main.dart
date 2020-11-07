@@ -58,7 +58,6 @@ class _MyHomePage extends State {
   var timeTotal;
   var countTotal;
 
-  WindowCounter windowCounter;
   bool viewMods;
 
   static const double mDRIVETIME = 25;
@@ -68,17 +67,14 @@ class _MyHomePage extends State {
 
   _MyHomePage() {
     viewMods = true;
-    Window defaultWindow = OManager.getDefaultWindow();
-    windowList.add(defaultWindow);
-
-    activeWindow = defaultWindow;
-    windowCounter = WindowCounter(
-      window: defaultWindow,
-      updater: update,
-      windowAddedFunction: updateWindowList,
-    );
+    activeWindow = OManager.getDefaultWindow();
+    windowList.add(activeWindow);
   }
 
+/*
+ *  Method first checks to see if current window should be saved
+ * to masterWindowList. If so,  
+ */
   updateWindowList(Window newWindow, Window oldWindow) {
     setState(() {
       // Removing window with now count
@@ -96,7 +92,7 @@ class _MyHomePage extends State {
       }
 
       activeWindow = newWindow;
-      windowList.add(newWindow);
+      windowList.add(activeWindow);
       return null;
     });
   }
@@ -157,12 +153,16 @@ class _MyHomePage extends State {
     });
   }
 
+  setActiveWindow(Window window) {
+    activeWindow = window;
+  }
+
   @override
   Widget build(BuildContext context) {
     AppBar mAppBar = AppBar(
       actions: [
         IconButton(
-          onPressed: _clearProject(),
+          onPressed: _clearProject,
           icon: Icon(
             Icons.delete_forever,
             color: Colors.white,
@@ -263,7 +263,11 @@ class _MyHomePage extends State {
                     padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                     width: double.infinity,
                     child: Container(
-                      child: windowCounter,
+                      child: WindowCounter(
+                        window: activeWindow,
+                        totalsUpdater: update,
+                        selectWindowFun: selectNewWindow,
+                      ),
                     ),
                   ),
                 ),
@@ -275,7 +279,61 @@ class _MyHomePage extends State {
     );
   }
 
+  /*
+   * Modal sheet used to select new window
+   */
+  void selectNewWindow(BuildContext ctx) {
+    showModalBottomSheet(
+      context: context,
+      builder: (_) {
+        return GridView.count(
+          crossAxisCount: 3,
+          children: OManager.windows.map((element) {
+            return GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              child: Card(
+                child: Column(
+                  children: [
+                    Container(
+                      child: element.getPicture(),
+                      width: MediaQuery.of(ctx).size.width / 4,
+                    ),
+                    Text(element.getName()),
+                  ],
+                ),
+              ),
+              onTap: () {
+                _addNewWindow(element);
+              },
+            );
+          }).toList(),
+        );
+      },
+    );
+  }
+
+  _addNewWindow(Window newWindow) {
+    // Save current window
+    Window existingWindow = updateWindowList(newWindow, activeWindow);
+
+    // Update Counter to new window
+    setState(() {
+     activeWindow = existingWindow == null ? newWindow : existingWindow;
+    });
+
+    Navigator.of(context).pop();
+  }
+
   _clearProject() {
-    // TODO: clear project
+    setState(() {
+      windowList.forEach((window) {
+        window.setCount(count: 0);
+        window = null;
+      });
+      windowList.clear();
+      activeWindow = OManager.getDefaultWindow();
+      windowList.add(activeWindow);
+      update();
+    });
   }
 }

@@ -2,74 +2,24 @@ import 'package:flutter/material.dart';
 import '../objects/Window.dart';
 import '../objects/OManager.dart';
 
-class WindowCounter extends StatefulWidget {
+class WindowCounter extends StatelessWidget {
   final Window window;
-  final Function updater, windowAddedFunction;
+  final Function totalsUpdater, selectWindowFun;
 
   WindowCounter(
       {@required this.window,
-      @required this.updater,
-      @required this.windowAddedFunction});
+      @required this.totalsUpdater,
+      @required this.selectWindowFun});
 
-  @override
-  _WindowCounterState createState() =>
-      _WindowCounterState(window, updater, windowAddedFunction);
-}
+// class _WindowCounterState extends State<WindowCounter> {
+//   Window _window;
+//   final Function _updater, _updateWindowList;
 
-class _WindowCounterState extends State<WindowCounter> {
-  Window _window;
-  final Function _updater, _updateWindowList;
+//   Image windowImage;
 
-  Image windowImage;
-
-  _WindowCounterState(this._window, this._updater, this._updateWindowList) {
-    windowImage = this._window.getPicture();
-  }
-
-  _addNewWindow(Window window) {
-    // Save current window
-    Window windowExisted = _updateWindowList(window, _window);
-
-    // Update Counter to new window
-    setState(() {
-      this._window = windowExisted == null ? window : windowExisted;
-    });
-
-    Navigator.of(context).pop();
-  }
-
-  /*
-   * Modal sheet used to select new window
-   */
-  void selectNewWindow(BuildContext ctx) {
-    showModalBottomSheet(
-      context: context,
-      builder: (_) {
-        return GridView.count(
-          crossAxisCount: 3,
-          children: OManager.windows.map((element) {
-            return GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              child: Card(
-                child: Column(
-                  children: [
-                    Container(
-                      child: element.getPicture(),
-                      width: MediaQuery.of(ctx).size.width / 4,
-                    ),
-                    Text(element.getName()),
-                  ],
-                ),
-              ),
-              onTap: () {
-                _addNewWindow(element);
-              },
-            );
-          }).toList(),
-        );
-      },
-    );
-  }
+//   _WindowCounterState(this._window, this._updater, this._updateWindowList) {
+//     windowImage = this._window.getPicture();
+//   }
 
   @override
   Widget build(BuildContext context) {
@@ -89,10 +39,8 @@ class _WindowCounterState extends State<WindowCounter> {
               Container(
                 child: GestureDetector(
                   onTap: () {
-                    setState(() {
-                      _window.amendCount(-1.0);
-                    });
-                    _updater();
+                    window.amendCount(-1.0);
+                    totalsUpdater();
                   },
                   child: Image.asset(
                     'assets/images/decrement_btn.png',
@@ -108,21 +56,20 @@ class _WindowCounterState extends State<WindowCounter> {
                 onAccept: (updateVisuals) {
                   // Updates the FactorCoin visuals
                   updateVisuals();
-
                 },
                 builder: (ctx, candidates, rejects) {
                   return candidates.length > 0
                       ? IconButton(
                           iconSize: screenWidth * .3,
                           onPressed: () {
-                            selectNewWindow(context);
+                            selectWindowFun(context);
                           },
                           icon: buildCard(Theme.of(context).primaryColor),
                         )
                       : IconButton(
                           iconSize: screenWidth * .3,
                           onPressed: () {
-                            selectNewWindow(context);
+                            selectWindowFun(context);
                           },
                           icon: buildCard(Colors.white),
                         );
@@ -133,10 +80,8 @@ class _WindowCounterState extends State<WindowCounter> {
               Container(
                 child: GestureDetector(
                   onTap: () {
-                    setState(() {
-                      _window.amendCount(1.0);
-                    });
-                    _updater();
+                    window.amendCount(1.0);
+                    totalsUpdater();
                   },
                   child: Image.asset(
                     'assets/images/increment_btn.png',
@@ -147,7 +92,7 @@ class _WindowCounterState extends State<WindowCounter> {
               ),
             ],
           ),
-          Text(_window.getName(), style: Theme.of(context).textTheme.bodyText1),
+          Text(window.getName(), style: Theme.of(context).textTheme.bodyText1),
         ],
       ),
     );
@@ -165,7 +110,7 @@ class _WindowCounterState extends State<WindowCounter> {
           borderRadius: BorderRadius.circular(12)),
       child: Container(
         color: color,
-        child: _window.getPicture(),
+        child: window.getPicture(),
         padding: EdgeInsets.all(4),
       ),
     );
