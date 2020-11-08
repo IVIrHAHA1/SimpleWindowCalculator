@@ -8,11 +8,24 @@ class OverviewModule extends StatelessWidget {
 
   _initStats() {
     statList.putIfAbsent('Hourly Rate', () => dictateHourlyRate());
+    statList.putIfAbsent('Tech Rate', () => techHourlyRate());
   }
 
   dictateHourlyRate() {
-    var total = 10 / 100;
-    return Text('$total');
+    var hourlyRate;
+    totalPrice == null || totalDuration == null
+        ? hourlyRate = 0.0
+        : hourlyRate = totalPrice / (totalDuration.inMinutes / 60);
+    return Text('$hourlyRate');
+  }
+
+  techHourlyRate() {
+    var techRate;
+
+    totalPrice == null || totalDuration == null
+        ? techRate = 0.0
+        : techRate = (totalPrice / (totalDuration.inMinutes / 60)) * .3;
+    return Text('$techRate');
   }
 
   OverviewModule(this.totalPrice, this.totalDuration);
@@ -25,7 +38,10 @@ class OverviewModule extends StatelessWidget {
         itemBuilder: (ctx, index) {
           String labelKey = statList.keys.elementAt(index);
 
-          return ListTile(leading: Text(labelKey), trailing: statList[labelKey],);
+          return ListTile(
+            leading: Text(labelKey),
+            trailing: statList[labelKey],
+          );
         },
         itemCount: statList.length,
       ),

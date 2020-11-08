@@ -1,10 +1,10 @@
-import 'package:SimpleWindowCalculator/Tools/HexColors.dart';
-import 'package:SimpleWindowCalculator/objects/OManager.dart';
-import 'package:SimpleWindowCalculator/widgets/FactorModule.dart';
-import 'package:SimpleWindowCalculator/widgets/OverviewModule.dart';
-import 'package:SimpleWindowCalculator/widgets/WindowCounter.dart';
-import 'package:SimpleWindowCalculator/widgets/WindowPallet.dart';
-import 'package:SimpleWindowCalculator/widgets/WindowPallet_pu.dart';
+import './Tools/HexColors.dart';
+import './objects/OManager.dart';
+import './widgets/FactorModule.dart';
+import './widgets/OverviewModule.dart';
+import './widgets/WindowCounter.dart';
+import './widgets/WindowPallet.dart';
+import './widgets/WindowPallet_pu.dart';
 
 import 'Tools/Format.dart';
 import 'widgets/ResultsModule.dart';
@@ -144,7 +144,7 @@ class _MyHomePage extends State {
                       ),
                 timeTotal != null
                     ? Text(
-                        '$timeTotal',
+                        '${Format.formatTime(timeTotal)}',
                         style: numberStyle,
                       )
                     : Text(
@@ -254,7 +254,7 @@ class _MyHomePage extends State {
 
       if(windowPriceTotal == 0.0) {
         priceTotal = 0.0;
-        timeTotal = Format.formatTime(Duration());
+        timeTotal = Duration();
       } else {
         // Add Drive time
         priceTotal = windowPriceTotal + mDRIVETIME;
@@ -270,7 +270,7 @@ class _MyHomePage extends State {
           priceTotal = mMIN_PRICE;
         }
 
-        timeTotal = Format.formatTime(time);
+        timeTotal = time;
       }
     });
   }
