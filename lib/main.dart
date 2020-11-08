@@ -1,6 +1,7 @@
 import 'package:SimpleWindowCalculator/Tools/HexColors.dart';
 import 'package:SimpleWindowCalculator/objects/OManager.dart';
 import 'package:SimpleWindowCalculator/widgets/FactorModule.dart';
+import 'package:SimpleWindowCalculator/widgets/OverviewModule.dart';
 import 'package:SimpleWindowCalculator/widgets/WindowCounter.dart';
 import 'package:SimpleWindowCalculator/widgets/WindowPallet.dart';
 import 'package:SimpleWindowCalculator/widgets/WindowPallet_pu.dart';
@@ -128,9 +129,9 @@ class _MyHomePage extends State {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: ResultsModule(
+              statModule: OverviewModule(priceTotal, timeTotal),
               height: availableScreen,
               hideViews: hideWidgets,
-              windows: windowList,
               children: [
                 priceTotal != null
                     ? Text(
@@ -251,7 +252,7 @@ class _MyHomePage extends State {
         time += window.getTotalDuration();
       }
 
-      if (windowPriceTotal == 0.0) {
+      if(windowPriceTotal == 0.0) {
         priceTotal = 0.0;
         timeTotal = Format.formatTime(Duration());
       } else {

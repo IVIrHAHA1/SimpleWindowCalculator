@@ -1,11 +1,6 @@
-/*
- * Module displays overall results of vital information
- */
-
 import 'package:SimpleWindowCalculator/Tools/Format.dart';
 import 'package:SimpleWindowCalculator/widgets/OverviewModule.dart';
 import 'package:flutter/material.dart';
-import 'package:SimpleWindowCalculator/objects/Window.dart';
 
 class ResultsModule extends StatefulWidget {
   // Sets container height of both Card and Total Count Tile
@@ -15,12 +10,17 @@ class ResultsModule extends StatefulWidget {
   final double height;
 
   final List<Text> children;
-  final List<Window> windows;
   final double count;
   final Function hideViews;
+  final OverviewModule statModule;
 
-  ResultsModule(
-      {this.height, this.children, this.count, this.hideViews, this.windows});
+  ResultsModule({
+    @required this.height,
+    @required this.count,
+    @required this.hideViews,
+    this.statModule,
+    this.children,
+  });
 
   @override
   _ResultsModuleState createState() =>
@@ -43,19 +43,15 @@ class _ResultsModuleState extends State<ResultsModule> {
   }
 
   _expandState() {
-    setState(() {
-      expanded = true;
-      dynamicHeight = widget.height - (widgetSize - collapsedHeight) - 17;
-      widget.hideViews(true);
-    });
+    expanded = true;
+    dynamicHeight = widget.height - (widgetSize - collapsedHeight) - 17;
+    widget.hideViews(true);
   }
 
   _collapseState() {
-    setState(() {
-      expanded = false;
-      widget.hideViews(false);
-      dynamicHeight = collapsedHeight;
-    });
+    expanded = false;
+    widget.hideViews(false);
+    dynamicHeight = collapsedHeight;
   }
 
   @override
@@ -111,9 +107,9 @@ class _ResultsModuleState extends State<ResultsModule> {
                       fit: FlexFit.loose,
                       child: Visibility(
                         visible: expanded,
-                        child: OverviewModule(
-                          windowList: widget.windows,
-                        ),
+                        child: widget.statModule != null
+                            ? widget.statModule
+                            : Container(),
                       ),
                     ),
                   ],
