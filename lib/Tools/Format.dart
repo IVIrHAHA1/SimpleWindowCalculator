@@ -1,6 +1,6 @@
 class Format {
   static format(double n) {
-    return n.toStringAsFixed(n.truncateToDouble() == n ? 0 : 1);
+    return n.toStringAsFixed(n.truncateToDouble() == n ? 0 : 2);
   }
 
   static formatTime(Duration d) =>
