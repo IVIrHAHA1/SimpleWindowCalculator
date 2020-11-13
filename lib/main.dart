@@ -174,11 +174,10 @@ class _MyHomePage extends State {
                 }
               },
               child: Container(
-                color: Colors.white38,
                 width: double.infinity,
-                height: availableScreen * .5,
                 child: Container(
                   child: WindowCounter(
+                    height:availableScreen * .5,
                     window: activeWindow,
                     totalsUpdater: calculateResults,
                     selectNewWindowFun: selectNewWindow,

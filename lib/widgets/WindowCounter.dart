@@ -4,6 +4,7 @@ import '../objects/Window.dart';
 
 class WindowCounter extends StatelessWidget {
   final Window window;
+  final double height;
 
   // Updates ResultsModule from main
   final Function totalsUpdater;
@@ -15,73 +16,90 @@ class WindowCounter extends StatelessWidget {
   WindowCounter(
       {@required this.window,
       @required this.totalsUpdater,
-      @required this.selectNewWindowFun});
+      @required this.selectNewWindowFun,
+      this.height});
 
   @override
   Widget build(BuildContext context) {
     return buildInnerController(context);
   }
 
-  Container buildInnerController(BuildContext ctx) {
-    const double buttonSize = .2;
-    var screenWidth = MediaQuery.of(ctx).size.width * .8;
+  buildInnerController(BuildContext ctx) {
+    const double factorPadding = 32; // TODO: Make dependent on Factor Coin size
+    final double innerCircleSize = height - factorPadding * 2;
+    final double buttonSize = innerCircleSize * .25;
 
     return Container(
-      padding: EdgeInsets.all(32),  // TODO: Make dependent on Factor Coin size
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: Colors.white,
-      ),
-      child: Container(
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: Theme.of(ctx).primaryColor,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            // DECREMENTING BUTTON
-            Container(
-              child: GestureDetector(
-                onTap: () {
-                  window.amendCount(-1.0);
-                  totalsUpdater();
-                },
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(100),
-                  ),
-                  child: Icon(
-                    Icons.add,
-                    color: Theme.of(ctx).primaryColor,
-                    size: screenWidth * buttonSize,
-                  ),
+      height: height,
+      child: Stack(
+        overflow: Overflow.clip,
+        children: [
+        Positioned(
+          height: height,
+          width: height,
+          right: -height/2,
+          child: Container(
+            padding: EdgeInsets.all(factorPadding),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.white,
+            ),
+            child: Stack(alignment: Alignment.center, children: [
+              Container(
+                height: innerCircleSize,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Theme.of(ctx).primaryColor,
                 ),
               ),
-            ),
+              Positioned(
+                right: innerCircleSize / 2 + 8,     // TODO: MAKE MARGIN GLOBAL
+                child: Column(
+                  children: [
+                    // DECREMENTING BUTTON
+                    GestureDetector(
+                      onTap: () {
+                        window.amendCount(-1.0);
+                        totalsUpdater();
+                      },
+                      child: Card(
+                        elevation: 5,
+                        shape: CircleBorder(side: BorderSide.none),
+                        child: Icon(
+                          Icons.add,
+                          color: Theme.of(ctx).primaryColor,
+                          size: buttonSize,
+                        ),
+                      ),
+                    ),
 
-            // INCREMENTING BUTTON
-            Container(
-              child: GestureDetector(
-                onTap: () {
-                  window.amendCount(1.0);
-                  totalsUpdater();
-                },
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(100),
-                  ),
-                  child: Icon(
-                    Icons.remove,
-                    color: Theme.of(ctx).primaryColor,
-                    size: screenWidth * buttonSize,
-                  ),
+                    SizedBox(
+                      height: innerCircleSize - (buttonSize * 2),
+                    ),
+
+                    // INCREMENTING BUTTON
+                    GestureDetector(
+                      onTap: () {
+                        window.amendCount(1.0);
+                        totalsUpdater();
+                      },
+                      child: Card(
+                        elevation: 5,
+                        shape: CircleBorder(side: BorderSide.none),
+                        child: Icon(
+                          Icons.remove,
+                          color: Theme.of(ctx).primaryColor,
+                          size: buttonSize,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ),
-          ],
+            ]),
+          ),
         ),
-      ),
+      ]),
     );
   }
 
