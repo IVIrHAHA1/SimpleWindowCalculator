@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:SimpleWindowCalculator/Tools/GlobalValues.dart';
 import 'package:SimpleWindowCalculator/Tools/HexColors.dart';
 import 'package:flutter/material.dart';
 import '../objects/Window.dart';
@@ -26,18 +29,25 @@ class WindowCounter extends StatelessWidget {
 
   buildInnerController(BuildContext ctx) {
     const double factorPadding = 32; // TODO: Make dependent on Factor Coin size
-    final double innerCircleSize = height - factorPadding * 2;
-    final double buttonSize = innerCircleSize * .25;
+    final double _innerCircleSize = height - factorPadding * 2;
+    final double buttonSize = _innerCircleSize * .25;
+
+    // Calculate Button Positioning
+    // Calculated as Positioned from right
+    final double _buttonCenterPosR =
+        _innerCircleSize / 2 + GlobalValues.appMargin - buttonSize / 2;
+    final double _radius = _innerCircleSize / 2;
+    final double _circlePoint = sqrt(pow(_radius, 2) - pow(_buttonCenterPosR, 2));
+    // Final Result
+    final double buttonPos = _circlePoint - buttonSize/4;
 
     return Container(
       height: height,
-      child: Stack(
-        overflow: Overflow.clip,
-        children: [
+      child: Stack(overflow: Overflow.clip, children: [
         Positioned(
           height: height,
           width: height,
-          right: -height/2,
+          right: -height / 2,
           child: Container(
             padding: EdgeInsets.all(factorPadding),
             decoration: BoxDecoration(
@@ -46,14 +56,14 @@ class WindowCounter extends StatelessWidget {
             ),
             child: Stack(alignment: Alignment.center, children: [
               Container(
-                height: innerCircleSize,
+                height: _innerCircleSize,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: Theme.of(ctx).primaryColor,
                 ),
               ),
               Positioned(
-                right: innerCircleSize / 2 + 8,     // TODO: MAKE MARGIN GLOBAL
+                right: _innerCircleSize / 2 + GlobalValues.appMargin,
                 child: Column(
                   children: [
                     // DECREMENTING BUTTON
@@ -74,7 +84,7 @@ class WindowCounter extends StatelessWidget {
                     ),
 
                     SizedBox(
-                      height: innerCircleSize - (buttonSize * 2),
+                      height: buttonPos,
                     ),
 
                     // INCREMENTING BUTTON
