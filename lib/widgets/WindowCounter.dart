@@ -1,9 +1,10 @@
+import 'package:SimpleWindowCalculator/Tools/HexColors.dart';
 import 'package:flutter/material.dart';
 import '../objects/Window.dart';
 
 class WindowCounter extends StatelessWidget {
   final Window window;
-  
+
   // Updates ResultsModule from main
   final Function totalsUpdater;
 
@@ -18,79 +19,68 @@ class WindowCounter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const double buttonSize = .3;
+    return buildInnerController(context);
+  }
 
-    var screenWidth = MediaQuery.of(context).size.width * .8;
+  Container buildInnerController(BuildContext ctx) {
+    const double buttonSize = .2;
+    var screenWidth = MediaQuery.of(ctx).size.width * .8;
+
     return Container(
-      width: screenWidth,
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              // DECREMENTING BUTTON
-              Container(
-                child: GestureDetector(
-                  onTap: () {
-                    window.amendCount(-1.0);
-                    totalsUpdater();
-                  },
-                  child: Image.asset(
-                    'assets/images/decrement_btn.png',
-                    height: screenWidth * buttonSize,
-                    width: screenWidth * buttonSize,
+      padding: EdgeInsets.all(32),  // TODO: Make dependent on Factor Coin size
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.white,
+      ),
+      child: Container(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Theme.of(ctx).primaryColor,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            // DECREMENTING BUTTON
+            Container(
+              child: GestureDetector(
+                onTap: () {
+                  window.amendCount(-1.0);
+                  totalsUpdater();
+                },
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                  child: Icon(
+                    Icons.add,
+                    color: Theme.of(ctx).primaryColor,
+                    size: screenWidth * buttonSize,
                   ),
                 ),
               ),
+            ),
 
-              // WINDOW PREVIEW
-              DragTarget<Function>(
-                onWillAccept: (fun) => fun != null,
-                onAccept: (updateVisuals) {
-                  // Updates the FactorCoin visuals
-                  updateVisuals();
+            // INCREMENTING BUTTON
+            Container(
+              child: GestureDetector(
+                onTap: () {
+                  window.amendCount(1.0);
+                  totalsUpdater();
                 },
-                builder: (ctx, candidates, rejects) {
-                  return candidates.length > 0
-                      ? IconButton(
-                          iconSize:
-                              screenWidth * .3, // TODO: Make this more dynamic
-                          onPressed: () {
-                            selectNewWindowFun(context);
-                          },
-                          icon: buildCard(Theme.of(context).primaryColor),
-                        )
-                      : IconButton(
-                          iconSize:
-                              screenWidth * .3, // TODO: Make this more dynamic
-                          onPressed: () {
-                            selectNewWindowFun(context);
-                          },
-                          icon: buildCard(Colors.white),
-                        );
-                },
-              ),
-
-              // INCREMENTING BUTTON
-              Container(
-                child: GestureDetector(
-                  onTap: () {
-                    window.amendCount(1.0);
-                    totalsUpdater();
-                  },
-                  child: Image.asset(
-                    'assets/images/increment_btn.png',
-                    height: screenWidth * buttonSize,
-                    width: screenWidth * buttonSize,
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                  child: Icon(
+                    Icons.remove,
+                    color: Theme.of(ctx).primaryColor,
+                    size: screenWidth * buttonSize,
                   ),
                 ),
               ),
-            ],
-          ),
-          Text(window.getName(), style: Theme.of(context).textTheme.bodyText1),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -117,3 +107,31 @@ class WindowCounter extends StatelessWidget {
     );
   }
 }
+
+// // WINDOW PREVIEW
+// DragTarget<Function>(
+//   onWillAccept: (fun) => fun != null,
+//   onAccept: (updateVisuals) {
+//     // Updates the FactorCoin visuals
+//     updateVisuals();
+//   },
+//   builder: (ctx, candidates, rejects) {
+//     return candidates.length > 0
+//         ? IconButton(
+//             iconSize:
+//                 screenWidth * .3, // TODO: Make this more dynamic
+//             onPressed: () {
+//               selectNewWindowFun(context);
+//             },
+//             icon: buildCard(Theme.of(context).primaryColor),
+//           )
+//         : IconButton(
+//             iconSize:
+//                 screenWidth * .3, // TODO: Make this more dynamic
+//             onPressed: () {
+//               selectNewWindowFun(context);
+//             },
+//             icon: buildCard(Colors.white),
+//           );
+//   },
+// ),

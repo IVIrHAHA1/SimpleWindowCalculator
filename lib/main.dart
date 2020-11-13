@@ -38,7 +38,9 @@ class MyApp extends StatelessWidget {
               bodyText1: TextStyle(
                   fontFamily: 'OpenSans', fontWeight: FontWeight.normal),
             ),
-        primarySwatch: Colors.blue,
+        primarySwatch: HexColors.createMaterialColor(
+          '#51AFFF',
+        ),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: MyHomePage(),
@@ -99,13 +101,7 @@ class _MyHomePage extends State {
     return Container(
       // This is to allow linear gradient behind the appBar
       // block begin:
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [HexColors.fromHex('#1C85DF'), Colors.white],
-        ),
-      ),
+      color: Theme.of(context).primaryColor,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: mAppBar,
@@ -162,11 +158,11 @@ class _MyHomePage extends State {
             child: Container(),
           ),
 
-          // Factors
-          Visibility(
-            visible: viewMods,
-            child: FactorModule(activeWindow, calculateResults),
-          ),
+          // Factor Module
+          // Visibility(
+          //   visible: viewMods,
+          //   child: FactorModule(activeWindow, calculateResults),
+          // ),
 
           // Counter Module
           Visibility(
@@ -178,18 +174,9 @@ class _MyHomePage extends State {
                 }
               },
               child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border(
-                    top: BorderSide(
-                      style: BorderStyle.solid,
-                      width: 2,
-                      color: Colors.grey,
-                    ),
-                  ),
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                color: Colors.white38,
                 width: double.infinity,
+                height: availableScreen * .5,
                 child: Container(
                   child: WindowCounter(
                     window: activeWindow,
@@ -252,7 +239,7 @@ class _MyHomePage extends State {
         time += window.getTotalDuration();
       }
 
-      if(windowPriceTotal == 0.0) {
+      if (windowPriceTotal == 0.0) {
         priceTotal = 0.0;
         timeTotal = Duration();
       } else {
