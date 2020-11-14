@@ -131,7 +131,7 @@ class _MyHomePage extends State {
               children: [
                 priceTotal != null
                     ? Text(
-                        '\$${Format.format(priceTotal)}',
+                        '\$${Format.format(priceTotal,2)}',
                         style: numberStyle,
                       )
                     : Text(
@@ -179,7 +179,7 @@ class _MyHomePage extends State {
                   child: WindowCounter(
                     height:availableScreen * .5,
                     window: activeWindow,
-                    totalsUpdater: calculateResults,
+                    calculator: calculateResults,
                     selectNewWindowFun: selectNewWindow,
                   ),
                 ),

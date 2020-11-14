@@ -18,7 +18,7 @@ class OverviewModule extends StatelessWidget {
         ? hourlyRate = 0.0
         : hourlyRate = totalPrice / (totalDuration.inMinutes / 60);
     return Text(
-      '\$${Format.format(hourlyRate)}',
+      '\$${Format.format(hourlyRate,2)}',
       style: Theme.of(ctx).textTheme.headline5,
     );
   }
@@ -30,7 +30,7 @@ class OverviewModule extends StatelessWidget {
         ? techRate = 0.0
         : techRate = (totalPrice / (totalDuration.inMinutes / 60)) * .3;
     return Text(
-      '\$${Format.format(techRate)}',
+      '\$${Format.format(techRate,2)}',
       style: Theme.of(ctx).textTheme.headline5,
     );
   }

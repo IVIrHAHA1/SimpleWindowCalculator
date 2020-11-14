@@ -70,7 +70,7 @@ class _FactorCoinState extends State<FactorCoin> {
 
     return Column(
       children: [
-        Text(factor != null ? '${Format.format((factor.getCount()))}' : ''),
+       // Text(factor != null ? '${Format.format((factor.getCount()), 1)}' : ''),
         disabled
             // (disabled) -> Coin is grayed out and has to be held to re-enable
             //  * while disabled cannot drag or increment/decrement
@@ -98,9 +98,9 @@ class _FactorCoinState extends State<FactorCoin> {
                   child: mintCoin(context, disabled, widget.size),
                 ),
               ),
-        Text(factor != null
-            ? '\$${Format.format((factor.calculatePrice(widget.window.getPrice())))}'
-            : ''),
+        // Text(factor != null
+        //     ? '\$${Format.format((factor.calculatePrice(widget.window.getPrice())),2)}'
+        //     : ''),
       ],
     );
   }
@@ -114,7 +114,7 @@ class _FactorCoinState extends State<FactorCoin> {
       shape: CircleBorder(
         side: BorderSide(
           color: styleBorder(context, greyed),
-          width: 2,
+          width: 3,
           style: BorderStyle.solid,
         ),
       ),

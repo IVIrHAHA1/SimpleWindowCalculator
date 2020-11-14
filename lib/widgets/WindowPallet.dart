@@ -55,10 +55,10 @@ class _WindowPreview extends StatelessWidget {
       children: [
         ListTile(
           leading: Text(
-            '${Format.format(window.getCount())}',
+            '${Format.format(window.getCount(),1)}',
             style: Theme.of(context).textTheme.headline5,
           ),
-          trailing: Text('\$${Format.format(window.grandTotal())}'),
+          trailing: Text('\$${Format.format(window.grandTotal(),2)}'),
         ),
         Container(
           width: double.infinity,
@@ -81,7 +81,7 @@ class _WindowPreview extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             Text(
-                              '${Format.format(entry.value.getCount())}',
+                              '${Format.format(entry.value.getCount(),1)}',
                             ),
                             entry.value.getImage(),
                           ],

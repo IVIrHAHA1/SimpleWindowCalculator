@@ -13,7 +13,7 @@ class FactorModule extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double _size = MediaQuery.of(context).size.width / 6;
+    double _size = MediaQuery.of(context).size.width / 6.75;
     const double _sizeRatio = 3 / 4;
 
     return Row(
@@ -43,7 +43,7 @@ class FactorModule extends StatelessWidget {
         FactorCoin(
           size: _size,
           child: Text(
-            '${Format.format(activeWindow.getCount())}',
+            '${Format.format(activeWindow.getCount(), 1)}',
             style: Theme.of(context).textTheme.headline5,
           ),
         ),

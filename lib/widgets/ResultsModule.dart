@@ -143,7 +143,7 @@ class _ResultsModuleState extends State<ResultsModule> {
                 child: Center(
                   child: widget.count != null
                       ? Text(
-                          '${Format.format(widget.count)}',
+                          '${Format.format(widget.count,1)}',
                           style: Theme.of(context).textTheme.headline5,
                         )
                       : Text(

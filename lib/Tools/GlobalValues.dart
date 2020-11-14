@@ -1,3 +1,3 @@
 class GlobalValues {
-  static const appMargin = 8;
+  static const double appMargin = 8;
 }
