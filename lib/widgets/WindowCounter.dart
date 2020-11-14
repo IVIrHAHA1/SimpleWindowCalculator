@@ -28,7 +28,7 @@ class WindowCounter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final factorSize = height / 7;
+    final factorSize = height / 6;
     // Using the center of FactorCoin as the point of reference
     final double radi = height / 2 - factorSize / 2;
 
@@ -54,7 +54,7 @@ class WindowCounter extends StatelessWidget {
               ],
             ),
           ),
-          buildController(context),
+          buildController(context, factorSize),
 
           // Filthy Factor
           Positioned(
@@ -148,10 +148,8 @@ class WindowCounter extends StatelessWidget {
     );
   }
 
-  buildController(BuildContext ctx) {
-    final double factorPadding = MediaQuery.of(ctx).size.width /
-        6.75 *
-        .5; // TODO: Make dependent on Factor Coin size
+  buildController(BuildContext ctx, double factorSize) {
+    final double factorPadding = factorSize * .75;
     final double _innerCircleSize = height - factorPadding * 2;
     final double buttonSize = _innerCircleSize * .25;
 

@@ -99,6 +99,7 @@ class _FactorCoinState extends State<FactorCoin> {
    */
   Card mintCoin(BuildContext context, bool greyed, double coinSize) {
     return Card(
+      elevation: 0,
       color: greyed ? Colors.grey : widget.backgroundColor,
       shape: CircleBorder(
         side: BorderSide(
@@ -148,7 +149,7 @@ class _FactorCoinState extends State<FactorCoin> {
     } else {
       return disabled || gray
           ? Colors.blueGrey
-          : (modeIncrement ? Colors.green : Colors.red);
+          : (modeIncrement ? Theme.of(ctx).primaryColor : Colors.red);
     }
   }
 }
