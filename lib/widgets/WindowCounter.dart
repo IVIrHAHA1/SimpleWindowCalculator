@@ -1,9 +1,8 @@
 import 'dart:math';
 
-import 'package:SimpleWindowCalculator/Tools/HexColors.dart';
-import 'package:SimpleWindowCalculator/objects/OManager.dart';
-import 'package:SimpleWindowCalculator/widgets/FactorCoin.dart';
-import 'package:SimpleWindowCalculator/widgets/FactorModule.dart';
+import '../Tools/HexColors.dart';
+import '../objects/OManager.dart';
+import '../widgets/FactorCoin.dart';
 
 import '../Tools/Format.dart';
 import '../Tools/GlobalValues.dart';
@@ -29,6 +28,10 @@ class WindowCounter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final factorSize = height / 7;
+    // Using the center of FactorCoin as the point of reference
+    final double radi = height / 2 - factorSize / 2;
+
     return Container(
       height: height,
       child: Stack(
@@ -52,36 +55,60 @@ class WindowCounter extends StatelessWidget {
             ),
           ),
           buildController(context),
+
+          // Filthy Factor
           Positioned(
-            bottom: height / 2 + 8,
-            right: height / 2 -
-                MediaQuery.of(context).size.width / 6.75 * .75 +
-                GlobalValues.appMargin +
-                8,
+            bottom: radi * sin(7 * pi / 24) + radi,
+            right: radi * cos(7 * pi / 24),
+            child: FactorCoin(
+              factorKey: Factors.filthy,
+              window: window,
+              size: factorSize,
+              alignment: Alignment.topCenter,
+              backgroundColor: HexColors.fromHex('#DCA065'),
+              updateTotal: calculator,
+            ),
+          ),
+
+          // Difficult Factor
+          Positioned(
+            bottom: radi * sin(pi / 12) + radi,
+            right: radi * cos(pi / 12),
             child: FactorCoin(
               factorKey: Factors.difficult,
               window: window,
-              size: MediaQuery.of(context).size.width / 6.75 * .75,
+              size: factorSize,
               alignment: Alignment.topCenter,
               backgroundColor: HexColors.fromHex('#FFEDA5'),
               updateTotal: calculator,
             ),
           ),
+
+          // Construction Factor
           Positioned(
-            top: height / 2 + 8,
-            right: height / 2 -
-                MediaQuery.of(context).size.width / 6.75 * .75 +
-                GlobalValues.appMargin +
-                8,
+            top: radi * sin(pi / 12) + radi,
+            right: radi * cos(pi / 12),
             child: FactorCoin(
               factorKey: Factors.construction,
               window: window,
-              size: MediaQuery.of(context).size.width / 6.75 * .75,
+              size: factorSize,
               alignment: Alignment.topCenter,
               backgroundColor: HexColors.fromHex('#FFB9B9'),
               updateTotal: calculator,
             ),
-          )
+          ),
+
+          Positioned(
+            top: radi * sin(7 * pi / 24) + radi,
+            right: radi * cos(7 * pi / 24),
+            child: FactorCoin(
+              factorKey: Factors.sided,
+              window: window,
+              size: factorSize,
+              alignment: Alignment.topCenter,
+              updateTotal: calculator,
+            ),
+          ),
         ],
       ),
     );
@@ -136,7 +163,7 @@ class WindowCounter extends StatelessWidget {
     final double _circlePoint =
         sqrt(pow(_radius, 2) - pow(_buttonCenterPosR, 2));
     // Final Result
-    final double buttonPos = _circlePoint - buttonSize / 4;
+    final double buttonWidth = _circlePoint - buttonSize / 4;
 
     return Stack(overflow: Overflow.clip, children: [
       Positioned(
@@ -183,7 +210,7 @@ class WindowCounter extends StatelessWidget {
                   ),
 
                   SizedBox(
-                    height: buttonPos,
+                    height: buttonWidth,
                   ),
 
                   // DECREMENTING BUTTON

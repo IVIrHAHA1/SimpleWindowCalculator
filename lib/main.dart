@@ -1,6 +1,5 @@
 import './Tools/HexColors.dart';
 import './objects/OManager.dart';
-import './widgets/FactorModule.dart';
 import './widgets/OverviewModule.dart';
 import './widgets/WindowCounter.dart';
 import './widgets/WindowPallet.dart';
@@ -157,12 +156,6 @@ class _MyHomePage extends State {
             fit: FlexFit.tight,
             child: Container(),
           ),
-
-          // Factor Module
-          // Visibility(
-          //   visible: viewMods,
-          //   child: FactorModule(activeWindow, calculateResults),
-          // ),
 
           // Counter Module
           Visibility(

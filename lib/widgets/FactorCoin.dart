@@ -1,5 +1,6 @@
 import 'package:SimpleWindowCalculator/Tools/Format.dart';
-import 'package:SimpleWindowCalculator/objects/Factor.dart';
+
+import '../objects/Factor.dart';
 
 import '../objects/OManager.dart';
 import '../objects/Window.dart';
@@ -64,45 +65,33 @@ class _FactorCoinState extends State<FactorCoin> {
 
   @override
   Widget build(BuildContext context) {
-    Factor factor = widget.window != null
-        ? widget.window.getFactor(widget.factorKey)
-        : null;
-
-    return Column(
-      children: [
-       // Text(factor != null ? '${Format.format((factor.getCount()), 1)}' : ''),
-        disabled
-            // (disabled) -> Coin is grayed out and has to be held to re-enable
-            //  * while disabled cannot drag or increment/decrement
-            ? InkWell(
-                onLongPress: () {
-                  changeAttachmentStatus();
-                },
-                child: mintCoin(context, true, widget.size),
-              )
-            // (!disabled) -> Coin is draggable and increments
-            : Draggable<Function>(
-                data: changeAttachmentStatus,
-                feedback: mintCoin(context, false, widget.size * 1.5),
-                childWhenDragging: mintCoin(context, true, widget.size),
-                child: InkWell(
-                  onTap: () {
-                    modeIncrement
-                        ? widget.window.incrementFactor(widget.factorKey)
-                        : widget.window.decrementFactor(widget.factorKey);
-                    widget.updateTotal();
-                  },
-                  onLongPress: () {
-                    changeMode();
-                  },
-                  child: mintCoin(context, disabled, widget.size),
-                ),
-              ),
-        // Text(factor != null
-        //     ? '\$${Format.format((factor.calculatePrice(widget.window.getPrice())),2)}'
-        //     : ''),
-      ],
-    );
+    return disabled
+        // (disabled) -> Coin is grayed out and has to be held to re-enable
+        //  * while disabled cannot drag or increment/decrement
+        ? InkWell(
+            onLongPress: () {
+              changeAttachmentStatus();
+            },
+            child: mintCoin(context, true, widget.size),
+          )
+        // (!disabled) -> Coin is draggable and increments
+        : Draggable<Function>(
+            data: changeAttachmentStatus,
+            feedback: mintCoin(context, false, widget.size * 1.5),
+            childWhenDragging: mintCoin(context, true, widget.size),
+            child: InkWell(
+              onTap: () {
+                modeIncrement
+                    ? widget.window.incrementFactor(widget.factorKey)
+                    : widget.window.decrementFactor(widget.factorKey);
+                widget.updateTotal();
+              },
+              onLongPress: () {
+                changeMode();
+              },
+              child: mintCoin(context, disabled, widget.size),
+            ),
+          );
   }
 
   /*
@@ -114,7 +103,7 @@ class _FactorCoinState extends State<FactorCoin> {
       shape: CircleBorder(
         side: BorderSide(
           color: styleBorder(context, greyed),
-          width: 3,
+          width: coinSize / 12,
           style: BorderStyle.solid,
         ),
       ),
