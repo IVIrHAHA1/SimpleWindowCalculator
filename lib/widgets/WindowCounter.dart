@@ -28,9 +28,17 @@ class WindowCounter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final factorSize = height / 6;
+    final factorSize = height / 6.5;
     // Using the center of FactorCoin as the point of reference
-    final double radi = height / 2 - factorSize / 2;
+    final double radi = (height / 2) - GlobalValues.appMargin;
+
+    // Inner Factor Position
+    final double ifp_y = radi * sin(pi / 8) + radi - factorSize/2;
+    final double ifp_x = radi * cos(pi / 8)  - factorSize/2;
+
+    // Outter Factor Position
+    final double ofp_y = radi * sin(pi / 3) + radi - factorSize/2;
+    final double ofp_x = radi * cos(pi / 3) - factorSize/2;
 
     return Container(
       height: height,
@@ -58,8 +66,8 @@ class WindowCounter extends StatelessWidget {
 
           // Filthy Factor
           Positioned(
-            bottom: radi * sin(7 * pi / 24) + radi,
-            right: radi * cos(7 * pi / 24),
+            bottom: ofp_y,
+            right: ofp_x,
             child: FactorCoin(
               factorKey: Factors.filthy,
               window: window,
@@ -72,8 +80,8 @@ class WindowCounter extends StatelessWidget {
 
           // Difficult Factor
           Positioned(
-            bottom: radi * sin(pi / 12) + radi,
-            right: radi * cos(pi / 12),
+            bottom: ifp_y,
+            right: ifp_x,
             child: FactorCoin(
               factorKey: Factors.difficult,
               window: window,
@@ -86,8 +94,8 @@ class WindowCounter extends StatelessWidget {
 
           // Construction Factor
           Positioned(
-            top: radi * sin(pi / 12) + radi,
-            right: radi * cos(pi / 12),
+            top: ifp_y,
+            right: ifp_x,
             child: FactorCoin(
               factorKey: Factors.construction,
               window: window,
@@ -99,8 +107,8 @@ class WindowCounter extends StatelessWidget {
           ),
 
           Positioned(
-            top: radi * sin(7 * pi / 24) + radi,
-            right: radi * cos(7 * pi / 24),
+            top: ofp_y,
+            right: ofp_x,
             child: FactorCoin(
               factorKey: Factors.sided,
               window: window,
@@ -149,7 +157,7 @@ class WindowCounter extends StatelessWidget {
   }
 
   buildController(BuildContext ctx, double factorSize) {
-    final double factorPadding = factorSize * .75;
+    final double factorPadding = factorSize * .9;
     final double _innerCircleSize = height - factorPadding * 2;
     final double buttonSize = _innerCircleSize * .25;
 
