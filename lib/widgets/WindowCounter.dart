@@ -29,16 +29,19 @@ class WindowCounter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final factorSize = height / 6.5;
+    // ErrorMargin is used to keep the the radius circular rather than
+    // an ellipse (when used in conjuction with radii)
+    final double errorMargin = factorSize * .8;
     // Using the center of FactorCoin as the point of reference
-    final double radi = (height / 2) - GlobalValues.appMargin;
+    final double radii = (height / 2);
 
     // Inner Factor Position
-    final double ifp_y = radi * sin(pi / 8) + radi - factorSize/2;
-    final double ifp_x = radi * cos(pi / 8)  - factorSize/2;
+    final double ifp_y = radii * sin(pi / 8) + radii - errorMargin;
+    final double ifp_x = radii * cos(pi / 8) - errorMargin;
 
     // Outter Factor Position
-    final double ofp_y = radi * sin(pi / 3) + radi - factorSize/2;
-    final double ofp_x = radi * cos(pi / 3) - factorSize/2;
+    final double ofp_y = radii * sin(pi / 3) + radii - errorMargin;
+    final double ofp_x = radii * cos(pi / 3) - errorMargin;
 
     return Container(
       height: height,
@@ -72,7 +75,7 @@ class WindowCounter extends StatelessWidget {
               factorKey: Factors.filthy,
               window: window,
               size: factorSize,
-              alignment: Alignment.topCenter,
+              alignment: Alignment.center,
               backgroundColor: HexColors.fromHex('#DCA065'),
               updateTotal: calculator,
             ),
@@ -106,6 +109,7 @@ class WindowCounter extends StatelessWidget {
             ),
           ),
 
+          // Sided Factor
           Positioned(
             top: ofp_y,
             right: ofp_x,
@@ -113,45 +117,11 @@ class WindowCounter extends StatelessWidget {
               factorKey: Factors.sided,
               window: window,
               size: factorSize,
-              alignment: Alignment.topCenter,
+              alignment: Alignment.center,
               updateTotal: calculator,
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  buildWindowPreview(BuildContext context) {
-    final double previewSize = height * .6;
-
-    return Container(
-      color: Colors.transparent,
-      height: previewSize,
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-        child: DragTarget<Function>(
-          onWillAccept: (fun) => fun != null,
-          onAccept: (updateVisuals) {
-            // Updates the FactorCoin visuals
-            updateVisuals();
-          },
-          builder: (ctx, candidates, rejects) {
-            return candidates.length > 0
-                ? GestureDetector(
-                    onTap: () {
-                      selectNewWindowFun(context);
-                    },
-                    child: buildCard(Colors.redAccent),
-                  )
-                : GestureDetector(
-                    onTap: () {
-                      selectNewWindowFun(context);
-                    },
-                    child: buildCard(Colors.transparent),
-                  );
-          },
-        ),
       ),
     );
   }
@@ -246,6 +216,40 @@ class WindowCounter extends StatelessWidget {
         ),
       ),
     ]);
+  }
+
+  buildWindowPreview(BuildContext context) {
+    final double previewSize = height * .6;
+
+    return Container(
+      color: Colors.transparent,
+      height: previewSize,
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+        child: DragTarget<Function>(
+          onWillAccept: (fun) => fun != null,
+          onAccept: (updateVisuals) {
+            // Updates the FactorCoin visuals
+            updateVisuals();
+          },
+          builder: (ctx, candidates, rejects) {
+            return candidates.length > 0
+                ? GestureDetector(
+                    onTap: () {
+                      selectNewWindowFun(context);
+                    },
+                    child: buildCard(Colors.redAccent),
+                  )
+                : GestureDetector(
+                    onTap: () {
+                      selectNewWindowFun(context);
+                    },
+                    child: buildCard(Colors.transparent),
+                  );
+          },
+        ),
+      ),
+    );
   }
 
 /*
