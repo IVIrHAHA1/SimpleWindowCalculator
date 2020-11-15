@@ -75,7 +75,7 @@ class _ResultsModuleState extends State<ResultsModule> {
           height: dynamicHeight,
           child: Card(
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(8),
             ),
             elevation: 5,
             child: GestureDetector(
@@ -132,12 +132,7 @@ class _ResultsModuleState extends State<ResultsModule> {
               height: 50,
               child: Card(
                 shape: RoundedRectangleBorder(
-                  side: BorderSide(
-                    width: 2,
-                    style: BorderStyle.solid,
-                    color: Colors.blue,
-                  ),
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(8),
                 ),
                 color: Colors.white,
                 child: Center(

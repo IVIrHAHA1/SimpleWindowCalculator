@@ -124,8 +124,10 @@ class WindowCounter extends StatelessWidget {
             '${window.getName()}',
             style: Theme.of(context).textTheme.headline6,
           ),
+
+          // Factor Row
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               buildDummyCoin(
                   factorSize, '#DCA065', Alignment.center, Factors.filthy),
@@ -154,7 +156,7 @@ class WindowCounter extends StatelessWidget {
           style: TextStyle(color: Colors.white),
         ),
         Opacity(
-          opacity: .5,
+          opacity: .75,
           child: FactorCoin(
             factorKey: factorKey,
             window: window,
@@ -165,7 +167,7 @@ class WindowCounter extends StatelessWidget {
           ),
         ),
         Text(
-          '${Format.format(window.getFactor(factorKey).getCount(), 1)}',
+          '\$${Format.format((window.getFactor(factorKey).calculatePrice(window.getPrice())),0)}',
           style: TextStyle(color: Colors.white),
         ),
       ],
@@ -265,7 +267,7 @@ class WindowCounter extends StatelessWidget {
   }
 
   buildWindowPreview(BuildContext context) {
-    final double previewSize = height * .6;
+    final double previewSize = height * .5;
 
     return Container(
       color: Colors.transparent,
