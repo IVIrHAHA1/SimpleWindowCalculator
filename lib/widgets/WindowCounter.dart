@@ -110,10 +110,11 @@ class WindowCounter extends StatelessWidget {
   }
 
   Widget buildPreview(BuildContext context, double factorSize) {
+    double width = MediaQuery.of(context).size.width/2;
+
     return Positioned(
       left: GlobalValues.appMargin,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
             '${Format.format(window.getCount(), 1)}',
@@ -126,17 +127,20 @@ class WindowCounter extends StatelessWidget {
           ),
 
           // Factor Row
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              buildDummyCoin(
-                  factorSize, '#DCA065', Alignment.center, Factors.filthy),
-              buildDummyCoin(factorSize, '#FFEDA5', Alignment.topCenter,
-                  Factors.difficult),
-              buildDummyCoin(factorSize, '#FFB9B9', Alignment.topCenter,
-                  Factors.construction),
-              buildDummyCoin(factorSize, null, Alignment.center, Factors.sided),
-            ],
+          Container(
+            width: width,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                buildDummyCoin(
+                    factorSize, '#DCA065', Alignment.center, Factors.filthy),
+                buildDummyCoin(factorSize, '#FFEDA5', Alignment.topCenter,
+                    Factors.difficult),
+                buildDummyCoin(factorSize, '#FFB9B9', Alignment.topCenter,
+                    Factors.construction),
+                buildDummyCoin(factorSize, null, Alignment.center, Factors.sided),
+              ],
+            ),
           )
         ],
       ),
@@ -153,7 +157,7 @@ class WindowCounter extends StatelessWidget {
       children: [
         Text(
           '${Format.format(window.getFactor(factorKey).getCount(), 1)}',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: Colors.white, fontSize: 8),
         ),
         Opacity(
           opacity: .75,
@@ -168,7 +172,7 @@ class WindowCounter extends StatelessWidget {
         ),
         Text(
           '\$${Format.format((window.getFactor(factorKey).calculatePrice(window.getPrice())),0)}',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: Colors.white, fontSize: 8),
         ),
       ],
     );

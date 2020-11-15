@@ -75,6 +75,7 @@ class _MyHomePage extends State {
   Widget build(BuildContext context) {
     // Needs to be here because of clear onPressed
     AppBar mAppBar = AppBar(
+      leading: Icon(Icons.menu, color: Colors.white,),
       actions: [
         IconButton(
           onPressed: _clearProject,
