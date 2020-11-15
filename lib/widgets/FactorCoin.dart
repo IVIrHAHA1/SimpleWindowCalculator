@@ -1,7 +1,3 @@
-import 'package:SimpleWindowCalculator/Tools/Format.dart';
-
-import '../objects/Factor.dart';
-
 import '../objects/OManager.dart';
 import '../objects/Window.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +7,6 @@ class FactorCoin extends StatefulWidget {
   final Color backgroundColor;
   final Alignment alignment;
   final Factors factorKey;
-  final Widget child; // TODO: Remove when redesign occurs
   final Window window;
   final Function updateTotal;
 
@@ -19,10 +14,9 @@ class FactorCoin extends StatefulWidget {
 
   FactorCoin({
     @required this.size,
+    @required this.factorKey,
     this.updateTotal,
-    this.factorKey,
     this.window,
-    this.child,
     this.backgroundColor = Colors.white,
     this.alignment = Alignment.center,
   });
@@ -65,6 +59,16 @@ class _FactorCoinState extends State<FactorCoin> {
 
   @override
   Widget build(BuildContext context) {
+    return widget.updateTotal != null
+        ? buildInteractiveCoin()
+        : buildDummyCoin();
+  }
+
+  Widget buildDummyCoin() {
+    return mintCoin(context, false, widget.size);
+  }
+
+  Widget buildInteractiveCoin() {
     return disabled
         // (disabled) -> Coin is grayed out and has to be held to re-enable
         //  * while disabled cannot drag or increment/decrement
@@ -133,9 +137,7 @@ class _FactorCoinState extends State<FactorCoin> {
       alignment: widget.alignment,
       // Takes the factor image. Otherwise takes any widget child and builds the circle
       // around it. Used for Window Specific Counter.
-      child: widget.window != null
-          ? widget.window.getFactor(widget.factorKey).getImage()
-          : widget.child,
+      child: widget.window.getFactor(widget.factorKey).getImage(),
     );
   }
 
@@ -144,12 +146,8 @@ class _FactorCoinState extends State<FactorCoin> {
    *  ** TODO: Remove when design occurs.
    */
   Color styleBorder(BuildContext ctx, bool gray) {
-    if (widget.child != null) {
-      return Theme.of(ctx).primaryColor;
-    } else {
-      return disabled || gray
-          ? Colors.blueGrey
-          : (modeIncrement ? Theme.of(ctx).primaryColor : Colors.red);
-    }
+    return disabled || gray
+        ? Colors.blueGrey
+        : (modeIncrement ? Theme.of(ctx).primaryColor : Colors.red);
   }
 }

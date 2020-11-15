@@ -46,25 +46,8 @@ class WindowCounter extends StatelessWidget {
     return Container(
       height: height,
       child: Stack(
-        alignment: Alignment.center,
         children: [
-          Positioned(
-            left: GlobalValues.appMargin,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  '${Format.format(window.getCount(), 1)}',
-                  style: Theme.of(context).textTheme.headline6,
-                ),
-                buildWindowPreview(context),
-                Text(
-                  '${window.getName()}',
-                  style: Theme.of(context).textTheme.headline6,
-                ),
-              ],
-            ),
-          ),
+          buildPreview(context, factorSize),
           buildController(context, factorSize),
 
           // Filthy Factor
@@ -123,6 +106,69 @@ class WindowCounter extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Widget buildPreview(BuildContext context, double factorSize) {
+    return Positioned(
+      left: GlobalValues.appMargin,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            '${Format.format(window.getCount(), 1)}',
+            style: Theme.of(context).textTheme.headline6,
+          ),
+          buildWindowPreview(context),
+          Text(
+            '${window.getName()}',
+            style: Theme.of(context).textTheme.headline6,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              buildDummyCoin(
+                  factorSize, '#DCA065', Alignment.center, Factors.filthy),
+              buildDummyCoin(factorSize, '#FFEDA5', Alignment.topCenter,
+                  Factors.difficult),
+              buildDummyCoin(factorSize, '#FFB9B9', Alignment.topCenter,
+                  Factors.construction),
+              buildDummyCoin(factorSize, null, Alignment.center, Factors.sided),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget buildDummyCoin(
+    double factorSize,
+    String colorCode,
+    Alignment alignment,
+    Factors factorKey,
+  ) {
+    return Column(
+      children: [
+        Text(
+          '${Format.format(window.getFactor(factorKey).getCount(), 1)}',
+          style: TextStyle(color: Colors.white),
+        ),
+        Opacity(
+          opacity: .5,
+          child: FactorCoin(
+            factorKey: factorKey,
+            window: window,
+            size: factorSize / 2,
+            alignment: alignment,
+            backgroundColor:
+                colorCode != null ? HexColors.fromHex(colorCode) : null,
+          ),
+        ),
+        Text(
+          '${Format.format(window.getFactor(factorKey).getCount(), 1)}',
+          style: TextStyle(color: Colors.white),
+        ),
+      ],
     );
   }
 
@@ -225,7 +271,7 @@ class WindowCounter extends StatelessWidget {
       color: Colors.transparent,
       height: previewSize,
       child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         child: DragTarget<Function>(
           onWillAccept: (fun) => fun != null,
           onAccept: (updateVisuals) {
@@ -260,7 +306,7 @@ class WindowCounter extends StatelessWidget {
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(8),
       ),
       child: window.getPicture(),
     );
