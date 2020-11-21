@@ -10,14 +10,14 @@ class FactorCoin extends StatefulWidget {
   final Alignment alignment;
   final Factors factorKey;
   final Window window;
-  final Function updateTotal;
+  final Function updateResultsMod;
 
   static const double iconRatio = 1 / 6;
 
   FactorCoin({
     @required this.size,
     @required this.factorKey,
-    this.updateTotal,
+    this.updateResultsMod,
     this.window,
     this.backgroundColor = Colors.white,
     this.alignment = Alignment.center,
@@ -59,9 +59,33 @@ class _FactorCoinState extends State<FactorCoin> {
     });
   }
 
+  optionController(Function stateOperation, FactorOptions option) {
+    switch (option) {
+      case FactorOptions.decrement:
+        changeMode();
+        Navigator.of(context).pop();
+        break;
+
+      case FactorOptions.apply:
+        stateOperation();
+        changeAttachmentStatus();
+        widget.updateResultsMod();
+        Navigator.of(context).pop();
+        break;
+
+      case FactorOptions.clear:
+        stateOperation();
+        widget.updateResultsMod();
+        Navigator.of(context).pop();
+        break;
+
+      case FactorOptions.edit:
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return widget.updateTotal != null
+    return widget.updateResultsMod != null
         ? buildInteractiveCoin(context)
         : buildDummyCoin();
   }
@@ -90,12 +114,14 @@ class _FactorCoinState extends State<FactorCoin> {
                 modeIncrement
                     ? widget.window.incrementFactor(widget.factorKey)
                     : widget.window.decrementFactor(widget.factorKey);
-                widget.updateTotal();
+                widget.updateResultsMod();
               },
               onLongPress: () {
                 Navigator.push(
                   context,
                   FactorOptionRoute(
+                    incrementingMode: modeIncrement,
+                    optionsController: optionController,
                     window: widget.window,
                     factorKey: widget.factorKey,
                   ),
@@ -152,7 +178,6 @@ class _FactorCoinState extends State<FactorCoin> {
 
   /*
    * Used for immutable circles
-   *  ** TODO: Remove when design occurs.
    */
   Color styleBorder(BuildContext ctx, bool gray) {
     return disabled || gray

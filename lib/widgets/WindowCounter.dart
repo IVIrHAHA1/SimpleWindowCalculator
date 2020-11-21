@@ -60,7 +60,7 @@ class WindowCounter extends StatelessWidget {
               size: factorSize,
               alignment: Alignment.center,
               backgroundColor: HexColors.fromHex('#DCA065'),
-              updateTotal: calculator,
+              updateResultsMod: calculator,
             ),
           ),
 
@@ -74,7 +74,7 @@ class WindowCounter extends StatelessWidget {
               size: factorSize,
               alignment: Alignment.topCenter,
               backgroundColor: HexColors.fromHex('#FFEDA5'),
-              updateTotal: calculator,
+              updateResultsMod: calculator,
             ),
           ),
 
@@ -88,7 +88,7 @@ class WindowCounter extends StatelessWidget {
               size: factorSize,
               alignment: Alignment.topCenter,
               backgroundColor: HexColors.fromHex('#FFB9B9'),
-              updateTotal: calculator,
+              updateResultsMod: calculator,
             ),
           ),
 
@@ -101,7 +101,7 @@ class WindowCounter extends StatelessWidget {
               window: window,
               size: factorSize,
               alignment: Alignment.center,
-              updateTotal: calculator,
+              updateResultsMod: calculator,
             ),
           ),
         ],
@@ -110,7 +110,7 @@ class WindowCounter extends StatelessWidget {
   }
 
   Widget buildPreview(BuildContext context, double factorSize) {
-    double width = MediaQuery.of(context).size.width/2;
+    double width = MediaQuery.of(context).size.width / 2;
 
     return Positioned(
       left: GlobalValues.appMargin,
@@ -133,12 +133,29 @@ class WindowCounter extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 buildDummyCoin(
-                    factorSize, '#DCA065', Alignment.center, Factors.filthy),
-                buildDummyCoin(factorSize, '#FFEDA5', Alignment.topCenter,
-                    Factors.difficult),
-                buildDummyCoin(factorSize, '#FFB9B9', Alignment.topCenter,
-                    Factors.construction),
-                buildDummyCoin(factorSize, null, Alignment.center, Factors.sided),
+                  factorSize,
+                  '#DCA065',
+                  Alignment.center,
+                  Factors.filthy,
+                ),
+                buildDummyCoin(
+                  factorSize,
+                  '#FFEDA5',
+                  Alignment.topCenter,
+                  Factors.difficult,
+                ),
+                buildDummyCoin(
+                  factorSize,
+                  '#FFB9B9',
+                  Alignment.topCenter,
+                  Factors.construction,
+                ),
+                buildDummyCoin(
+                  factorSize,
+                  null,
+                  Alignment.center,
+                  Factors.sided,
+                ),
               ],
             ),
           )
@@ -171,7 +188,7 @@ class WindowCounter extends StatelessWidget {
           ),
         ),
         Text(
-          '\$${Format.format((window.getFactor(factorKey).calculatePrice(window.getPrice())),0)}',
+          '\$${Format.format((window.getFactor(factorKey).calculatePrice(window.getPrice())), 0)}',
           style: TextStyle(color: Colors.white, fontSize: 8),
         ),
       ],

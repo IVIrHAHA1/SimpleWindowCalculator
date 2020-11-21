@@ -3,6 +3,13 @@ import 'package:SimpleWindowCalculator/objects/OManager.dart';
 import 'package:SimpleWindowCalculator/objects/Window.dart';
 import 'package:flutter/material.dart';
 
+enum FactorOptions {
+  decrement,
+  apply,
+  clear,
+  edit,
+}
+
 class FactorOptionRoute extends ModalRoute {
   @override
   Color get barrierColor => Colors.black.withOpacity(.5);
@@ -28,35 +35,60 @@ class FactorOptionRoute extends ModalRoute {
       icon: Icon(Icons.arrow_drop_down_circle),
       title: 'Decrement',
       subtitle: 'Modify quick-action',
-      function: (window, factorKey) {
-        print(window.getName());
+      windowFunction: (window, factorKey, optionsController) {
+        optionsController(null, FactorOptions.decrement);
       },
     ),
 
     // Apply Factor
     _Option(
-      icon: Icon(Icons.arrow_upward),
-      title: 'Apply Factor',
-      subtitle: 'Matches factor count to current window count',
-    ),
+        icon: Icon(Icons.arrow_upward),
+        title: 'Apply Factor',
+        subtitle: 'Matches factor count to current window count',
+        windowFunction: (window, factorKey, optionsController) {
+          optionsController(
+            () {
+              window.getFactor(factorKey).setCount(window.getCount());
+            },
+            FactorOptions.apply,
+          );
+        }),
+
+    // Clear Factor
+    _Option(
+        icon: Icon(Icons.clear),
+        title: 'Clear Factor',
+        subtitle: 'Clears factor from selected window',
+        windowFunction: (window, factorKey, optionsController) {
+          optionsController(
+            () {
+              window.getFactor(factorKey).setCount(0);
+            },
+            FactorOptions.clear,
+          );
+        }),
+
+    // Edit Factor
+    _Option(
+        icon: Icon(Icons.edit),
+        title: 'Edit Factor',
+        subtitle: 'Edit factor details',
+        windowFunction: (window, factorKey, optionsController) {
+          optionsController(null, FactorOptions.edit);
+        }),
   ];
 
-  double top, bottom, left, right;
+  final Function optionsController;
   final Window window;
   final Factors factorKey;
+  bool incrementingMode;
 
   FactorOptionRoute({
+    this.optionsController,
     @required this.window,
     @required this.factorKey,
-    this.top = 50,
-    this.bottom = 50,
-    this.right = 50,
-    this.left = 50,
+    this.incrementingMode
   });
-
-  void _changeMode() {
-    print('changing mode');
-  }
 
   @override
   Widget buildPage(BuildContext context, Animation<double> animation,
@@ -67,6 +99,18 @@ class FactorOptionRoute extends ModalRoute {
     final double popUpHeight =
         (verticalPadding * 8) - MediaQuery.of(context).padding.top;
 
+  // if true coin mode is currently set to decrement
+  if(!incrementingMode) {
+    options[0] =  _Option(
+      icon: Icon(Icons.arrow_drop_up),
+      title: 'Increment',
+      subtitle: 'Modify quick-action',
+      windowFunction: (window, factorKey, optionsController) {
+        optionsController(null, FactorOptions.decrement);
+      },
+    );
+  }
+ 
     return GestureDetector(
       onTap: () {
         Navigator.of(context).pop();
@@ -115,6 +159,7 @@ class FactorOptionRoute extends ModalRoute {
                     itemBuilder: (ctx, index) {
                       return buildTile(
                         options[index],
+                        context,
                       );
                     },
                   ),
@@ -127,12 +172,15 @@ class FactorOptionRoute extends ModalRoute {
     );
   }
 
-  ListTile buildTile(_Option option) {
+  ListTile buildTile(_Option option, BuildContext context) {
     return ListTile(
       leading: option.icon,
       title: Text(option.title),
-      subtitle: Text(option.subtitle),
-      onTap: () => option.function(window, factorKey),
+      subtitle: Text(
+        option.subtitle,
+        style: TextStyle(fontSize: 10),
+      ),
+      onTap: () => option.windowFunction(window, factorKey, optionsController),
     );
   }
 
@@ -143,15 +191,15 @@ class FactorOptionRoute extends ModalRoute {
 }
 
 class _Option {
-  final String title;
-  final String subtitle;
-  final Icon icon;
-  final Function(Window, Factors) function;
+  String title;
+  String subtitle;
+  Icon icon;
+  final Function(Window, Factors, Function) windowFunction;
 
   _Option({
     this.icon,
     this.title,
     this.subtitle,
-    this.function,
+    this.windowFunction,
   });
 }
