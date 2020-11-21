@@ -1,3 +1,5 @@
+import 'package:SimpleWindowCalculator/Routes/FactorOptionsRoute.dart';
+
 import '../objects/OManager.dart';
 import '../objects/Window.dart';
 import 'package:flutter/material.dart';
@@ -60,7 +62,7 @@ class _FactorCoinState extends State<FactorCoin> {
   @override
   Widget build(BuildContext context) {
     return widget.updateTotal != null
-        ? buildInteractiveCoin()
+        ? buildInteractiveCoin(context)
         : buildDummyCoin();
   }
 
@@ -68,7 +70,7 @@ class _FactorCoinState extends State<FactorCoin> {
     return mintCoin(context, false, widget.size);
   }
 
-  Widget buildInteractiveCoin() {
+  Widget buildInteractiveCoin(BuildContext context) {
     return disabled
         // (disabled) -> Coin is grayed out and has to be held to re-enable
         //  * while disabled cannot drag or increment/decrement
@@ -78,7 +80,7 @@ class _FactorCoinState extends State<FactorCoin> {
             },
             child: mintCoin(context, true, widget.size),
           )
-        // (!disabled) -> Coin is draggable and increments
+        // (enabled) -> Coin is draggable and increments
         : Draggable<Function>(
             data: changeAttachmentStatus,
             feedback: mintCoin(context, false, widget.size * 1.5),
@@ -91,7 +93,14 @@ class _FactorCoinState extends State<FactorCoin> {
                 widget.updateTotal();
               },
               onLongPress: () {
-                changeMode();
+                Navigator.push(
+                  context,
+                  FactorOptionRoute(
+                    window: widget.window,
+                    factorKey: widget.factorKey,
+                  ),
+                );
+                //changeMode();
               },
               child: mintCoin(context, disabled, widget.size),
             ),

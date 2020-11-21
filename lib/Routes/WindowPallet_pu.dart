@@ -45,7 +45,6 @@ class WindowPalletPU extends ModalRoute {
     
     return GestureDetector(
       onTap: () {
-        // call this method here to hide soft keyboard
         Navigator.of(context).pop();
       },
       child: Material( // This makes sure that text and other content follows the material style

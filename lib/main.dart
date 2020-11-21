@@ -3,7 +3,7 @@ import './objects/OManager.dart';
 import './widgets/OverviewModule.dart';
 import './widgets/WindowCounter.dart';
 import './widgets/WindowPallet.dart';
-import './widgets/WindowPallet_pu.dart';
+import 'Routes/WindowPallet_pu.dart';
 
 import 'Tools/Format.dart';
 import 'widgets/ResultsModule.dart';
