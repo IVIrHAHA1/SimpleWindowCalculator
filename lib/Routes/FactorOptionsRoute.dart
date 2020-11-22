@@ -33,9 +33,12 @@ class FactorOptionRoute extends ModalRoute {
   final List<_Option> options = [
     // Decrement
     _Option(
-      icon: Icon(Icons.arrow_drop_down_circle),
+      icon: Icon(
+        Icons.remove_circle_outline,
+        color: HexColors.fromHex('#2F3037'),
+      ),
       title: 'Decrement',
-      subtitle: 'Modify quick-action',
+      //subtitle: 'Modify quick-action',
       windowFunction: (window, factorKey, optionsController) {
         optionsController(null, FactorOptions.decrement);
       },
@@ -43,9 +46,12 @@ class FactorOptionRoute extends ModalRoute {
 
     // Apply Factor
     _Option(
-        icon: Icon(Icons.arrow_upward),
+        icon: Icon(
+          Icons.check,
+          color: HexColors.fromHex('#2F3037'),
+        ),
         title: 'Apply Factor',
-        subtitle: 'Matches factor count to current window count',
+        //subtitle: 'Matches factor count to current window count',
         windowFunction: (window, factorKey, optionsController) {
           optionsController(
             () {
@@ -57,9 +63,12 @@ class FactorOptionRoute extends ModalRoute {
 
     // Clear Factor
     _Option(
-        icon: Icon(Icons.clear),
+        icon: Icon(
+          Icons.clear,
+          color: HexColors.fromHex('#2F3037'),
+        ),
         title: 'Clear Factor',
-        subtitle: 'Clears factor from selected window',
+        //subtitle: 'Clears factor from selected window',
         windowFunction: (window, factorKey, optionsController) {
           optionsController(
             () {
@@ -71,9 +80,12 @@ class FactorOptionRoute extends ModalRoute {
 
     // Edit Factor
     _Option(
-        icon: Icon(Icons.edit),
+        icon: Icon(
+          Icons.edit,
+          color: HexColors.fromHex('#2F3037'),
+        ),
         title: 'Edit Factor',
-        subtitle: 'Edit factor details',
+        subtitle: '(feature coming soon)',
         windowFunction: (window, factorKey, optionsController) {
           optionsController(null, FactorOptions.edit);
         }),
@@ -93,16 +105,21 @@ class FactorOptionRoute extends ModalRoute {
   @override
   Widget buildPage(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation) {
-    final double horizontalPadding = MediaQuery.of(context).size.width / 8;
-    final double verticalPadding = MediaQuery.of(context).size.height / 10;
+    final double horizontalPadding = MediaQuery.of(context).size.width * .05;
+    final double verticalPadding = MediaQuery.of(context).size.height / 16;
 
     final double popUpHeight =
-        (verticalPadding * 8) - MediaQuery.of(context).padding.top;
+        (verticalPadding * 14) - MediaQuery.of(context).padding.top;
+
+    final double popUpWidth = horizontalPadding * 6;
 
     // if true coin mode is currently set to decrement
     if (!incrementingMode) {
       options[0] = _Option(
-        icon: Icon(Icons.arrow_drop_up),
+        icon: Icon(
+          Icons.add_circle_outline,
+          color: HexColors.fromHex('#2F3037'),
+        ),
         title: 'Increment',
         subtitle: 'Modify quick-action',
         windowFunction: (window, factorKey, optionsController) {
@@ -111,50 +128,49 @@ class FactorOptionRoute extends ModalRoute {
       );
     }
 
-    return GestureDetector(
-      onTap: () {
-        Navigator.of(context).pop();
-      },
-      child: Material(
-        type: MaterialType.transparency,
-        child: SafeArea(
-          bottom: true,
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              shape: BoxShape.rectangle,
-              borderRadius: BorderRadius.circular(GlobalValues.cornerRadius),
-            ),
-            margin: EdgeInsets.only(
-              bottom: verticalPadding,
-              left: horizontalPadding,
-              right: horizontalPadding,
-              top: verticalPadding,
-            ),
-            child: Column(
-              children: [
-                // Header
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(GlobalValues.cornerRadius),
-                      topRight: Radius.circular(GlobalValues.cornerRadius),
-                    ),
-                    color: Theme.of(context).primaryColor,
+    return Material(
+      type: MaterialType.transparency,
+      child: SafeArea(
+        bottom: true,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            shape: BoxShape.rectangle,
+            borderRadius: BorderRadius.circular(GlobalValues.cornerRadius),
+          ),
+          margin: EdgeInsets.only(
+            bottom: verticalPadding,
+            left: horizontalPadding,
+            right: horizontalPadding,
+            top: verticalPadding,
+          ),
+          child: Column(
+            children: [
+              // Header
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(GlobalValues.cornerRadius),
+                    topRight: Radius.circular(GlobalValues.cornerRadius),
                   ),
-                  alignment: Alignment.center,
-                  height: popUpHeight * .15,
-                  width: double.infinity,
-                  child: Text(
-                    'Factor Options: ' + _formatFactorKey(factorKey),
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
+                  color: Theme.of(context).primaryColor,
                 ),
+                alignment: Alignment.center,
+                height: popUpHeight * .15,
+                width: double.infinity,
+                child: Text(
+                  'Factor Options: ' + _formatFactorKey(factorKey),
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+              ),
 
-                // Body
-                Container(
-                  padding: EdgeInsets.all(GlobalValues.appMargin),
-                  height: popUpHeight * .7,
+              // Body
+              Container(
+                alignment: Alignment.center,
+                height: popUpHeight * .7,
+                child: Container(
+                  height: popUpHeight * .6,
+                  color: Colors.transparent,
                   child: ListView.builder(
                     itemCount: options.length,
                     itemBuilder: (ctx, index) {
@@ -165,22 +181,47 @@ class FactorOptionRoute extends ModalRoute {
                     },
                   ),
                 ),
+              ),
 
-                // Footer
-                Container(
-                  width: double.infinity,
-                  height: popUpHeight * .15,
-                  decoration: BoxDecoration(
-                    color: HexColors.fromHex('#FBFBFB'),
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(GlobalValues.cornerRadius),
-                      bottomRight: Radius.circular(GlobalValues.cornerRadius),
+              // Footer
+              Container(
+                width: double.infinity,
+                height: popUpHeight * .15,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: HexColors.fromHex('#FBFBFB'),
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(GlobalValues.cornerRadius),
+                    bottomRight: Radius.circular(GlobalValues.cornerRadius),
+                  ),
+                ),
+                child: InkWell(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Card(
+                    elevation: 4,
+                    color: Theme.of(context).primaryColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Container(
+                      alignment: Alignment.center,
+                      height: popUpHeight * .08,
+                      width: MediaQuery.of(context).size.width * .5,
+                      child: Text(
+                        'cancel',
+                        style: TextStyle(
+                            fontFamily: 'OpenSans',
+                            color: Colors.white,
+                            fontSize: 16,
+                            letterSpacing: 2),
+                      ),
                     ),
                   ),
-                  child: ,
-                )
-              ],
-            ),
+                ),
+              )
+            ],
           ),
         ),
       ),
@@ -192,19 +233,29 @@ class FactorOptionRoute extends ModalRoute {
       leading: option.icon,
       title: Text(
         option.title,
-        style: TextStyle(fontFamily: 'OpenSans', fontWeight: FontWeight.bold),
+        style: TextStyle(
+          fontFamily: 'OpenSans',
+          fontWeight: FontWeight.bold,
+          color: HexColors.fromHex('#2F3037'),
+        ),
       ),
-      subtitle: Text(
-        option.subtitle,
-        style: TextStyle(fontSize: 10, fontFamily: 'OpenSans'),
-      ),
+      subtitle: option.subtitle != null
+          ? Text(
+              option.subtitle,
+              style: TextStyle(
+                fontFamily: 'OpenSans',
+                color: HexColors.fromHex('#2F3037'),
+                fontSize: 12,
+              ),
+            )
+          : Text(''),
       onTap: () => option.windowFunction(window, factorKey, optionsController),
     );
   }
 
   String _formatFactorKey(Factors key) {
     List<String> lines = key.toString().split('.');
-    return lines[1];
+    return '${lines[1][0].toUpperCase()}${lines[1].substring(1)}';
   }
 }
 

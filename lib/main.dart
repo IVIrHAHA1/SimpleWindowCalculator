@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: 'OpenSans',
         textTheme: ThemeData.light().textTheme.copyWith(
+          
               headline6: TextStyle(
                 fontFamily: 'OpenSans',
                 color: Colors.white,
