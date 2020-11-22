@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:flutter/services.dart';
+
 import '../Tools/HexColors.dart';
 import '../objects/OManager.dart';
 import '../widgets/FactorCoin.dart';
@@ -236,10 +238,12 @@ class WindowCounter extends StatelessWidget {
                   // INCREMENTING BUTTON
                   GestureDetector(
                     onLongPress: () {
+                      HapticFeedback.mediumImpact();
                       window.amendCount(.5);
                       calculator();
                     },
                     onTap: () {
+                      HapticFeedback.mediumImpact();
                       window.amendCount(1.0);
                       calculator();
                     },
@@ -261,10 +265,12 @@ class WindowCounter extends StatelessWidget {
                   // DECREMENTING BUTTON
                   GestureDetector(
                     onLongPress: () {
+                      HapticFeedback.mediumImpact();
                       window.amendCount(-.5);
                       calculator();
                     },
                     onTap: () {
+                      HapticFeedback.mediumImpact();
                       window.amendCount(-1.0);
                       calculator();
                     },
