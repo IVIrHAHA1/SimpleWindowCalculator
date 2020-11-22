@@ -1,3 +1,5 @@
+import 'package:SimpleWindowCalculator/widgets/FactorCoin.dart';
+
 import '../objects/Factor.dart';
 import '../objects/OManager.dart';
 
@@ -180,6 +182,16 @@ class Window {
     for (Factors factorKey in Factors.values) {
       factorList[factorKey].setCount(0);
       factorList[factorKey].affix(false);
+      factorModeList[factorKey](true);
     }
+  }
+
+  Map<Factors, Function> factorModeList = Map();
+
+  // Registers a quick-action listener. Useful for reseting factor list.
+  registerFactorQAListener(Factors key, Function setMode) {
+    factorModeList.containsKey(key)
+        ? factorModeList[key] = setMode
+        : factorModeList.putIfAbsent(key, () => setMode);
   }
 }

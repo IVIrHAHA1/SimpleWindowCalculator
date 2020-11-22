@@ -59,6 +59,13 @@ class _FactorCoinState extends State<FactorCoin> {
     });
   }
 
+  // Hard set for incrementing mode
+  setMode(bool mode){
+    setState(() {
+      modeIncrement = mode;
+    });
+  } 
+
   optionController(Function stateOperation, FactorOptions option) {
     switch (option) {
       case FactorOptions.decrement:
@@ -87,7 +94,9 @@ class _FactorCoinState extends State<FactorCoin> {
   @override
   Widget build(BuildContext context) {
     disabled = widget.window.getFactor(widget.factorKey).isAffixed();
-    
+    // Gives window object some control over this FactorCoin
+    widget.window.registerFactorQAListener(widget.factorKey, setMode);
+
     return widget.updateResultsMod != null
         ? buildInteractiveCoin(context)
         : buildDummyCoin();

@@ -43,7 +43,7 @@ class FactorOptionRoute extends ModalRoute {
         color: HexColors.fromHex('#2F3037'),
       ),
       title: 'Decrement',
-      //subtitle: 'Modify quick-action',
+      subtitle: 'set quick-action',
       windowFunction: (window, factorKey, optionsController) {
         optionsController(null, FactorOptions.decrement);
       },
@@ -56,7 +56,7 @@ class FactorOptionRoute extends ModalRoute {
           color: HexColors.fromHex('#2F3037'),
         ),
         title: 'Apply Factor',
-        //subtitle: 'Matches factor count to current window count',
+        subtitle: 'match window count',
         windowFunction: (window, factorKey, optionsController) {
           optionsController(
             () {
@@ -73,7 +73,7 @@ class FactorOptionRoute extends ModalRoute {
           color: HexColors.fromHex('#2F3037'),
         ),
         title: 'Clear Factor',
-        //subtitle: 'Clears factor from selected window',
+        subtitle: 'clear from window',
         windowFunction: (window, factorKey, optionsController) {
           optionsController(
             () {
