@@ -270,10 +270,13 @@ class _MyHomePage extends State {
 
   _clearProject() {
     setState(() {
+      // Reset Individual Window
       windowList.forEach((window) {
         window.setCount(count: 0);
+        window.resetFactors();
         window = null;
       });
+      // Reset Window List
       windowList.clear();
       activeWindow = OManager.getDefaultWindow();
       windowList.add(activeWindow);

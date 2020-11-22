@@ -175,4 +175,11 @@ class Window {
     else if (factor.getCount() > 0 && factorKey == Factors.sided)
       factor.setCount(factor.getCount() - 1);
   }
+
+  resetFactors() {
+    for (Factors factorKey in Factors.values) {
+      factorList[factorKey].setCount(0);
+      factorList[factorKey].affix(false);
+    }
+  }
 }
