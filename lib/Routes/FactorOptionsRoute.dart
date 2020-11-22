@@ -1,4 +1,5 @@
 import 'package:SimpleWindowCalculator/Tools/GlobalValues.dart';
+import 'package:SimpleWindowCalculator/Tools/HexColors.dart';
 import 'package:SimpleWindowCalculator/objects/OManager.dart';
 import 'package:SimpleWindowCalculator/objects/Window.dart';
 import 'package:flutter/material.dart';
@@ -83,12 +84,11 @@ class FactorOptionRoute extends ModalRoute {
   final Factors factorKey;
   bool incrementingMode;
 
-  FactorOptionRoute({
-    this.optionsController,
-    @required this.window,
-    @required this.factorKey,
-    this.incrementingMode
-  });
+  FactorOptionRoute(
+      {this.optionsController,
+      @required this.window,
+      @required this.factorKey,
+      this.incrementingMode});
 
   @override
   Widget buildPage(BuildContext context, Animation<double> animation,
@@ -99,18 +99,18 @@ class FactorOptionRoute extends ModalRoute {
     final double popUpHeight =
         (verticalPadding * 8) - MediaQuery.of(context).padding.top;
 
-  // if true coin mode is currently set to decrement
-  if(!incrementingMode) {
-    options[0] =  _Option(
-      icon: Icon(Icons.arrow_drop_up),
-      title: 'Increment',
-      subtitle: 'Modify quick-action',
-      windowFunction: (window, factorKey, optionsController) {
-        optionsController(null, FactorOptions.decrement);
-      },
-    );
-  }
- 
+    // if true coin mode is currently set to decrement
+    if (!incrementingMode) {
+      options[0] = _Option(
+        icon: Icon(Icons.arrow_drop_up),
+        title: 'Increment',
+        subtitle: 'Modify quick-action',
+        windowFunction: (window, factorKey, optionsController) {
+          optionsController(null, FactorOptions.decrement);
+        },
+      );
+    }
+
     return GestureDetector(
       onTap: () {
         Navigator.of(context).pop();
@@ -153,7 +153,8 @@ class FactorOptionRoute extends ModalRoute {
 
                 // Body
                 Container(
-                  height: popUpHeight * .75,
+                  padding: EdgeInsets.all(GlobalValues.appMargin),
+                  height: popUpHeight * .7,
                   child: ListView.builder(
                     itemCount: options.length,
                     itemBuilder: (ctx, index) {
@@ -164,6 +165,19 @@ class FactorOptionRoute extends ModalRoute {
                     },
                   ),
                 ),
+
+                // Footer
+                Container(
+                  width: double.infinity,
+                  height: popUpHeight * .15,
+                  decoration: BoxDecoration(
+                    color: HexColors.fromHex('#FBFBFB'),
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(GlobalValues.cornerRadius),
+                      bottomRight: Radius.circular(GlobalValues.cornerRadius),
+                    ),
+                  ),
+                )
               ],
             ),
           ),
@@ -175,10 +189,13 @@ class FactorOptionRoute extends ModalRoute {
   ListTile buildTile(_Option option, BuildContext context) {
     return ListTile(
       leading: option.icon,
-      title: Text(option.title),
+      title: Text(
+        option.title,
+        style: TextStyle(fontFamily: 'OpenSans', fontWeight: FontWeight.bold),
+      ),
       subtitle: Text(
         option.subtitle,
-        style: TextStyle(fontSize: 10),
+        style: TextStyle(fontSize: 10, fontFamily: 'OpenSans'),
       ),
       onTap: () => option.windowFunction(window, factorKey, optionsController),
     );
