@@ -86,6 +86,8 @@ class _FactorCoinState extends State<FactorCoin> {
 
   @override
   Widget build(BuildContext context) {
+    disabled = widget.window.getFactor(widget.factorKey).isAffixed();
+    
     return widget.updateResultsMod != null
         ? buildInteractiveCoin(context)
         : buildDummyCoin();
