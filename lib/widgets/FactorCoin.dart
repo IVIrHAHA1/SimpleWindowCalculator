@@ -80,6 +80,7 @@ class _FactorCoinState extends State<FactorCoin> {
         break;
 
       case FactorOptions.edit:
+      // TODO: create a way to edit Factor values.
     }
   }
 
