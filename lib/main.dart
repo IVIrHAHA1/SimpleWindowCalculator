@@ -1,3 +1,5 @@
+import 'package:SimpleWindowCalculator/widgets/ModalContent.dart';
+
 import './Tools/HexColors.dart';
 import './objects/OManager.dart';
 import './widgets/OverviewModule.dart';
@@ -290,99 +292,12 @@ class _MyHomePage extends State {
    *                        GUI POP UPS/MUNIPS
    *  -------------------------------------------------------------------- */
   void selectNewWindow(BuildContext ctx) {
-    double modalSheetHeight = (MediaQuery.of(context).size.height) / 2;
 
     showModalBottomSheet(
       backgroundColor: Colors.transparent,
       context: context,
       builder: (_) {
-        return Column(
-          children: [
-            Container(
-              alignment: Alignment.topRight,
-              width: double.infinity,
-              height: modalSheetHeight * .1,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.transparent,
-              ),
-              child: Card(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
-                child: Container(
-                  width: MediaQuery.of(context).size.width * .4,
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8, horizontal: 30),
-                      alignment: Alignment.centerRight,
-                  child: Text(
-                    'search ...',
-                    style: TextStyle(
-                      fontFamily: 'OpenSans',
-                      fontStyle: FontStyle.italic,
-                      color: Colors.black87,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              color: Colors.amber,
-              height: modalSheetHeight * .8,
-              child: GridView.count(
-                crossAxisCount: 3,
-                children: OManager.windows.map((element) {
-                  return GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    child: Card(
-                      child: Column(
-                        children: [
-                          Container(
-                            child: element.getPicture(),
-                            width: MediaQuery.of(ctx).size.width / 4,
-                          ),
-                          Text(element.getName()),
-                        ],
-                      ),
-                    ),
-                    onTap: () {
-                      _addNewWindow(element);
-                    },
-                  );
-                }).toList(),
-              ),
-            ),
-
-            // Create Window Button
-            Container(
-              alignment: Alignment.center,
-              width: double.infinity,
-              height: modalSheetHeight*.1,
-              color: Colors.white,
-              child: InkWell(
-                child: Card(
-                  elevation: 4,
-                  color: Theme.of(context).primaryColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Container(
-                    alignment: Alignment.center,
-                    height: modalSheetHeight * .1,
-                    width: MediaQuery.of(context).size.width * .5,
-                    child: Text(
-                      'cancel',
-                      style: TextStyle(
-                          fontFamily: 'OpenSans',
-                          color: Colors.white,
-                          fontSize: 16,
-                          letterSpacing: 2),
-                    ),
-                  ),
-                ),
-              ),
-            )
-          ],
-        );
+        return ModalContent(addWindow: _addNewWindow,);
       },
     );
   }

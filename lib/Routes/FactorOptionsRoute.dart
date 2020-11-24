@@ -100,7 +100,7 @@ class FactorOptionRoute extends ModalRoute {
   final Function optionsController;
   final Window window;
   final Factors factorKey;
-  bool incrementingMode;  // Need to swap incrementing and decrementing options.
+  bool incrementingMode; // Need to swap incrementing and decrementing options.
 
   FactorOptionRoute(
       {this.optionsController,

@@ -61,7 +61,6 @@ class Window {
    * This method has been replaced by amendcount().
    * Sets window count to passed var
    */
-  @deprecated
   setCount({double count}) {
     // Keep window count updating here
     this.count = count;
