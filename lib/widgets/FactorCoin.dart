@@ -1,4 +1,5 @@
 import 'package:SimpleWindowCalculator/Routes/FactorOptionsRoute.dart';
+import 'package:flutter/services.dart';
 
 import '../objects/OManager.dart';
 import '../objects/Window.dart';
@@ -60,12 +61,15 @@ class _FactorCoinState extends State<FactorCoin> {
   }
 
   // Hard set for incrementing mode
-  setMode(bool mode){
+  setMode(bool mode) {
     setState(() {
       modeIncrement = mode;
     });
-  } 
+  }
 
+  /*
+   *  Gives option menu control of various states throught the app. 
+   */
   optionController(Function stateOperation, FactorOptions option) {
     switch (option) {
       case FactorOptions.decrement:
@@ -87,7 +91,8 @@ class _FactorCoinState extends State<FactorCoin> {
         break;
 
       case FactorOptions.edit:
-      // TODO: create a way to edit Factor values.
+        // TODO: implement
+        Navigator.of(context).pop();
     }
   }
 
@@ -123,12 +128,14 @@ class _FactorCoinState extends State<FactorCoin> {
             childWhenDragging: mintCoin(context, true, widget.size),
             child: InkWell(
               onTap: () {
+                HapticFeedback.heavyImpact();
                 modeIncrement
                     ? widget.window.incrementFactor(widget.factorKey)
                     : widget.window.decrementFactor(widget.factorKey);
                 widget.updateResultsMod();
               },
               onLongPress: () {
+                HapticFeedback.lightImpact();
                 Navigator.push(
                   context,
                   FactorOptionRoute(

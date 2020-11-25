@@ -253,13 +253,13 @@ class WindowCounter extends StatelessWidget {
                       child: Icon(
                         Icons.add,
                         color: Theme.of(ctx).primaryColor,
-                        size: buttonSize,
+                        size: buttonSize * 1.2,
                       ),
                     ),
                   ),
 
                   SizedBox(
-                    height: buttonWidth,
+                    height: buttonWidth * .5,
                   ),
 
                   // DECREMENTING BUTTON
@@ -280,7 +280,7 @@ class WindowCounter extends StatelessWidget {
                       child: Icon(
                         Icons.remove,
                         color: Theme.of(ctx).primaryColor,
-                        size: buttonSize,
+                        size: buttonSize * .8,
                       ),
                     ),
                   ),

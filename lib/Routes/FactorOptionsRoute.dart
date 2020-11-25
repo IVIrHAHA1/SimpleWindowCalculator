@@ -83,6 +83,22 @@ class FactorOptionRoute extends ModalRoute {
           );
         }),
 
+    _Option(
+        icon: Icon(
+          Icons.check_circle_outline,
+          color: HexColors.fromHex('#2F3037'),
+        ),
+        title: 'Apply To Project',
+        subtitle: '(feature coming soon)',
+        windowFunction: (window, factorKey, optionsController) {
+          optionsController(
+            () {
+              //window.getFactor(factorKey).setCount(0);
+            },
+            FactorOptions.edit,
+          );
+        }),
+
     // Edit Factor
     _Option(
         icon: Icon(
@@ -158,7 +174,7 @@ class FactorOptionRoute extends ModalRoute {
                 alignment: Alignment.center,
                 height: popUpHeight * .7,
                 child: Container(
-                  height: popUpHeight * .6,
+                  height: popUpHeight * .7,
                   color: Colors.transparent,
                   child: ListView.builder(
                     itemCount: options.length,
