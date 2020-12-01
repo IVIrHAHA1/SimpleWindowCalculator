@@ -118,6 +118,8 @@ class FactorOptionRoute extends ModalRoute {
   final Factors factorKey;
   bool incrementingMode; // Need to swap incrementing and decrementing options.
 
+  static const paddingRatio = .2;
+
   FactorOptionRoute(
       {this.optionsController,
       @required this.window,
@@ -132,6 +134,8 @@ class FactorOptionRoute extends ModalRoute {
 
     final double popUpHeight =
         (verticalPadding * 14) - MediaQuery.of(context).padding.top;
+
+    final double popUpWidth = (horizontalPadding * 14);
 
     // if true coin mode is currently set to decrement
     //Incrementing option
@@ -167,14 +171,16 @@ class FactorOptionRoute extends ModalRoute {
           ),
           child: Column(
             children: [
-              buildHeader(context, popUpHeight),
+              buildHeader(context, popUpHeight, popUpWidth),
 
               // Body
               Container(
-                alignment: Alignment.center,
+                alignment: Alignment.centerLeft,
+                padding: EdgeInsets.only(left: popUpWidth * paddingRatio),
                 height: popUpHeight * .7,
                 child: Container(
                   height: popUpHeight * .7,
+                  width: popUpWidth * .75,
                   color: Colors.transparent,
                   child: ListView.builder(
                     itemCount: options.length,
@@ -199,8 +205,9 @@ class FactorOptionRoute extends ModalRoute {
   /*
    *  Builds the title and header bar. 
    */
-  Container buildHeader(BuildContext context, double popUpHeight) {
+  Container buildHeader(BuildContext context, double height, double width) {
     return Container(
+      padding: EdgeInsets.only(left: width * paddingRatio),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(GlobalValues.cornerRadius),
@@ -208,8 +215,8 @@ class FactorOptionRoute extends ModalRoute {
         ),
         color: Theme.of(context).primaryColor,
       ),
-      alignment: Alignment.center,
-      height: popUpHeight * .15,
+      alignment: Alignment.centerLeft,
+      height: height * .15,
       width: double.infinity,
       child: Text(
         'Factor Options: ' + _formatFactorKey(factorKey),
@@ -264,8 +271,9 @@ class FactorOptionRoute extends ModalRoute {
   /*
    *  Builds option tile 
    */
-  ListTile buildTile(_Option option, BuildContext context) {
+  Widget buildTile(_Option option, BuildContext context) {
     return ListTile(
+      contentPadding: EdgeInsets.only(left: 0),
       leading: option.icon,
       title: Text(
         option.title,
@@ -277,12 +285,15 @@ class FactorOptionRoute extends ModalRoute {
         ),
       ),
       subtitle: option.subtitle != null
-          ? Text(
-              option.subtitle,
-              style: TextStyle(
-                fontFamily: 'OpenSans',
-                color: HexColors.fromHex('#2F3037'),
-                fontSize: 12,
+          ? Opacity(
+              opacity: .5,
+              child: Text(
+                option.subtitle,
+                style: TextStyle(
+                  fontFamily: 'OpenSans',
+                  color: HexColors.fromHex('#2F3037'),
+                  fontSize: 12,
+                ),
               ),
             )
           : Text(''),

@@ -39,7 +39,7 @@ class OManager {
     Window(
       name: 'Picture',
       duration: Duration(minutes: 5),
-      price: 8,
+      price: 8.50,
       image: Image.asset(
         'assets/images/picture_window.png',
       ),
