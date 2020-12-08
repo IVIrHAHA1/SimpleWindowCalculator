@@ -58,6 +58,7 @@ flutter:
     - assets/images/hazard_factor.png
     - assets/images/sided_factor.png
     - assets/images/solar_panel.png
+    - assets/images/na_image.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

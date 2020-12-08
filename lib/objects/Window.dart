@@ -13,10 +13,10 @@ class Window {
   static const String _mNAME = 'Standard Window';
   static const Duration _mDURATION = Duration(minutes: 10);
 
-  final double price;
-  final String name;
-  final Duration duration;
-  final Image image;
+  double price;
+  String name;
+  Duration duration;
+  Image image;
 
   double count;
   var _grandTotal;
@@ -96,6 +96,22 @@ class Window {
   /*  -----------------------------------------------------------------------
    *                              GETTER METHODS
    *  -------------------------------------------------------------------- */
+  setName(String name) {
+    this.name = name;
+  }
+
+  setPrice(double price) {
+    this.price = price;
+  }
+
+  setDuration(Duration duration) {
+    this.duration = duration;
+  }
+
+  setImage(Image image) {
+    this.image = image;
+  }
+
   getName() {
     return name != null ? name : _mNAME;
   }
@@ -108,10 +124,8 @@ class Window {
     return price != null ? price : _mPRICE;
   }
 
-  getPicture() {
-    return this.image != null
-        ? this.image
-        : Image.asset('assets/images/standard_window.png');
+  getImage() {
+    return this.image;
   }
 
   getDuration() {

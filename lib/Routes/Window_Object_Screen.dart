@@ -24,6 +24,8 @@ class WindowObjectScreen extends StatelessWidget {
         ),
         onPressed: () => Navigator.of(context).pop(),
       ),
+
+      // OnSubmit data
       actions: [
         IconButton(
             icon: Icon(
@@ -41,7 +43,7 @@ class WindowObjectScreen extends StatelessWidget {
     return Scaffold(
       appBar: appBar,
       backgroundColor: Theme.of(context).primaryColor,
-      body: _WindowDetails(bodyHeight),
+      body: _WindowDetails(bodyHeight, window),
     );
   }
 }
@@ -49,14 +51,18 @@ class WindowObjectScreen extends StatelessWidget {
 class _WindowDetails extends StatelessWidget {
   final double height;
 
+  Window window;
+
   final nameController = TextEditingController();
   final timeController = TextEditingController();
   final priceController = TextEditingController();
 
-  _WindowDetails(this.height);
+  _WindowDetails(this.height, this.window);
 
   @override
   Widget build(BuildContext context) {
+    window = window ?? new Window();
+
     return Container(
       height: height,
       child: Column(
@@ -78,11 +84,14 @@ class _WindowDetails extends StatelessWidget {
         child: Container(
           width: size * .75,
           padding: EdgeInsets.all(8),
-          child: OManager.getDefaultWindow().getPicture(),
+          child: window.getImage() ?? Image.asset('assets/images/na_image.png'),
         ),
       ),
     );
-    ;
+  }
+
+  updateWindowData() {
+    window.setNam
   }
 
   Widget buildBoxes(double size) {
@@ -94,6 +103,7 @@ class _WindowDetails extends StatelessWidget {
           DetailInputBox(
             label: 'Name',
             controller: nameController,
+            updateData: updateWindowData,
           ),
           DetailInputBox(
             label: 'Time',
@@ -112,8 +122,9 @@ class _WindowDetails extends StatelessWidget {
 class DetailInputBox extends StatefulWidget {
   final String label;
   final controller;
+  final Function updateData;
 
-  DetailInputBox({this.label, this.controller});
+  DetailInputBox({this.label, this.controller, this.updateData});
 
   @override
   _DetailInputBoxState createState() => _DetailInputBoxState(label);
@@ -127,7 +138,7 @@ class _DetailInputBoxState extends State<DetailInputBox> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: (MediaQuery.of(context).size.height/16),
+      height: (MediaQuery.of(context).size.height / 16),
       width: MediaQuery.of(context).size.width * .5,
       decoration: BoxDecoration(
         color: Theme.of(context).primaryColorLight,
@@ -142,6 +153,7 @@ class _DetailInputBoxState extends State<DetailInputBox> {
           setState(() {
             textLabel = value;
           });
+          widget.updateData();
         },
         decoration: InputDecoration(
           labelText: textLabel,

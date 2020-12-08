@@ -82,7 +82,7 @@ class ModalContent extends StatelessWidget {
               child: Column(
                 children: [
                   Container(
-                    child: element.getPicture(),
+                    child: element.getImage(),
                     width: MediaQuery.of(context).size.width / 4,
                   ),
                   Text(element.getName()),
