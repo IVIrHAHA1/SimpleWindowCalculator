@@ -14,7 +14,7 @@ class ModalContent extends StatelessWidget {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) {
-          return WindowObjectScreen();
+          return WindowObjectScreen(null);
         },
       ),
     );

@@ -1,10 +1,11 @@
-import 'package:SimpleWindowCalculator/objects/OManager.dart';
+import '../objects/OManager.dart';
+import '../objects/Window.dart';
 import 'package:flutter/material.dart';
 
 class WindowObjectScreen extends StatelessWidget {
-  final nameController = TextEditingController();
-  final timeController = TextEditingController();
-  final priceController = TextEditingController();
+  final Window window;
+
+  WindowObjectScreen(this.window);
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +48,10 @@ class WindowObjectScreen extends StatelessWidget {
 
 class _WindowDetails extends StatelessWidget {
   final double height;
+
+  final nameController = TextEditingController();
+  final timeController = TextEditingController();
+  final priceController = TextEditingController();
 
   _WindowDetails(this.height);
 
@@ -104,19 +109,42 @@ class _WindowDetails extends StatelessWidget {
   }
 }
 
-class DetailInputBox extends StatelessWidget {
+class DetailInputBox extends StatefulWidget {
   final String label;
   final controller;
 
   DetailInputBox({this.label, this.controller});
 
   @override
+  _DetailInputBoxState createState() => _DetailInputBoxState(label);
+}
+
+class _DetailInputBoxState extends State<DetailInputBox> {
+  String textLabel;
+
+  _DetailInputBoxState(this.textLabel);
+
+  @override
   Widget build(BuildContext context) {
     return Container(
+      height: (MediaQuery.of(context).size.height/16),
+      width: MediaQuery.of(context).size.width * .5,
+      decoration: BoxDecoration(
+        color: Theme.of(context).primaryColorLight,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(8),
+          topRight: Radius.circular(8),
+        ),
+      ),
       child: TextField(
-        controller: controller,
+        controller: widget.controller,
+        onSubmitted: (String value) async {
+          setState(() {
+            textLabel = value;
+          });
+        },
         decoration: InputDecoration(
-          labelText: label,
+          labelText: textLabel,
         ),
       ),
     );
