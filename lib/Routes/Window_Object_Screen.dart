@@ -1,3 +1,5 @@
+import 'package:fluttertoast/fluttertoast.dart';
+
 import '../objects/OManager.dart';
 import '../objects/Window.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +37,11 @@ class WindowObjectScreen extends StatelessWidget {
             color: Colors.white,
           ),
           onPressed: () {
+            // TODO: Add a way to save object and add it to list.
+            // TODO: Also need to dispose of TextInputControllers.
             print(window.getName() ?? 'still not named');
+            print(window.getPrice().toString() + ' priced');
+            print(window.getDuration().toString() + ' Timed');
           },
         )
       ],
@@ -102,7 +108,6 @@ class _WindowDetails extends StatelessWidget {
 
   _updateWindowDuration() {
     try {
-      print('trying this');
       var time = double.parse(timeController.text);
 
       var sec = ((time % 1) * 60).toString().split('.').first;
@@ -115,7 +120,16 @@ class _WindowDetails extends StatelessWidget {
 
       window.setDuration(duration);
     } catch (Exception) {
-      
+      // TODO: Implement user error msg
+    }
+  }
+
+  _updateWindowPrice() {
+    try {
+      var price = double.parse(priceController.text);
+      window.setPrice(price);
+    } catch (Exception) {
+      // TODO: Implement user error msg
     }
   }
 
@@ -140,6 +154,7 @@ class _WindowDetails extends StatelessWidget {
             label: 'Price',
             controller: priceController,
             textInputType: TextInputType.number,
+            updateData: _updateWindowPrice,
           ),
         ],
       ),
