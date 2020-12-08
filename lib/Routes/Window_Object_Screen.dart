@@ -3,12 +3,14 @@ import '../objects/Window.dart';
 import 'package:flutter/material.dart';
 
 class WindowObjectScreen extends StatelessWidget {
-  final Window window;
+  Window window;
 
   WindowObjectScreen(this.window);
 
   @override
   Widget build(BuildContext context) {
+    window = window ?? new Window();
+
     AppBar appBar = AppBar(
       centerTitle: true,
       title: Text(
@@ -28,11 +30,14 @@ class WindowObjectScreen extends StatelessWidget {
       // OnSubmit data
       actions: [
         IconButton(
-            icon: Icon(
-              Icons.check_circle_outline,
-              color: Colors.white,
-            ),
-            onPressed: () => Navigator.of(context).pop())
+          icon: Icon(
+            Icons.check_circle_outline,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            print(window.getName() ?? 'still not named');
+          },
+        )
       ],
     );
 
@@ -41,6 +46,7 @@ class WindowObjectScreen extends StatelessWidget {
         MediaQuery.of(context).padding.top;
 
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       appBar: appBar,
       backgroundColor: Theme.of(context).primaryColor,
       body: _WindowDetails(bodyHeight, window),
@@ -51,7 +57,7 @@ class WindowObjectScreen extends StatelessWidget {
 class _WindowDetails extends StatelessWidget {
   final double height;
 
-  Window window;
+  final Window window;
 
   final nameController = TextEditingController();
   final timeController = TextEditingController();
@@ -61,8 +67,6 @@ class _WindowDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    window = window ?? new Window();
-
     return Container(
       height: height,
       child: Column(
@@ -90,8 +94,29 @@ class _WindowDetails extends StatelessWidget {
     );
   }
 
-  updateWindowData() {
-    window.setNam
+  _updateWindowName() {
+    window.setName(
+      nameController.text ?? window.getName(),
+    );
+  }
+
+  _updateWindowDuration() {
+    try {
+      print('trying this');
+      var time = double.parse(timeController.text);
+
+      var sec = ((time % 1) * 60).toString().split('.').first;
+      var minutes = (time - (time % 1)).toString().split('.').first;
+
+      Duration duration = Duration(
+        minutes: int.parse(minutes),
+        seconds: int.parse(sec),
+      );
+
+      window.setDuration(duration);
+    } catch (Exception) {
+      
+    }
   }
 
   Widget buildBoxes(double size) {
@@ -103,15 +128,18 @@ class _WindowDetails extends StatelessWidget {
           DetailInputBox(
             label: 'Name',
             controller: nameController,
-            updateData: updateWindowData,
+            updateData: _updateWindowName,
           ),
           DetailInputBox(
             label: 'Time',
             controller: timeController,
+            textInputType: TextInputType.number,
+            updateData: _updateWindowDuration,
           ),
           DetailInputBox(
             label: 'Price',
             controller: priceController,
+            textInputType: TextInputType.number,
           ),
         ],
       ),
@@ -123,8 +151,14 @@ class DetailInputBox extends StatefulWidget {
   final String label;
   final controller;
   final Function updateData;
+  final TextInputType textInputType;
 
-  DetailInputBox({this.label, this.controller, this.updateData});
+  DetailInputBox({
+    this.label,
+    this.controller,
+    this.updateData,
+    this.textInputType,
+  });
 
   @override
   _DetailInputBoxState createState() => _DetailInputBoxState(label);
@@ -148,6 +182,7 @@ class _DetailInputBoxState extends State<DetailInputBox> {
         ),
       ),
       child: TextField(
+        keyboardType: widget.textInputType ?? TextInputType.text,
         controller: widget.controller,
         onSubmitted: (String value) async {
           setState(() {
