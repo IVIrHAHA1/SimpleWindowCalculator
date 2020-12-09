@@ -10,7 +10,7 @@ class Window {
 
   // Default Values
   static const double _mPRICE = 12;
-  static const String _mNAME = 'Standard Window';
+  static const String _mNAME = 'unnamed';
   static const Duration _mDURATION = Duration(minutes: 10);
 
   double price;

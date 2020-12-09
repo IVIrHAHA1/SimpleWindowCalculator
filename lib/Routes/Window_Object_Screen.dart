@@ -65,10 +65,6 @@ class _WindowDetails extends StatelessWidget {
 
   final Window window;
 
-  final nameController = TextEditingController();
-  final timeController = TextEditingController();
-  final priceController = TextEditingController();
-
   _WindowDetails(this.height, this.window);
 
   @override
@@ -100,15 +96,15 @@ class _WindowDetails extends StatelessWidget {
     );
   }
 
-  _updateWindowName() {
+  _updateWindowName(String name) {
     window.setName(
-      nameController.text ?? window.getName(),
+      name ?? window.getName(),
     );
   }
 
-  _updateWindowDuration() {
+  _updateWindowDuration(String timeText) {
     try {
-      var time = double.parse(timeController.text);
+      var time = double.parse(timeText);
 
       var sec = ((time % 1) * 60).toString().split('.').first;
       var minutes = (time - (time % 1)).toString().split('.').first;
@@ -124,9 +120,9 @@ class _WindowDetails extends StatelessWidget {
     }
   }
 
-  _updateWindowPrice() {
+  _updateWindowPrice(String priceText) {
     try {
-      var price = double.parse(priceController.text);
+      var price = double.parse(priceText);
       window.setPrice(price);
     } catch (Exception) {
       // TODO: Implement user error msg
@@ -141,18 +137,15 @@ class _WindowDetails extends StatelessWidget {
         children: [
           DetailInputBox(
             label: 'Name',
-            controller: nameController,
             updateData: _updateWindowName,
           ),
           DetailInputBox(
             label: 'Time',
-            controller: timeController,
             textInputType: TextInputType.number,
             updateData: _updateWindowDuration,
           ),
           DetailInputBox(
             label: 'Price',
-            controller: priceController,
             textInputType: TextInputType.number,
             updateData: _updateWindowPrice,
           ),
@@ -164,13 +157,11 @@ class _WindowDetails extends StatelessWidget {
 
 class DetailInputBox extends StatefulWidget {
   final String label;
-  final controller;
   final Function updateData;
   final TextInputType textInputType;
 
   DetailInputBox({
     this.label,
-    this.controller,
     this.updateData,
     this.textInputType,
   });
@@ -198,15 +189,14 @@ class _DetailInputBoxState extends State<DetailInputBox> {
       ),
       child: TextField(
         keyboardType: widget.textInputType ?? TextInputType.text,
-        controller: widget.controller,
         onSubmitted: (String value) async {
           setState(() {
             textLabel = value;
           });
-          widget.updateData();
+          widget.updateData(value);
         },
         decoration: InputDecoration(
-          labelText: textLabel,
+          hintText: textLabel
         ),
       ),
     );
