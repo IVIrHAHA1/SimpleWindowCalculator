@@ -130,7 +130,7 @@ class _MyHomePage extends State {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: ResultsModule(
-              statModule: OverviewModule(priceTotal, timeTotal),
+              statModule: OverviewModule(priceTotal, timeTotal, windowList),
               height: availableScreen,
               hideViews: hideWidgets,
               children: [

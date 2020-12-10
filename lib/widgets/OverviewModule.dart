@@ -1,11 +1,16 @@
 import 'package:SimpleWindowCalculator/Tools/Format.dart';
+import 'package:SimpleWindowCalculator/widgets/WindowPallet.dart';
 import 'package:flutter/material.dart';
 
 class OverviewModule extends StatelessWidget {
   final double totalPrice;
   final Duration totalDuration;
+  final List windowList;
+  final pageController = PageController(initialPage: 0);
 
   final Map<String, Text> statList = Map();
+
+  OverviewModule(this.totalPrice, this.totalDuration, this.windowList);
 
   _initStats(BuildContext ctx) {
     statList.putIfAbsent('Hourly Rate', () => _dictateHourlyRate(ctx));
@@ -18,7 +23,7 @@ class OverviewModule extends StatelessWidget {
         ? hourlyRate = 0.0
         : hourlyRate = totalPrice / (totalDuration.inMinutes / 60);
     return Text(
-      '\$${Format.format(hourlyRate,2)}',
+      '\$${Format.format(hourlyRate, 2)}',
       style: Theme.of(ctx).textTheme.headline5,
     );
   }
@@ -30,7 +35,7 @@ class OverviewModule extends StatelessWidget {
         ? techRate = 0.0
         : techRate = (totalPrice / (totalDuration.inMinutes / 60)) * .3;
     return Text(
-      '\$${Format.format(techRate,2)}',
+      '\$${Format.format(techRate, 2)}',
       style: Theme.of(ctx).textTheme.headline5,
     );
   }
@@ -42,11 +47,19 @@ class OverviewModule extends StatelessWidget {
         totalDuration == Duration();
   }
 
-  OverviewModule(this.totalPrice, this.totalDuration);
-
   @override
   Widget build(BuildContext context) {
     _initStats(context);
+    return PageView(
+      controller: pageController,
+      children: [
+        Card(child: WindowPallet(windowList),),
+        _techDetails(),
+      ],
+    );
+  }
+
+  Container _techDetails() {
     return Container(
       child: ListView.builder(
         itemBuilder: (ctx, index) {
