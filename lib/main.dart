@@ -4,8 +4,8 @@ import './Tools/HexColors.dart';
 import './objects/OManager.dart';
 import './widgets/OverviewModule.dart';
 import './widgets/WindowCounter.dart';
-import './widgets/WindowPallet.dart';
-import 'Routes/WindowPallet_pu.dart';
+import 'widgets/Pallet.dart';
+import 'Routes/Pallet_pop_up.dart';
 
 import 'Tools/Format.dart';
 import 'widgets/ResultsModule.dart';

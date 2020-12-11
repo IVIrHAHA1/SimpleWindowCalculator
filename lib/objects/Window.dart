@@ -109,9 +109,7 @@ class Window {
   }
 
   getPicture() {
-    return this.image != null
-        ? this.image
-        : Image.asset('assets/images/standard_window.png');
+    return this.image;
   }
 
   getDuration() {

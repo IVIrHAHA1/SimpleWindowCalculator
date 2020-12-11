@@ -1,5 +1,5 @@
 import 'package:SimpleWindowCalculator/Tools/Format.dart';
-import 'package:SimpleWindowCalculator/widgets/WindowPallet.dart';
+import 'package:SimpleWindowCalculator/widgets/Pallet.dart';
 import 'package:flutter/material.dart';
 
 class OverviewModule extends StatelessWidget {

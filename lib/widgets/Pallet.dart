@@ -1,3 +1,5 @@
+import 'package:SimpleWindowCalculator/Tools/GlobalValues.dart';
+
 import '../Tools/Format.dart';
 
 import '../objects/Window.dart';
@@ -10,9 +12,7 @@ class WindowPallet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Column(
+    return Column(
         children: [
           Text('windows in use'),
           Divider(
@@ -27,18 +27,14 @@ class WindowPallet extends StatelessWidget {
                 scrollDirection: Axis.vertical,
                 child: Column(
                   children: windowList.map((window) {
-                    return window.getPicture() != null
-                        ? _WindowPreview(window: window)
-                        : Icon(Icons.explicit);
+                    return _WindowPreview(window: window);
                   }).toList(),
                 ),
               ),
             ),
           ),
         ],
-      ),
-      resizeToAvoidBottomPadding: false,
-    );
+      );
   }
 }
 
@@ -51,6 +47,12 @@ class _WindowPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var getHeight = () {
+      return MediaQuery.of(context).size.height / 6;
+    };
+
+    var width = MediaQuery.of(context).size.width - (GlobalValues.appMargin * 2);
+
     return Column(
       children: [
         ListTile(
@@ -61,38 +63,37 @@ class _WindowPreview extends StatelessWidget {
           trailing: Text('\$${Format.format(window.grandTotal(),2)}'),
         ),
         Container(
-          width: double.infinity,
-          child: Stack(
+          width: double.infinity, // Sets the width of the Column
+          child: Row(
             children: [
-              // Sets the width of the Column
+              // Get Image
               Container(
                 child: window.getPicture(),
-                height: MediaQuery.of(context).size.height / 6,
+                height: getHeight(),
               ),
-              Positioned(
-                child: Container(
-                  height: MediaQuery.of(context).size.height / 6,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: window.factorList.entries.map((entry) {
-                      return Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Text(
-                              '${Format.format(entry.value.getCount(),1)}',
-                            ),
-                            entry.value.getImage(),
-                          ],
-                        ),
-                        height: 20,
-                      );
-                    }).toList(),
-                  ),
+
+
+              // Place icons and labels to the right
+              Container(
+                height: getHeight(),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: window.factorList.entries.map((entry) {
+                    return Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            '${Format.format(entry.value.getCount(),1)}',
+                          ),
+                          entry.value.getImage(),
+                        ],
+                      ),
+                      height: 20,
+                    );
+                  }).toList(),
                 ),
-                top: 10,
-                right: 10,
               ),
             ],
           ),
