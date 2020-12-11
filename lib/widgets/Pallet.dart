@@ -1,4 +1,6 @@
 import 'package:SimpleWindowCalculator/Tools/GlobalValues.dart';
+import 'package:SimpleWindowCalculator/objects/OManager.dart';
+import 'package:SimpleWindowCalculator/widgets/FactorCoin.dart';
 
 import '../Tools/Format.dart';
 
@@ -13,28 +15,28 @@ class WindowPallet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-        children: [
-          Text('windows in use'),
-          Divider(
-            thickness: 2,
-            height: 4,
-          ),
-          Flexible(
-            fit: FlexFit.tight,
-            child: Container(
-              alignment: Alignment.topCenter,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Column(
-                  children: windowList.map((window) {
-                    return _WindowPreview(window: window);
-                  }).toList(),
-                ),
+      children: [
+        Text('windows in use'),
+        Divider(
+          thickness: 2,
+          height: 4,
+        ),
+        Flexible(
+          fit: FlexFit.tight,
+          child: Container(
+            alignment: Alignment.topCenter,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Column(
+                children: windowList.map((window) {
+                  return _WindowPreview(window: window);
+                }).toList(),
               ),
             ),
           ),
-        ],
-      );
+        ),
+      ],
+    );
   }
 }
 
@@ -51,17 +53,11 @@ class _WindowPreview extends StatelessWidget {
       return MediaQuery.of(context).size.height / 6;
     };
 
-    var width = MediaQuery.of(context).size.width - (GlobalValues.appMargin * 2);
+    var width =
+        MediaQuery.of(context).size.width - (GlobalValues.appMargin * 2);
 
     return Column(
       children: [
-        ListTile(
-          leading: Text(
-            '${Format.format(window.getCount(),1)}',
-            style: Theme.of(context).textTheme.headline5,
-          ),
-          trailing: Text('\$${Format.format(window.grandTotal(),2)}'),
-        ),
         Container(
           width: double.infinity, // Sets the width of the Column
           child: Row(
@@ -72,29 +68,62 @@ class _WindowPreview extends StatelessWidget {
                 height: getHeight(),
               ),
 
-
-              // Place icons and labels to the right
-              Container(
-                height: getHeight(),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: window.factorList.entries.map((entry) {
-                    return Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(
-                            '${Format.format(entry.value.getCount(),1)}',
-                          ),
-                          entry.value.getImage(),
-                        ],
+              // Window results
+              Flexible(
+                fit: FlexFit.tight,
+                child: Container(
+                  padding:
+                      EdgeInsets.symmetric(vertical: GlobalValues.appMargin),
+                  alignment: Alignment.topLeft,
+                  height: getHeight(),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${Format.format(window.getCount(), 1)}',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16),
                       ),
-                      height: 20,
-                    );
-                  }).toList(),
+                      Text(
+                        '\$${Format.format(window.grandTotal(), 2)}',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
+                    ],
+                  ),
                 ),
               ),
+
+              // Filthy and Difficult
+              Flexible(
+                fit: FlexFit.loose,
+                child: Container(
+                  height: getHeight(),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      buildFactorOverview(getHeight(), Factors.filthy),
+                      buildFactorOverview(getHeight(), Factors.difficult),
+                    ],
+                  ),
+                ),
+              ),
+
+              // Construction and Sided
+              Flexible(
+                fit: FlexFit.loose,
+                child: Container(
+                  height: getHeight(),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      buildFactorOverview(getHeight(), Factors.construction),
+                      buildFactorOverview(getHeight(), Factors.sided),
+                    ],
+                  ),
+                ),
+              )
             ],
           ),
         ),
@@ -105,6 +134,25 @@ class _WindowPreview extends StatelessWidget {
           indent: 8,
         ),
       ],
+    );
+  }
+
+  Container buildFactorOverview(double height, Factors factorType) {
+    return Container(
+      height: height / 2,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Text(
+            '${Format.format(window.factorList[factorType].getCount(), 1)}',
+          ),
+          FactorCoin(
+            size: height / 3,
+            factorKey: factorType,
+            window: window,
+          ),
+        ],
+      ),
     );
   }
 }
