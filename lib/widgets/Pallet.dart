@@ -1,7 +1,7 @@
-import 'package:SimpleWindowCalculator/Tools/GlobalValues.dart';
-import 'package:SimpleWindowCalculator/Tools/HexColors.dart';
-import 'package:SimpleWindowCalculator/objects/OManager.dart';
-import 'package:SimpleWindowCalculator/widgets/FactorCoin.dart';
+import '../Tools/GlobalValues.dart';
+import '../Tools/HexColors.dart';
+import '../objects/OManager.dart';
+import '../widgets/FactorCoin.dart';
 
 import '../Tools/Format.dart';
 
@@ -15,28 +15,19 @@ class WindowPallet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text('windows in use'),
-        Divider(
-          thickness: 2,
-          height: 4,
-        ),
-        Flexible(
-          fit: FlexFit.tight,
-          child: Container(
-            alignment: Alignment.topCenter,
-            child: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: Column(
-                children: windowList.map((window) {
-                  return _WindowPreview(window: window);
-                }).toList(),
-              ),
-            ),
+    return Flexible(
+      fit: FlexFit.tight,
+      child: Container(
+        alignment: Alignment.topCenter,
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
+            children: windowList.map((window) {
+              return _WindowPreview(window: window);
+            }).toList(),
           ),
         ),
-      ],
+      ),
     );
   }
 }
