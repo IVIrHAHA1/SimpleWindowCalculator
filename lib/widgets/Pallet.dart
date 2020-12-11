@@ -1,4 +1,5 @@
 import 'package:SimpleWindowCalculator/Tools/GlobalValues.dart';
+import 'package:SimpleWindowCalculator/Tools/HexColors.dart';
 import 'package:SimpleWindowCalculator/objects/OManager.dart';
 import 'package:SimpleWindowCalculator/widgets/FactorCoin.dart';
 
@@ -53,91 +54,106 @@ class _WindowPreview extends StatelessWidget {
       return MediaQuery.of(context).size.height / 6;
     };
 
-    var width =
-        MediaQuery.of(context).size.width - (GlobalValues.appMargin * 2);
+    return Card(
+      elevation: 8,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(
+          GlobalValues.cornerRadius,
+        ),
+      ),
+      child: Container(
+        margin: EdgeInsets.all(4),
+        width: double.infinity, // Sets the width of the Column
+        child: Row(
+          children: [
+            // Get Image
+            Container(
+              child: window.getPicture(),
+              height: getHeight(),
+            ),
 
-    return Column(
-      children: [
-        Container(
-          width: double.infinity, // Sets the width of the Column
-          child: Row(
-            children: [
-              // Get Image
-              Container(
-                child: window.getPicture(),
+            // Window results
+            Flexible(
+              fit: FlexFit.tight,
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: GlobalValues.appMargin),
+                alignment: Alignment.topLeft,
                 height: getHeight(),
-              ),
-
-              // Window results
-              Flexible(
-                fit: FlexFit.tight,
-                child: Container(
-                  padding:
-                      EdgeInsets.symmetric(vertical: GlobalValues.appMargin),
-                  alignment: Alignment.topLeft,
-                  height: getHeight(),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '${Format.format(window.getCount(), 1)}',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16),
-                      ),
-                      Text(
-                        '\$${Format.format(window.grandTotal(), 2)}',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16),
-                      ),
-                    ],
-                  ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '${Format.format(window.getCount(), 1)}',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                    Text(
+                      '\$${Format.format(window.grandTotal(), 2)}',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                  ],
                 ),
               ),
+            ),
 
-              // Filthy and Difficult
-              Flexible(
-                fit: FlexFit.loose,
-                child: Container(
-                  height: getHeight(),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      buildFactorOverview(getHeight(), Factors.filthy),
-                      buildFactorOverview(getHeight(), Factors.difficult),
-                    ],
-                  ),
+            // Filthy and Difficult
+            Flexible(
+              fit: FlexFit.loose,
+              child: Container(
+                height: getHeight(),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    buildFactorOverview(
+                      getHeight(),
+                      Factors.filthy,
+                      HexColors.fromHex('#DCA065'),
+                    ),
+                    buildFactorOverview(
+                      getHeight(),
+                      Factors.difficult,
+                      HexColors.fromHex('#FFEDA5'),
+                    ),
+                  ],
                 ),
               ),
+            ),
 
-              // Construction and Sided
-              Flexible(
-                fit: FlexFit.loose,
-                child: Container(
-                  height: getHeight(),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      buildFactorOverview(getHeight(), Factors.construction),
-                      buildFactorOverview(getHeight(), Factors.sided),
-                    ],
-                  ),
+            // Construction and Sided
+            Flexible(
+              fit: FlexFit.loose,
+              child: Container(
+                height: getHeight(),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    buildFactorOverview(
+                      getHeight(),
+                      Factors.construction,
+                      HexColors.fromHex('#FFB9B9'),
+                    ),
+                    buildFactorOverview(
+                      getHeight(),
+                      Factors.sided,
+                      null,
+                    ),
+                  ],
                 ),
-              )
-            ],
-          ),
+              ),
+            )
+          ],
         ),
-        Divider(
-          thickness: 2,
-          height: 5,
-          endIndent: 8,
-          indent: 8,
-        ),
-      ],
+      ),
     );
   }
 
-  Container buildFactorOverview(double height, Factors factorType) {
+  Container buildFactorOverview(
+    double height,
+    Factors factorType,
+    Color color,
+  ) {
     return Container(
       height: height / 2,
       child: Row(
@@ -149,7 +165,7 @@ class _WindowPreview extends StatelessWidget {
           FactorCoin(
             size: height / 3,
             factorKey: factorType,
-            window: window,
+            backgroundColor: color,
           ),
         ],
       ),
