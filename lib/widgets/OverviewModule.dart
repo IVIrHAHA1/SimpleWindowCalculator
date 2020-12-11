@@ -13,12 +13,33 @@ class OverviewModule extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PageView(
-      controller: pageController,
-      children: [
-        WindowPallet(windowList),
-        TechDetails(totalPrice, totalDuration),
-      ],
-    );
+    return DefaultTabController(
+        length: 2,
+        child: Column(
+          children: [
+            TabBar(
+              tabs: [
+                Tab(text: 'Job Details'),
+                Tab(text: 'Tech Details'),
+              ],
+            ),
+            Flexible(                         // TODO: Fix this issue first
+              fit: FlexFit.tight,
+              child: TabBarView(
+                children: [
+                  WindowPallet(windowList),
+                  TechDetails(totalPrice, totalDuration),
+                ],
+              ),
+            ),
+          ],
+        ));
+    // return PageView(
+    //   controller: pageController,
+    //   children: [
+    //     WindowPallet(windowList),
+    //     TechDetails(totalPrice, totalDuration),
+    //   ],
+    // );
   }
 }

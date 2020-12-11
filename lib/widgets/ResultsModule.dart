@@ -103,8 +103,8 @@ class _ResultsModuleState extends State<ResultsModule> {
                     ),
 
                     // OverviewList
-                    Flexible(
-                      fit: FlexFit.loose,
+                    Container(
+                      height: 373,
                       child: Visibility(
                         visible: expanded,
                         child: widget.statModule != null
@@ -138,7 +138,7 @@ class _ResultsModuleState extends State<ResultsModule> {
                 child: Center(
                   child: widget.count != null
                       ? Text(
-                          '${Format.format(widget.count,1)}',
+                          '${Format.format(widget.count, 1)}',
                           style: Theme.of(context).textTheme.headline5,
                         )
                       : Text(
