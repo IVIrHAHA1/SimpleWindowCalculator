@@ -98,10 +98,6 @@ class _FactorCoinState extends State<FactorCoin> {
 
   @override
   Widget build(BuildContext context) {
-    disabled = widget.window.getFactor(widget.factorKey).isAffixed();
-    // Gives window object some control over this FactorCoin
-    widget.window.registerFactorQAListener(widget.factorKey, setMode);
-
     return widget.updateResultsMod != null
         ? buildInteractiveCoin(context)
         : buildDummyCoin();
@@ -112,6 +108,10 @@ class _FactorCoinState extends State<FactorCoin> {
   }
 
   Widget buildInteractiveCoin(BuildContext context) {
+    disabled = widget.window.getFactor(widget.factorKey).isAffixed();
+    // Gives window object some control over this FactorCoin
+    widget.window.registerFactorQAListener(widget.factorKey, setMode);
+
     return disabled
         // (disabled) -> Coin is grayed out and has to be held to re-enable
         //  * while disabled cannot drag or increment/decrement
@@ -191,7 +191,7 @@ class _FactorCoinState extends State<FactorCoin> {
       alignment: widget.alignment,
       // Takes the factor image. Otherwise takes any widget child and builds the circle
       // around it. Used for Window Specific Counter.
-      child: widget.window.getFactor(widget.factorKey).getImage(),
+      child: OManager.factorList[widget.factorKey].getImage(),
     );
   }
 
