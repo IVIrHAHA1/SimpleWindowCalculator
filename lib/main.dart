@@ -4,8 +4,6 @@ import './Tools/HexColors.dart';
 import './objects/OManager.dart';
 import './widgets/OverviewModule.dart';
 import './widgets/WindowCounter.dart';
-import 'widgets/Pallet.dart';
-import 'Routes/Pallet_pop_up.dart';
 
 import 'Tools/Format.dart';
 import 'widgets/ResultsModule.dart';
@@ -168,13 +166,11 @@ class _MyHomePage extends State {
             visible: viewMods,
             child: Container(
               width: double.infinity,
-              child: Container(
-                child: WindowCounter(
-                  height: availableScreen * .5,
-                  window: activeWindow,
-                  calculator: calculateResults,
-                  selectNewWindowFun: selectNewWindow,
-                ),
+              child: WindowCounter(
+                height: availableScreen * .5,
+                window: activeWindow,
+                calculator: calculateResults,
+                selectNewWindowFun: selectNewWindow,
               ),
             ),
           ),
