@@ -103,8 +103,8 @@ class _ResultsModuleState extends State<ResultsModule> {
                     ),
 
                     // OverviewList
-                    Container(
-                      height: 373,
+                    Flexible(
+                      fit: FlexFit.tight,
                       child: Visibility(
                         visible: expanded,
                         child: widget.statModule != null

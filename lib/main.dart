@@ -166,21 +166,14 @@ class _MyHomePage extends State {
           // Counter Module
           Visibility(
             visible: viewMods,
-            child: GestureDetector(
-              onPanUpdate: (details) {
-                if (details.delta.dx > 0) {
-                  showPallet();
-                }
-              },
+            child: Container(
+              width: double.infinity,
               child: Container(
-                width: double.infinity,
-                child: Container(
-                  child: WindowCounter(
-                    height: availableScreen * .5,
-                    window: activeWindow,
-                    calculator: calculateResults,
-                    selectNewWindowFun: selectNewWindow,
-                  ),
+                child: WindowCounter(
+                  height: availableScreen * .5,
+                  window: activeWindow,
+                  calculator: calculateResults,
+                  selectNewWindowFun: selectNewWindow,
                 ),
               ),
             ),
@@ -306,18 +299,5 @@ class _MyHomePage extends State {
     setState(() {
       viewMods = !hide;
     });
-  }
-
-  showPallet() {
-    Navigator.push(
-      context,
-      WindowPalletPU(
-        top: 0,
-        bottom: 0,
-        left: 0,
-        right: MediaQuery.of(context).size.width / 2,
-        child: WindowPallet(windowList),
-      ),
-    );
   }
 }
