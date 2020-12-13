@@ -22,17 +22,18 @@ class WindowCounter extends StatelessWidget {
   // a new window. Needed for Window Preview button.
   final Function selectNewWindowFun;
 
-  WindowCounter(
-      {@required this.window,
-      @required this.calculator,
-      @required this.selectNewWindowFun,
-      });
+  WindowCounter({
+    @required this.window,
+    @required this.calculator,
+    @required this.selectNewWindowFun,
+    this.height,
+  });
 
   @override
   Widget build(BuildContext context) {
     final box = context.findRenderObject() as RenderBox;
 
-    height = box.size.height;
+    if (box != null) height = box.size.height;
 
     final factorSize = height / 6.5;
     // ErrorMargin is used to keep the the radius circular rather than

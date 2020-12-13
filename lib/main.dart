@@ -1,3 +1,4 @@
+import 'package:SimpleWindowCalculator/Animations/SizingTween.dart';
 import 'package:SimpleWindowCalculator/widgets/ModalContent.dart';
 
 import './Tools/HexColors.dart';
@@ -71,6 +72,22 @@ class _MyHomePage extends State {
     windowList.add(activeWindow);
   }
 
+  AnimationController _controller;
+  @override
+  void initState() {
+    // _controller = AnimationController(
+    //   vsync: this,
+    //   duration: Duration(milliseconds: 400),
+    // );
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose(); // May not need this
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     // Needs to be here because of clear onPressed
@@ -97,9 +114,11 @@ class _MyHomePage extends State {
     );
 
     // Get available screen space
-    double availableScreen = MediaQuery.of(context).size.height -
+    availableScreen = MediaQuery.of(context).size.height -
         mAppBar.preferredSize.height -
         MediaQuery.of(context).padding.top;
+
+    _setCtrHeight();
 
     return Container(
       // This is to allow linear gradient behind the appBar
@@ -163,9 +182,9 @@ class _MyHomePage extends State {
 
           // Counter Module
           Visibility(
-            visible: viewMods,
-            child: Container(
-              width: double.infinity,
+            visible: true,
+            child: SizingTween(
+              size: availableScreen * .5,
               child: WindowCounter(
                 height: availableScreen * .5,
                 window: activeWindow,
@@ -177,6 +196,23 @@ class _MyHomePage extends State {
         ],
       ),
     );
+  }
+
+  double controllerDynamicHeight;
+  double availableScreen;
+
+  _setCtrHeight() {
+    if (!viewMods)
+      controllerDynamicHeight = availableScreen * .5;
+    else
+      controllerDynamicHeight = availableScreen * .2;
+  }
+
+  hideWidgets(bool hide) {
+    setState(() {
+      viewMods = !hide;
+      _setCtrHeight();
+    });
   }
 
   /*  -----------------------------------------------------------------------
@@ -281,19 +317,14 @@ class _MyHomePage extends State {
    *                        GUI POP UPS/MUNIPS
    *  -------------------------------------------------------------------- */
   void selectNewWindow(BuildContext ctx) {
-
     showModalBottomSheet(
       backgroundColor: Colors.transparent,
       context: context,
       builder: (_) {
-        return ModalContent(addWindow: _addNewWindow,);
+        return ModalContent(
+          addWindow: _addNewWindow,
+        );
       },
     );
-  }
-
-  hideWidgets(bool hide) {
-    setState(() {
-      viewMods = !hide;
-    });
   }
 }
