@@ -3,53 +3,38 @@ import 'package:flutter/material.dart';
 class SizingTween extends StatefulWidget {
   final double size;
   final Widget child;
+  final AnimationController controller;
 
   SizingTween({
     this.size,
     this.child,
+    this.controller,
   });
 
   @override
   _SizingTweenState createState() => _SizingTweenState();
 }
 
-class _SizingTweenState extends State<SizingTween>
-    with SingleTickerProviderStateMixin {
-  AnimationController _controller;
+class _SizingTweenState extends State<SizingTween> {
   Animation _animation;
 
   @override
   void initState() {
-    _controller = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: 200),
-    );
-
-    _animation = Tween<double>(begin: widget.size, end: 0).animate(_controller);
+    _animation =
+        Tween<double>(begin: widget.size, end: 0).animate(widget.controller);
 
     super.initState();
   }
 
   @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: _controller,
+      animation: widget.controller,
       child: widget.child,
       builder: (_, Widget child) {
-        return GestureDetector(
-          onTap: () {
-            _controller.forward();
-          },
-          child: Container(
-            height: _animation.value,
-            child: child,
-          ),
+        return Container(
+          height: _animation.value,
+          child: child,
         );
       },
     );

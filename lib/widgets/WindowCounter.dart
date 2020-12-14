@@ -31,9 +31,9 @@ class WindowCounter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final box = context.findRenderObject() as RenderBox;
+    // final box = context.findRenderObject() as RenderBox;
 
-    if (box != null) height = box.size.height;
+    // if (box != null) height = box.size.height;
 
     final factorSize = height / 6.5;
     // ErrorMargin is used to keep the the radius circular rather than

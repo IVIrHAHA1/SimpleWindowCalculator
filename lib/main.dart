@@ -53,7 +53,7 @@ class MyHomePage extends StatefulWidget {
   State<StatefulWidget> createState() => _MyHomePage();
 }
 
-class _MyHomePage extends State {
+class _MyHomePage extends State with SingleTickerProviderStateMixin {
   final List<Window> windowList = List();
   Window activeWindow;
 
@@ -75,16 +75,17 @@ class _MyHomePage extends State {
   AnimationController _controller;
   @override
   void initState() {
-    // _controller = AnimationController(
-    //   vsync: this,
-    //   duration: Duration(milliseconds: 400),
-    // );
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 400),
+      reverseDuration: Duration(milliseconds: 400),
+    );
     super.initState();
   }
 
   @override
   void dispose() {
-    _controller.dispose(); // May not need this
+    _controller.dispose();
     super.dispose();
   }
 
@@ -181,16 +182,14 @@ class _MyHomePage extends State {
           ),
 
           // Counter Module
-          Visibility(
-            visible: true,
-            child: SizingTween(
-              size: availableScreen * .5,
-              child: WindowCounter(
-                height: availableScreen * .5,
-                window: activeWindow,
-                calculator: calculateResults,
-                selectNewWindowFun: selectNewWindow,
-              ),
+          SizingTween(
+            controller: _controller,
+            size: availableScreen * .5,
+            child: WindowCounter(
+              height: availableScreen * .5,
+              window: activeWindow,
+              calculator: calculateResults,
+              selectNewWindowFun: selectNewWindow,
             ),
           ),
         ],
@@ -209,9 +208,13 @@ class _MyHomePage extends State {
   }
 
   hideWidgets(bool hide) {
+    if (hide)
+      _controller.forward();
+    else
+      _controller.reverse(from: 20);
+
     setState(() {
       viewMods = !hide;
-      _setCtrHeight();
     });
   }
 

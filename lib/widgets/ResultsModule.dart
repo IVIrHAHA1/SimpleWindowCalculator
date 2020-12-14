@@ -43,12 +43,14 @@ class _ResultsModuleState extends State<ResultsModule> {
   }
 
   _expandState() {
+    print('expand');
     expanded = true;
     //dynamicHeight = widget.height - (widgetSize - collapsedHeight) - 17;
     widget.hideViews(true);
   }
 
   _collapseState() {
+    print('collapse');
     expanded = false;
     widget.hideViews(false);
     //dynamicHeight = collapsedHeight;
