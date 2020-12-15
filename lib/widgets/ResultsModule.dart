@@ -1,4 +1,5 @@
 import 'package:SimpleWindowCalculator/Tools/Format.dart';
+import 'package:SimpleWindowCalculator/Tools/GlobalValues.dart';
 import 'package:SimpleWindowCalculator/widgets/OverviewModule.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +13,7 @@ class ResultsModule extends StatefulWidget {
   final List<Text> children;
   final double count;
   final Function hideViews;
-  final OverviewModule statModule;
+  final Widget statModule;
 
   ResultsModule({
     @required this.height,
@@ -43,17 +44,15 @@ class _ResultsModuleState extends State<ResultsModule> {
   }
 
   _expandState() {
-    print('expand');
     expanded = true;
-    //dynamicHeight = widget.height - (widgetSize - collapsedHeight) - 17;
     widget.hideViews(true);
+    dynamicHeight = widget.height - (widgetSize - collapsedHeight) - 17;
   }
 
   _collapseState() {
-    print('collapse');
     expanded = false;
     widget.hideViews(false);
-    //dynamicHeight = collapsedHeight;
+    dynamicHeight = collapsedHeight;
   }
 
   @override
@@ -73,7 +72,7 @@ class _ResultsModuleState extends State<ResultsModule> {
     return Column(
       children: [
         AnimatedContainer(
-          duration: Duration(milliseconds: 400),
+          duration: Duration(milliseconds: GlobalValues.animDuration),
           height: dynamicHeight,
           child: Card(
             shape: RoundedRectangleBorder(
@@ -107,12 +106,9 @@ class _ResultsModuleState extends State<ResultsModule> {
                     // OverviewList
                     Flexible(
                       fit: FlexFit.tight,
-                      child: Visibility(
-                        visible: expanded,
-                        child: widget.statModule != null
-                            ? widget.statModule
-                            : Container(),
-                      ),
+                      child: widget.statModule != null
+                          ? widget.statModule
+                          : Container(),
                     ),
                   ],
                 ),

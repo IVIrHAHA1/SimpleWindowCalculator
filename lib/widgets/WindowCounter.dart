@@ -50,6 +50,10 @@ class WindowCounter extends StatelessWidget {
     final double ofp_y = radii * sin(pi / 3) + radii - errorMargin;
     final double ofp_x = radii * cos(pi / 3) - errorMargin;
 
+    // TODO: Make this mathematically viable, as of now it's approx.
+    final double ifp_y_top = radii * sin(-pi / 11) + radii - errorMargin;
+    final double ofp_y_top = radii * sin(-pi / 3.75) + radii - errorMargin;
+
     return Container(
       height: height,
       child: Stack(
@@ -59,7 +63,7 @@ class WindowCounter extends StatelessWidget {
 
           // Filthy Factor
           Positioned(
-            bottom: ofp_y,
+            top: ofp_y_top,
             right: ofp_x,
             child: FactorCoin(
               factorKey: Factors.filthy,
@@ -73,7 +77,7 @@ class WindowCounter extends StatelessWidget {
 
           // Difficult Factor
           Positioned(
-            bottom: ifp_y,
+            top: ifp_y_top,
             right: ifp_x,
             child: FactorCoin(
               factorKey: Factors.difficult,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class SizingTween extends StatefulWidget {
+  // beginning size
   final double size;
   final Widget child;
   final AnimationController controller;
@@ -16,12 +17,14 @@ class SizingTween extends StatefulWidget {
 }
 
 class _SizingTweenState extends State<SizingTween> {
-  Animation _animation;
+  Animation _animation, _animation2;
 
   @override
   void initState() {
     _animation =
         Tween<double>(begin: widget.size, end: 0).animate(widget.controller);
+
+    _animation2 = Tween<double>(begin: 1, end: 0).animate(widget.controller);
 
     super.initState();
   }
@@ -34,7 +37,10 @@ class _SizingTweenState extends State<SizingTween> {
       builder: (_, Widget child) {
         return Container(
           height: _animation.value,
-          child: child,
+          child: Opacity(
+            opacity: _animation2.value,
+            child: child,
+          ),
         );
       },
     );

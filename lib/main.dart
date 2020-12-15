@@ -1,4 +1,5 @@
 import 'package:SimpleWindowCalculator/Animations/SizingTween.dart';
+import 'package:SimpleWindowCalculator/Tools/GlobalValues.dart';
 import 'package:SimpleWindowCalculator/widgets/ModalContent.dart';
 
 import './Tools/HexColors.dart';
@@ -77,8 +78,8 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
   void initState() {
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 400),
-      reverseDuration: Duration(milliseconds: 400),
+      duration: Duration(milliseconds: GlobalValues.animDuration),
+      reverseDuration: Duration(milliseconds: GlobalValues.animDuration),
     );
     super.initState();
   }
@@ -118,8 +119,6 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
     availableScreen = MediaQuery.of(context).size.height -
         mAppBar.preferredSize.height -
         MediaQuery.of(context).padding.top;
-
-    _setCtrHeight();
 
     return Container(
       // This is to allow linear gradient behind the appBar
@@ -197,15 +196,7 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
     );
   }
 
-  double controllerDynamicHeight;
   double availableScreen;
-
-  _setCtrHeight() {
-    if (!viewMods)
-      controllerDynamicHeight = availableScreen * .5;
-    else
-      controllerDynamicHeight = availableScreen * .2;
-  }
 
   hideWidgets(bool hide) {
     if (hide)
