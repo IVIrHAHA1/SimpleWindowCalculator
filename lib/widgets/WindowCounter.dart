@@ -346,7 +346,7 @@ class WindowCounter extends StatelessWidget {
         color: color,
         borderRadius: BorderRadius.circular(8),
       ),
-      child: window.getPicture(),
+      child: window.getImage(),
     );
   }
 }

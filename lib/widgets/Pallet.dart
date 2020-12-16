@@ -56,7 +56,7 @@ class _WindowPreview extends StatelessWidget {
           children: [
             // Get Image
             Container(
-              child: window.getPicture(),
+              child: window.getImage(),
               height: getHeight(),
             ),
 
