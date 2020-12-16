@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 class ResultsModule extends StatefulWidget {
   // Sets container height of both Card and Total Count Tile
+  // vs how much is going to the controller
   static const double _widgetSizeRatio = .4;
 
   // Height is the available screen size (*Because of appBar access)
@@ -12,13 +13,13 @@ class ResultsModule extends StatefulWidget {
 
   final List<Text> children;
   final double count;
-  final Function hideViews;
-  final Widget statModule;
+  final Function triggerExpandAnim;
+  final OverviewModule statModule;
 
   ResultsModule({
     @required this.height,
     @required this.count,
-    @required this.hideViews,
+    @required this.triggerExpandAnim,
     this.statModule,
     this.children,
   });
@@ -29,8 +30,8 @@ class ResultsModule extends StatefulWidget {
 }
 
 class _ResultsModuleState extends State<ResultsModule> {
-  static const double cardRatio = .75;
-
+  static const double cardRatio = .75; // Amount the card is going to occuppy
+  // vs total window count
   final double widgetSize;
   double dynamicHeight, collapsedHeight;
   IconButton expansionControlBtn;
@@ -45,13 +46,13 @@ class _ResultsModuleState extends State<ResultsModule> {
 
   _expandState() {
     expanded = true;
-    widget.hideViews(true);
-    dynamicHeight = widget.height - (widgetSize - collapsedHeight) - 17;
+    widget.triggerExpandAnim(true);
+    dynamicHeight = widget.height - (widgetSize - collapsedHeight);
   }
 
   _collapseState() {
     expanded = false;
-    widget.hideViews(false);
+    widget.triggerExpandAnim(false);
     dynamicHeight = collapsedHeight;
   }
 
@@ -76,17 +77,16 @@ class _ResultsModuleState extends State<ResultsModule> {
           height: dynamicHeight,
           child: Card(
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(GlobalValues.cornerRadius),
             ),
             elevation: 5,
-            child: GestureDetector(
-              onTap: expanded ? _collapseState : _expandState,
-              child: Container(
-                height: collapsedHeight,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Row(
+            child: Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  GestureDetector(
+                    onTap: expanded ? _collapseState : _expandState,
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         // Price Result Circle
@@ -102,53 +102,59 @@ class _ResultsModuleState extends State<ResultsModule> {
                         ),
                       ],
                     ),
+                  ),
 
-                    // OverviewList
-                    Flexible(
-                      fit: FlexFit.tight,
-                      child: widget.statModule != null
-                          ? widget.statModule
-                          : Container(),
-                    ),
-                  ],
-                ),
+                  // OverviewList
+                  AnimatedContainer(
+                    height: expanded ? (dynamicHeight-collapsedHeight) : 0,
+                    duration: Duration(milliseconds: GlobalValues.animDuration),
+                    child: widget.statModule ?? Container(),
+                  ),
+                ],
               ),
             ),
           ),
         ),
 
         // Total Count Modulette
-        Container(
-          height: widgetSize - collapsedHeight,
-          child: ListTile(
-            leading: Text(
-              'Total Window Count',
-              style: Theme.of(context).textTheme.headline6,
+        _buildWindowCountDisplay(context),
+      ],
+    );
+  }
+
+  /*
+   *  Total Window Count Display  
+   */
+  Widget _buildWindowCountDisplay(BuildContext context) {
+    return Container(
+      height: widgetSize - collapsedHeight,
+      child: ListTile(
+        leading: Text(
+          'Total Window Count',
+          style: Theme.of(context).textTheme.headline6,
+        ),
+        trailing: Container(
+          width: 75,
+          height: 50,
+          child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
             ),
-            trailing: Container(
-              width: 75,
-              height: 50,
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                color: Colors.white,
-                child: Center(
-                  child: widget.count != null
-                      ? Text(
-                          '${Format.format(widget.count, 1)}',
-                          style: Theme.of(context).textTheme.headline5,
-                        )
-                      : Text(
-                          '0',
-                          style: Theme.of(context).textTheme.headline5,
-                        ),
-                ),
-              ),
+            color: Colors.white,
+            child: Center(
+              child: widget.count != null
+                  ? Text(
+                      '${Format.format(widget.count, 1)}',
+                      style: Theme.of(context).textTheme.headline5,
+                    )
+                  : Text(
+                      '0',
+                      style: Theme.of(context).textTheme.headline5,
+                    ),
             ),
           ),
         ),
-      ],
+      ),
     );
   }
 }

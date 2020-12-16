@@ -62,13 +62,10 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
   var timeTotal;
   var countTotal;
 
-  bool viewMods;
-
   static const double mDRIVETIME = 25;
   static const double mMIN_PRICE = 150;
 
   _MyHomePage() {
-    viewMods = true;
     activeWindow = OManager.getDefaultWindow();
     windowList.add(activeWindow);
   }
@@ -149,7 +146,7 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
             child: ResultsModule(
               statModule: OverviewModule(priceTotal, timeTotal, windowList),
               height: availableScreen,
-              hideViews: hideWidgets,
+              triggerExpandAnim: triggerExpandAnim,
               children: [
                 priceTotal != null
                     ? Text(
@@ -198,14 +195,14 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
 
   double availableScreen;
 
-  hideWidgets(bool hide) {
+  triggerExpandAnim(bool hide) {
     if (hide)
       _controller.forward();
     else
-      _controller.reverse(from: 20);
+      _controller.reverse();
 
     setState(() {
-      viewMods = !hide;
+      // viewMods = !hide;
     });
   }
 

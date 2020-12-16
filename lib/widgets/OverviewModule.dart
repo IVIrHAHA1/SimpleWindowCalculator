@@ -1,12 +1,13 @@
+import 'package:SimpleWindowCalculator/Tools/GlobalValues.dart';
+
 /**
  * Overview module controllers the TabView which in turn conatains the
  * Job Details and Tech Details widgets.
  * 
  */
 
-import 'package:SimpleWindowCalculator/Tools/Format.dart';
-import 'package:SimpleWindowCalculator/widgets/Pallet.dart';
-import 'package:SimpleWindowCalculator/widgets/TechDetails.dart';
+import '../widgets/Pallet.dart';
+import '../widgets/TechDetails.dart';
 import 'package:flutter/material.dart';
 
 class OverviewModule extends StatelessWidget {
@@ -22,6 +23,8 @@ class OverviewModule extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           TabBar(
             tabs: [
@@ -47,7 +50,7 @@ class OverviewModule extends StatelessWidget {
             fit: FlexFit.tight,
             child: TabBarView(
               children: [
-                WindowPallet(windowList),
+                Pallet(windowList),
                 TechDetails(totalPrice, totalDuration),
               ],
             ),
@@ -55,12 +58,5 @@ class OverviewModule extends StatelessWidget {
         ],
       ),
     );
-    // return PageView(
-    //   controller: pageController,
-    //   children: [
-    //     WindowPallet(windowList),
-    //     TechDetails(totalPrice, totalDuration),
-    //   ],
-    // );
   }
 }

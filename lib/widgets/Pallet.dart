@@ -8,24 +8,21 @@ import '../Tools/Format.dart';
 import '../objects/Window.dart';
 import 'package:flutter/material.dart';
 
-class WindowPallet extends StatelessWidget {
+class Pallet extends StatelessWidget {
   final List<Window> windowList;
 
-  WindowPallet(this.windowList);
+  Pallet(this.windowList);
 
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-      fit: FlexFit.tight,
-      child: Container(
-        alignment: Alignment.topCenter,
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Column(
-            children: windowList.map((window) {
-              return _WindowPreview(window: window);
-            }).toList(),
-          ),
+    return Container(
+      alignment: Alignment.topCenter,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          children: windowList.map((window) {
+            return _WindowPreview(window: window);
+          }).toList(),
         ),
       ),
     );
@@ -42,7 +39,7 @@ class _WindowPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var getHeight = () {
-      return MediaQuery.of(context).size.height / 6;
+      return MediaQuery.of(context).size.height / 8;
     };
 
     return Card(
