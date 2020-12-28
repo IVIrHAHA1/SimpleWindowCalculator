@@ -70,6 +70,7 @@ class _ResultsModuleState extends State<ResultsModule> {
       textView: widget.children[1],
     );
 
+    // Column including window count and results mod
     return Column(
       children: [
         AnimatedContainer(
@@ -82,7 +83,7 @@ class _ResultsModuleState extends State<ResultsModule> {
             elevation: 5,
             child: Container(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   GestureDetector(
                     onTap: expanded ? _collapseState : _expandState,
@@ -105,6 +106,7 @@ class _ResultsModuleState extends State<ResultsModule> {
                   ),
 
                   // OverviewList
+                  // TODO: Revisit Overview expanding when you learn about Futures
                   AnimatedContainer(
                     height: expanded ? (dynamicHeight-collapsedHeight) : 0,
                     duration: Duration(milliseconds: GlobalValues.animDuration),
