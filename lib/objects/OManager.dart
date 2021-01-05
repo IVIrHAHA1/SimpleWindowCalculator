@@ -28,8 +28,8 @@ class OManager {
     // Casement Window
     Window(
       name: 'Casement',
-      duration: Duration(minutes: 6),
-      price: 9,
+      duration: Duration(minutes: 6, seconds: 30),
+      price: 11,
       image: Image.asset(
         'assets/images/casement_window.png',
       ),
@@ -38,8 +38,8 @@ class OManager {
     // Picture Window
     Window(
       name: 'Picture',
-      duration: Duration(minutes: 5, seconds: 30),
-      price: 9,
+      duration: Duration(minutes: 6),
+      price: 11,
       image: Image.asset(
         'assets/images/picture_window.png',
       ),
