@@ -318,6 +318,7 @@ class WindowCounter extends StatelessWidget {
           },
           builder: (ctx, candidates, rejects) {
             return candidates.length > 0
+                // Convey to user that FactorCoin is expected
                 ? GestureDetector(
                     onTap: () {
                       selectNewWindowFun(context);
