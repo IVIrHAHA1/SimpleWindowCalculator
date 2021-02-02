@@ -6,13 +6,11 @@ import '../objects/OManager.dart';
 import 'package:flutter/material.dart';
 
 class Window {
-  // TODO: add an 'image not found' image
-
   // Default Values
   static const double _mPRICE = 12;
   static const String _mNAME = 'unnamed';
   static const Duration _mDURATION = Duration(minutes: 10);
-
+  
   double price;
   String name;
   Duration duration;
@@ -22,9 +20,37 @@ class Window {
   var _grandTotal;
   var _grandDuration;
 
+  /// Set at runtime
   Map<Factors, Factor> factorList = Map();
 
   Window({this.price = 0.0, this.duration, this.name, this.image}) {
+    this._grandTotal = 0.0;
+    this._grandDuration = Duration();
+    _initFactors();
+  }
+
+  /// Keys to be used with json
+  static String _nameKey = 'NameKey';
+  static String _priceKey = 'PriceKey';
+  static String _durationKey = 'DurationKey';
+  // TODO: find a way to make this
+  static String _imageKey = 'ImageKey';
+
+  Map<String, dynamic> toJson() {
+    return {
+      _priceKey: price,
+      _nameKey: name,
+      _durationKey: duration.inSeconds,
+      _imageKey: null,
+    };
+  }
+
+  Window.fromMap(Map map) {
+    this.price = map[_priceKey];
+    this.name = map[_nameKey];
+    this.duration = Duration(seconds: map[_durationKey]);
+    this.image = null;
+
     this._grandTotal = 0.0;
     this._grandDuration = Duration();
     _initFactors();

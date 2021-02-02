@@ -2,14 +2,12 @@ import '../objects/Window.dart';
 import 'package:flutter/material.dart';
 
 class WindowObjectScreen extends StatelessWidget {
-  Window window;
+  final Window window;
 
   WindowObjectScreen(this.window);
 
   @override
   Widget build(BuildContext context) {
-    window = window ?? new Window();
-
     AppBar appBar = AppBar(
       centerTitle: true,
       title: Text(
@@ -94,6 +92,10 @@ class _WindowDetails extends StatelessWidget {
     );
   }
 
+  /*
+   *  These details or going to be changed, so that when user hits create/enter
+   *  the details will change in the Database; Either replace or insert.
+   */
   _updateWindowName(String name) {
     window.setName(
       name ?? window.getName(),
