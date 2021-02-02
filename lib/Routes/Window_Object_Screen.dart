@@ -1,6 +1,3 @@
-import 'package:fluttertoast/fluttertoast.dart';
-
-import '../objects/OManager.dart';
 import '../objects/Window.dart';
 import 'package:flutter/material.dart';
 
@@ -52,7 +49,7 @@ class WindowObjectScreen extends StatelessWidget {
         MediaQuery.of(context).padding.top;
 
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomInset: false,
       appBar: appBar,
       backgroundColor: Theme.of(context).primaryColor,
       body: _WindowDetails(bodyHeight, window),
@@ -69,11 +66,12 @@ class _WindowDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double keyBoardHeight = MediaQuery.of(context).viewInsets.bottom;
     return Container(
       height: height,
       child: Column(
         children: [
-          buildImage(height * .5),
+          buildImage(keyBoardHeight > 0 ? 0 : (height * .5)),
           buildBoxes(height * .5),
         ],
       ),
@@ -81,14 +79,14 @@ class _WindowDetails extends StatelessWidget {
   }
 
   Widget buildImage(double size) {
-    return Container(
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 300),
       height: size,
       alignment: Alignment.center,
       child: Card(
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         child: Container(
-          width: size * .75,
           padding: EdgeInsets.all(8),
           child: window.getImage() ?? Image.asset('assets/images/na_image.png'),
         ),
@@ -195,9 +193,7 @@ class _DetailInputBoxState extends State<DetailInputBox> {
           });
           widget.updateData(value);
         },
-        decoration: InputDecoration(
-          hintText: textLabel
-        ),
+        decoration: InputDecoration(hintText: textLabel),
       ),
     );
   }
