@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import '../objects/Factor.dart';
 
 import 'Window.dart';
@@ -10,7 +12,7 @@ class OManager {
       name: 'Sliding',
       duration: Duration(minutes: 10),
       price: 12.50,
-      image: Image.asset(
+      image: File(
         'assets/images/standard_window.png',
       ),
     ),
@@ -20,7 +22,7 @@ class OManager {
       name: 'French',
       duration: Duration(minutes: 15),
       price: 16,
-      image: Image.asset(
+      image: File(
         'assets/images/french_window.png',
       ),
     ),
@@ -30,7 +32,7 @@ class OManager {
       name: 'Casement',
       duration: Duration(minutes: 6, seconds: 30),
       price: 11,
-      image: Image.asset(
+      image: File(
         'assets/images/casement_window.png',
       ),
     ),
@@ -40,7 +42,7 @@ class OManager {
       name: 'Picture',
       duration: Duration(minutes: 6),
       price: 11,
-      image: Image.asset(
+      image: File(
         'assets/images/picture_window.png',
       ),
     ),
@@ -50,7 +52,7 @@ class OManager {
       name: 'Garden',
       duration: Duration(minutes: 20),
       price: 20,
-      image: Image.asset(
+      image: File(
         'assets/images/garden_window.png',
       ),
     ),
@@ -60,7 +62,7 @@ class OManager {
       name: 'Solar Panel',
       duration: Duration(minutes: 5),
       price: 5,
-      image: Image.asset('assets/images/solar_panel.png'),
+      image: File('assets/images/solar_panel.png'),
     )
   ];
 

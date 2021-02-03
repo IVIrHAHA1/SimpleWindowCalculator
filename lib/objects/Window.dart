@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:SimpleWindowCalculator/Tools/DatabaseProvider.dart';
 import 'package:SimpleWindowCalculator/widgets/FactorCoin.dart';
@@ -17,7 +18,7 @@ class Window {
   double price;
   String name;
   Duration duration;
-  Image image;
+  File image; 
 
   double count;
   var _grandTotal;
@@ -44,7 +45,7 @@ class Window {
       _priceKey: price,
       _nameKey: name,
       _durationKey: duration.inSeconds,
-      _imageKey: null,
+      _imageKey: image.path,
     };
   }
 
@@ -59,7 +60,7 @@ class Window {
     this.price = jsonMap[_priceKey];
     this.name = jsonMap[_nameKey];
     this.duration = Duration(seconds: jsonMap[_durationKey]);
-    this.image = null;
+    this.image = File(jsonMap[_imageKey]);
 
     this._grandTotal = 0.0;
     this._grandDuration = Duration();
@@ -144,7 +145,7 @@ class Window {
     this.duration = duration;
   }
 
-  setImage(Image image) {
+  setImage(File image) {
     this.image = image;
   }
 

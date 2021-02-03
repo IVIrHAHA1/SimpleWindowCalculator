@@ -2,7 +2,8 @@ import 'dart:convert';
 
 import 'package:SimpleWindowCalculator/objects/OManager.dart';
 import 'package:SimpleWindowCalculator/objects/Window.dart';
-import 'package:path/path.dart';
+import 'package:path/path.dart' as paths;
+import 'package:path_provider/path_provider.dart' as syspath;
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 
@@ -33,8 +34,8 @@ class DatabaseProvider {
   }
 
   _initDatabase() async {
-    String directoryPath = await getDatabasesPath();
-    String path = join(directoryPath, _databaseName);
+    final directoryPath = await getDatabasesPath();
+    String path = paths.join(directoryPath, _databaseName);
 
     return await openDatabase(
       path,
