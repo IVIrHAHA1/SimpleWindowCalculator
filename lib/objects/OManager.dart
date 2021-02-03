@@ -4,7 +4,7 @@ import 'Window.dart';
 import 'package:flutter/material.dart';
 
 class OManager {
-  static final List<Window> windows = [
+  static final List<Window> presetWindows = [
     // Standard Window
     Window(
       name: 'Sliding',
@@ -65,11 +65,11 @@ class OManager {
   ];
 
   static getAll() {
-    return windows;
+    return presetWindows;
   }
 
   static Window getDefaultWindow() {
-    return windows[0];
+    return presetWindows[0];
   }
 
   static getFactorInstance(Factors type) {

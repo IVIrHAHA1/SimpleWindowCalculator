@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:SimpleWindowCalculator/Tools/DatabaseProvider.dart';
 import 'package:SimpleWindowCalculator/widgets/FactorCoin.dart';
 
 import '../objects/Factor.dart';
@@ -45,10 +48,17 @@ class Window {
     };
   }
 
-  Window.fromMap(Map map) {
-    this.price = map[_priceKey];
-    this.name = map[_nameKey];
-    this.duration = Duration(seconds: map[_durationKey]);
+  Map<String, dynamic> toMap() {
+    return {
+      WINDOW_NAME_ID : this.name.hashCode,
+      WINDOW_OBJECT : jsonEncode(this),
+    };
+  }
+
+  Window.fromMap(Map jsonMap) {
+    this.price = jsonMap[_priceKey];
+    this.name = jsonMap[_nameKey];
+    this.duration = Duration(seconds: jsonMap[_durationKey]);
     this.image = null;
 
     this._grandTotal = 0.0;

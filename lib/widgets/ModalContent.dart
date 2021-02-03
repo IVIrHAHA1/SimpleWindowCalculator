@@ -1,5 +1,7 @@
 import 'package:SimpleWindowCalculator/Routes/Window_Object_Screen.dart';
+import 'package:SimpleWindowCalculator/Tools/DatabaseProvider.dart';
 import 'package:SimpleWindowCalculator/Tools/GlobalValues.dart';
+import 'package:SimpleWindowCalculator/objects/Window.dart';
 
 import '../objects/OManager.dart';
 import 'package:flutter/material.dart';
@@ -72,29 +74,66 @@ class ModalContent extends StatelessWidget {
     return Container(
       color: backgroundColor,
       //height: size,
-      child: GridView.count(
-        crossAxisCount: 3,
-        children: OManager.windows.map((element) {
-          return GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            child: Card(
-              elevation: 2,
-              child: Column(
-                children: [
-                  Container(
-                    child: element.getImage(),
-                    width: MediaQuery.of(context).size.width / 4,
+      child: FutureBuilder<List<Window>>(
+        future: DatabaseProvider.instance.loadAll(),
+        initialData: OManager.presetWindows,
+        builder: (_, snapshot) {
+          if (snapshot.hasData) {
+            print('has data');
+            return GridView.count(
+              crossAxisCount: 3,
+              children: snapshot.data.map((element) {
+                return GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  child: Card(
+                    elevation: 2,
+                    child: Column(
+                      children: [
+                        Container(
+                          child: element.getImage(),
+                          width: MediaQuery.of(context).size.width / 4,
+                        ),
+                        Text(element.getName()),
+                      ],
+                    ),
                   ),
-                  Text(element.getName()),
-                ],
-              ),
-            ),
-            onTap: () {
-              addWindow(element);
-            },
-          );
-        }).toList(),
+                  onTap: () {
+                    addWindow(element);
+                  },
+                );
+              }).toList(),
+            );
+          } else if (snapshot.hasError) {
+            print('we an error');
+          } else {
+            /// make somekind of loading widget
+            print('we have beyond an error');
+          }
+        },
       ),
+      // child: GridView.count(
+      //   crossAxisCount: 3,
+      //   children: OManager.presetWindows.map((element) {
+      //     return GestureDetector(
+      //       behavior: HitTestBehavior.opaque,
+      //       child: Card(
+      //         elevation: 2,
+      //         child: Column(
+      //           children: [
+      //             Container(
+      //               child: element.getImage(),
+      //               width: MediaQuery.of(context).size.width / 4,
+      //             ),
+      //             Text(element.getName()),
+      //           ],
+      //         ),
+      //       ),
+      //       onTap: () {
+      //         addWindow(element);
+      //       },
+      //     );
+      //   }).toList(),
+      // ),
     );
   }
 
