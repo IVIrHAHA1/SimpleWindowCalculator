@@ -79,7 +79,6 @@ class ModalContent extends StatelessWidget {
         initialData: OManager.presetWindows,
         builder: (_, snapshot) {
           if (snapshot.hasData) {
-            print('has data');
             return GridView.count(
               crossAxisCount: 3,
               children: snapshot.data.map((element) {
@@ -97,6 +96,15 @@ class ModalContent extends StatelessWidget {
                       ],
                     ),
                   ),
+                  onLongPress: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) {
+                          return WindowObjectScreen(element);
+                        },
+                      ),
+                    );
+                  },
                   onTap: () {
                     addWindow(element);
                   },

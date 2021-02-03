@@ -11,7 +11,7 @@ class WindowObjectScreen extends StatelessWidget {
     AppBar appBar = AppBar(
       centerTitle: true,
       title: Text(
-        'Create Window',
+        window == null ? 'Create Window' : window.getName(),
         style: TextStyle(
           color: Colors.white,
         ),
@@ -66,6 +66,7 @@ class _WindowDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     double keyBoardHeight = MediaQuery.of(context).viewInsets.bottom;
     return Container(
+      alignment: Alignment.center,
       height: height,
       child: Column(
         children: [
@@ -78,16 +79,32 @@ class _WindowDetails extends StatelessWidget {
 
   Widget buildImage(double size) {
     return AnimatedContainer(
-      duration: Duration(milliseconds: 300),
+      duration: Duration(milliseconds: 200),
       height: size,
       alignment: Alignment.center,
+      constraints: BoxConstraints.tightFor(width: size, height: size),
       child: Card(
         elevation: 4,
+        margin: EdgeInsets.all(16),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        child: Container(
-          padding: EdgeInsets.all(8),
-          child: window.getImage() ?? Image.asset('assets/images/na_image.png'),
-        ),
+        child: window == null || window.getImage() == null
+            ? Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: Text('No Image Available'),
+                    ),
+                    Icon(
+                      Icons.camera_alt,
+                      color: Colors.grey,
+                    ),
+                  ],
+                ),
+              )
+            : Center(child: Image.asset(window.getImage().path)),
       ),
     );
   }
@@ -155,6 +172,7 @@ class _WindowDetails extends StatelessWidget {
   }
 }
 
+/// Text input boxes where necessary Window details will be gathered from user
 class DetailInputBox extends StatefulWidget {
   final String label;
   final Function updateData;
