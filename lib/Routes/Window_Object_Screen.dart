@@ -1,5 +1,11 @@
+import 'dart:io';
+
+import 'package:path/path.dart' as paths;
+
 import '../objects/Window.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart' as syspaths;
 
 class WindowObjectScreen extends StatelessWidget {
   final Window window;
@@ -50,12 +56,12 @@ class WindowObjectScreen extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       appBar: appBar,
       backgroundColor: Theme.of(context).primaryColor,
-      body: _WindowDetails(bodyHeight, window),
+      body: _WindowDetails(bodyHeight, window ?? Window()),
     );
   }
 }
 
-class _WindowDetails extends StatelessWidget {
+class _WindowDetails extends StatefulWidget {
   final double height;
 
   final Window window;
@@ -63,18 +69,44 @@ class _WindowDetails extends StatelessWidget {
   _WindowDetails(this.height, this.window);
 
   @override
+  __WindowDetailsState createState() => __WindowDetailsState();
+}
+
+class __WindowDetailsState extends State<_WindowDetails> {
+  @override
   Widget build(BuildContext context) {
     double keyBoardHeight = MediaQuery.of(context).viewInsets.bottom;
     return Container(
       alignment: Alignment.center,
-      height: height,
+      height: widget.height,
       child: Column(
         children: [
-          buildImage(keyBoardHeight > 0 ? 0 : (height * .5)),
-          buildBoxes(height * .5),
+          buildImage(keyBoardHeight > 0 ? 0 : (widget.height * .5)),
+          buildBoxes(widget.height * .5),
         ],
       ),
     );
+  }
+
+  void _obtainImage() async {
+    /// Allows for the utilization of the system camera, this saves the image
+    /// in temporary storage
+    ImagePicker imagePicker = ImagePicker();
+    PickedFile imageFile = await imagePicker.getImage(
+      source: ImageSource.camera,
+      maxWidth: 600,
+    );
+
+    /// This gives a directory to save the image
+    final appDir = await syspaths.getApplicationDocumentsDirectory();
+    final fileName = paths.basename(imageFile.path);
+
+    /// Now save the image into directory [appDir] with the file name [fileName]
+    final saveImage = await File(imageFile.path).copy('${appDir.path}/$fileName');
+
+    setState(() {
+      widget.window.setImage(saveImage);
+    });
   }
 
   Widget buildImage(double size) {
@@ -87,35 +119,34 @@ class _WindowDetails extends StatelessWidget {
         elevation: 4,
         margin: EdgeInsets.all(16),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        child: window == null || window.getImage() == null
-            ? Center(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 8.0),
-                      child: Text('No Image Available'),
-                    ),
-                    Icon(
-                      Icons.camera_alt,
-                      color: Colors.grey,
-                    ),
-                  ],
-                ),
-              )
-            : Center(child: Image.asset(window.getImage().path)),
+        child: GestureDetector(
+          onTap: _obtainImage,
+          child: widget.window.getImage() == null
+              ? Center(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: Text('No Image Available'),
+                      ),
+                      Icon(
+                        Icons.camera_alt,
+                        color: Colors.grey,
+                      ),
+                    ],
+                  ),
+                )
+              : Center(child: Image.asset(widget.window.getImage().path)),
+        ),
       ),
     );
   }
 
-  /*
-   *  These details or going to be changed, so that when user hits create/enter
-   *  the details will change in the Database; Either replace or insert.
-   */
   _updateWindowName(String name) {
-    window.setName(
-      name ?? window.getName(),
+    widget.window.setName(
+      name ?? widget.window.getName(),
     );
   }
 
@@ -131,7 +162,7 @@ class _WindowDetails extends StatelessWidget {
         seconds: int.parse(sec),
       );
 
-      window.setDuration(duration);
+      widget.window.setDuration(duration);
     } catch (Exception) {
       // TODO: Implement user error msg
     }
@@ -140,7 +171,7 @@ class _WindowDetails extends StatelessWidget {
   _updateWindowPrice(String priceText) {
     try {
       var price = double.parse(priceText);
-      window.setPrice(price);
+      widget.window.setPrice(price);
     } catch (Exception) {
       // TODO: Implement user error msg
     }
@@ -153,16 +184,16 @@ class _WindowDetails extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           DetailInputBox(
-            label: 'Name',
+            label: widget.window.getName() ?? 'Name',
             updateData: _updateWindowName,
           ),
           DetailInputBox(
-            label: 'Time',
+            label: widget.window.getDuration().inSeconds.toString() ?? 'Time',
             textInputType: TextInputType.number,
             updateData: _updateWindowDuration,
           ),
           DetailInputBox(
-            label: 'Price',
+            label: widget.window.getPrice().toString() ?? 'Price',
             textInputType: TextInputType.number,
             updateData: _updateWindowPrice,
           ),

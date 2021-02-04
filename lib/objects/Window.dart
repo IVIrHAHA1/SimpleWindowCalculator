@@ -165,7 +165,7 @@ class Window {
     return this.image;
   }
 
-  getDuration() {
+  Duration getDuration() {
     return duration != null ? duration : _mDURATION;
   }
 
