@@ -16,7 +16,14 @@ class ModalContent extends StatelessWidget {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) {
-          return WindowObjectScreen(null);
+          return WindowObjectScreen(
+            Window(
+              /// TODO: DELETE THIS AFTER TESTING
+              name: 'test',
+              duration: Duration(minutes: 2),
+              price: 12.0,
+            ),
+          );
         },
       ),
     );
@@ -75,8 +82,8 @@ class ModalContent extends StatelessWidget {
       color: backgroundColor,
       //height: size,
       child: FutureBuilder<List<Window>>(
-        future: DatabaseProvider.instance.loadAll(),
         initialData: OManager.presetWindows,
+        future: DatabaseProvider.instance.loadAll(),
         builder: (_, snapshot) {
           if (snapshot.hasData) {
             return GridView.count(
@@ -89,7 +96,12 @@ class ModalContent extends StatelessWidget {
                     child: Column(
                       children: [
                         Container(
-                          child: Image.asset(element.getImage().path),
+                          child: Image.file(
+                            element.getImage(),
+                            errorBuilder: (ctx, obj, _) {
+                              return Image.asset(element.getImage().path);
+                            },
+                          ),
                           width: MediaQuery.of(context).size.width / 4,
                         ),
                         Text(element.getName()),
@@ -114,8 +126,38 @@ class ModalContent extends StatelessWidget {
           } else if (snapshot.hasError) {
             print('we an error');
           } else {
-            /// make somekind of loading widget
-            print('we have beyond an error');
+            return GridView.count(
+              crossAxisCount: 3,
+              children: OManager.presetWindows.map((window) {
+                return GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  child: Card(
+                    elevation: 2,
+                    child: Column(
+                      children: [
+                        Container(
+                          child: Image.asset(window.getImage().path),
+                          width: MediaQuery.of(context).size.width / 4,
+                        ),
+                        Text(window.getName()),
+                      ],
+                    ),
+                  ),
+                  onLongPress: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) {
+                          return WindowObjectScreen(window);
+                        },
+                      ),
+                    );
+                  },
+                  onTap: () {
+                    addWindow(window);
+                  },
+                );
+              }).toList(),
+            );
           }
         },
       ),

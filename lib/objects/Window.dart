@@ -37,7 +37,6 @@ class Window {
   static String _nameKey = 'NameKey';
   static String _priceKey = 'PriceKey';
   static String _durationKey = 'DurationKey';
-  // TODO: find a way to make this
   static String _imageKey = 'ImageKey';
 
   Map<String, dynamic> toJson() {
