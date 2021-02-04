@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:SimpleWindowCalculator/Tools/ImageLoader.dart';
 import 'package:flutter/services.dart';
 
 import '../Tools/HexColors.dart';
@@ -347,7 +348,7 @@ class WindowCounter extends StatelessWidget {
         color: color,
         borderRadius: BorderRadius.circular(8),
       ),
-      child: Image.asset(window.getImage().path),
+      child: ImageLoader.fromFile(window.getImage()),
     );
   }
 }

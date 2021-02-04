@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:SimpleWindowCalculator/Tools/DatabaseProvider.dart';
+import 'package:SimpleWindowCalculator/Tools/ImageLoader.dart';
 import 'package:path/path.dart' as paths;
 
 import '../objects/Window.dart';
@@ -195,7 +196,7 @@ class _WindowImageInputState extends State<_WindowImageInput> {
                 ],
               ),
             )
-          : Center(child: Image.file(windowImage)),
+          : Center(child: ImageLoader.fromFile(windowImage)),
     );
   }
 

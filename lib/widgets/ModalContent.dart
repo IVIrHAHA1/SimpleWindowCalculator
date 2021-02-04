@@ -2,6 +2,7 @@ import 'package:SimpleWindowCalculator/Routes/Window_Object_Screen.dart';
 import 'package:SimpleWindowCalculator/Tools/DatabaseProvider.dart';
 import 'package:SimpleWindowCalculator/Tools/GlobalValues.dart';
 import 'package:SimpleWindowCalculator/objects/Window.dart';
+import 'package:SimpleWindowCalculator/Tools/ImageLoader.dart';
 
 import '../objects/OManager.dart';
 import 'package:flutter/material.dart';
@@ -82,85 +83,47 @@ class ModalContent extends StatelessWidget {
       color: backgroundColor,
       //height: size,
       child: FutureBuilder<List<Window>>(
-        initialData: OManager.presetWindows,
-        future: DatabaseProvider.instance.loadAll(),
-        builder: (_, snapshot) {
-          if (snapshot.hasData) {
-            return GridView.count(
-              crossAxisCount: 3,
-              children: snapshot.data.map((element) {
-                return GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  child: Card(
-                    elevation: 2,
-                    child: Column(
-                      children: [
-                        Container(
-                          child: Image.file(
-                            element.getImage(),
-                            errorBuilder: (ctx, obj, _) {
-                              return Image.asset(element.getImage().path);
-                            },
+          initialData: OManager.presetWindows,
+          future: DatabaseProvider.instance.loadAll(),
+          builder: (_, snapshot) {
+            if (snapshot.hasData) {
+              return GridView.count(
+                crossAxisCount: 3,
+                children: snapshot.data.map((element) {
+                  return GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    child: Card(
+                      elevation: 2,
+                      child: Column(
+                        children: [
+                          Container(
+                            child: ImageLoader.fromFile(element.getImage()),
+                            width: MediaQuery.of(context).size.width / 4,
                           ),
-                          width: MediaQuery.of(context).size.width / 4,
-                        ),
-                        Text(element.getName()),
-                      ],
-                    ),
-                  ),
-                  onLongPress: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) {
-                          return WindowObjectScreen(element);
-                        },
+                          Text(element.getName()),
+                        ],
                       ),
-                    );
-                  },
-                  onTap: () {
-                    addWindow(element);
-                  },
-                );
-              }).toList(),
-            );
-          } else if (snapshot.hasError) {
-            print('we an error');
-          } else {
-            return GridView.count(
-              crossAxisCount: 3,
-              children: OManager.presetWindows.map((window) {
-                return GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  child: Card(
-                    elevation: 2,
-                    child: Column(
-                      children: [
-                        Container(
-                          child: Image.asset(window.getImage().path),
-                          width: MediaQuery.of(context).size.width / 4,
-                        ),
-                        Text(window.getName()),
-                      ],
                     ),
-                  ),
-                  onLongPress: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) {
-                          return WindowObjectScreen(window);
-                        },
-                      ),
-                    );
-                  },
-                  onTap: () {
-                    addWindow(window);
-                  },
-                );
-              }).toList(),
-            );
-          }
-        },
-      ),
+                    onLongPress: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) {
+                            return WindowObjectScreen(element);
+                          },
+                        ),
+                      );
+                    },
+                    onTap: () {
+                      addWindow(element);
+                    },
+                  );
+                }).toList(),
+              );
+            } else {
+              /// TODO: TRY AND RECOVER FROM CRASH
+              return Container(child: Text('Fatal Crash'));
+            }
+          }),
       // child: GridView.count(
       //   crossAxisCount: 3,
       //   children: OManager.presetWindows.map((element) {
