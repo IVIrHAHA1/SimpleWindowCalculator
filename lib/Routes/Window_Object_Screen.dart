@@ -209,6 +209,7 @@ class _WindowImageInputState extends State<_WindowImageInput> {
       source: ImageSource.camera,
       maxWidth: 600,
       maxHeight: 600,
+      preferredCameraDevice: CameraDevice.rear,
     );
 
     // Make sure an image was taken

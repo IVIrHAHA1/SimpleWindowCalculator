@@ -79,6 +79,7 @@ class ModalContent extends StatelessWidget {
   }
 
   Container buildBody(double size, BuildContext context) {
+    var imageSize =  MediaQuery.of(context).size.width / 4;
     return Container(
       color: backgroundColor,
       //height: size,
@@ -89,6 +90,7 @@ class ModalContent extends StatelessWidget {
             if (snapshot.hasData) {
               return GridView.count(
                 crossAxisCount: 3,
+                scrollDirection: Axis.vertical,
                 children: snapshot.data.map((element) {
                   return GestureDetector(
                     behavior: HitTestBehavior.opaque,
@@ -98,7 +100,8 @@ class ModalContent extends StatelessWidget {
                         children: [
                           Container(
                             child: ImageLoader.fromFile(element.getImage()),
-                            width: MediaQuery.of(context).size.width / 4,
+                            width: imageSize,
+                            height: imageSize,
                           ),
                           Text(element.getName()),
                         ],
@@ -124,29 +127,6 @@ class ModalContent extends StatelessWidget {
               return Container(child: Text('Fatal Crash'));
             }
           }),
-      // child: GridView.count(
-      //   crossAxisCount: 3,
-      //   children: OManager.presetWindows.map((element) {
-      //     return GestureDetector(
-      //       behavior: HitTestBehavior.opaque,
-      //       child: Card(
-      //         elevation: 2,
-      //         child: Column(
-      //           children: [
-      //             Container(
-      //               child: element.getImage(),
-      //               width: MediaQuery.of(context).size.width / 4,
-      //             ),
-      //             Text(element.getName()),
-      //           ],
-      //         ),
-      //       ),
-      //       onTap: () {
-      //         addWindow(element);
-      //       },
-      //     );
-      //   }).toList(),
-      // ),
     );
   }
 
