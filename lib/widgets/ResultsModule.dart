@@ -28,12 +28,14 @@ class ResultsModule extends StatefulWidget {
 }
 
 class _ResultsModuleState extends State<ResultsModule> {
-  static const double cardRatio = .75; // Amount the card is going to occuppy
-  // vs total window count module
+  // Amount the ResultsMod is going to occupy vs the "total-window-count" module
+  static const double cardRatio = .75;
+  /// The total height of both "total-window-count" and ResultsMod
   final double widgetSize;
+  /// The height of only the ResultsMod
   double dynamicHeight, collapsedHeight;
-  IconButton expansionControlBtn;
 
+  /// State of an expaned ResultsMod or a collapsed ResultsMod
   bool expanded;
 
   _ResultsModuleState(this.widgetSize) {
@@ -152,8 +154,6 @@ class _ResultsModuleState extends State<ResultsModule> {
     );
   }
 
-  bool statModVis = false;
-
   /*
    *  Total Window Count Display  
    */
@@ -230,8 +230,8 @@ class ResultsValueHolder {
 
   /// Since the Results module only needs the output of data, we can collect
   /// necessary data with the [ResultsValueHolder]
-  /// 
-  /// NOTE: For simplicity sake, we use a Class rather than passing the data 
+  ///
+  /// NOTE: For simplicity sake, we use a Class rather than passing the data
   /// directly into the [ResultsModule] Widget
   ResultsValueHolder({
     this.countTotal,

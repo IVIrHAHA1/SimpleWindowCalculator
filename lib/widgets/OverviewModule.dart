@@ -25,28 +25,25 @@ class OverviewModule extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Flexible(
-            flex: 1,
-            child: TabBar(
-              tabs: [
-                Tab(
-                  child: Text(
-                    'Job Details',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
+          TabBar(
+            tabs: [
+              Tab(
+                child: Text(
+                  'Job Details',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                Tab(
-                  child: Text(
-                    'Tech Details',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
+              ),
+              Tab(
+                child: Text(
+                  'Tech Details',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
           Flexible(
             fit: FlexFit.tight,
