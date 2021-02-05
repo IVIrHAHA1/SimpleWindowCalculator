@@ -79,7 +79,7 @@ class ModalContent extends StatelessWidget {
   }
 
   Container buildBody(double size, BuildContext context) {
-    var imageSize =  MediaQuery.of(context).size.width / 4;
+    var imageSize = MediaQuery.of(context).size.width / 4;
     return Container(
       color: backgroundColor,
       //height: size,
@@ -99,7 +99,9 @@ class ModalContent extends StatelessWidget {
                       child: Column(
                         children: [
                           Container(
-                            child: ImageLoader.fromFile(element.getImage()),
+                            padding: const EdgeInsets.only(top:8),
+                            child: ImageLoader.fromFile(element.getImage(),
+                                borderRadius: 0),
                             width: imageSize,
                             height: imageSize,
                           ),

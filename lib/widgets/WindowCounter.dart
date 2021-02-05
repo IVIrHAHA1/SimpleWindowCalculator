@@ -324,7 +324,7 @@ class WindowCounter extends StatelessWidget {
                     onTap: () {
                       selectNewWindowFun(context);
                     },
-                    child: buildCard(Colors.redAccent),
+                    child: buildCard(Colors.blueGrey),
                   )
                 : GestureDetector(
                     onTap: () {
@@ -344,6 +344,7 @@ class WindowCounter extends StatelessWidget {
   buildCard(Color color) {
     return Container(
       padding: const EdgeInsets.all(4),
+      width: height * .5,
       decoration: BoxDecoration(
         color: color,
         borderRadius: BorderRadius.circular(8),
