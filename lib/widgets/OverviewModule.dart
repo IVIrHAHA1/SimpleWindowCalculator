@@ -23,28 +23,30 @@ class OverviewModule extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Column(
-        mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          TabBar(
-            tabs: [
-              Tab(
-                child: Text(
-                  'Job Details',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
+          Flexible(
+            flex: 1,
+            child: TabBar(
+              tabs: [
+                Tab(
+                  child: Text(
+                    'Job Details',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-              ),
-              Tab(
-                child: Text(
-                  'Tech Details',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
+                Tab(
+                  child: Text(
+                    'Tech Details',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           Flexible(
             fit: FlexFit.tight,

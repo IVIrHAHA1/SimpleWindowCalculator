@@ -31,7 +31,7 @@ class ResultsModule extends StatefulWidget {
 
 class _ResultsModuleState extends State<ResultsModule> {
   static const double cardRatio = .75; // Amount the card is going to occuppy
-  // vs total window count
+  // vs total window count module
   final double widgetSize;
   double dynamicHeight, collapsedHeight;
   IconButton expansionControlBtn;
@@ -108,9 +108,19 @@ class _ResultsModuleState extends State<ResultsModule> {
                   // OverviewList
                   // TODO: Revisit Overview expanding when you learn about Futures
                   AnimatedContainer(
-                    height: expanded ? (dynamicHeight-collapsedHeight) : 0,
+                    height: expanded ? (dynamicHeight - collapsedHeight) : 0,
                     duration: Duration(milliseconds: GlobalValues.animDuration),
-                    child: widget.statModule ?? Container(),
+                    // child: widget.statModule ?? Container(),
+                    child: AnimatedCrossFade(
+                      firstChild: widget.statModule,
+                      secondChild: Container(),
+                      crossFadeState: expanded
+                          ? CrossFadeState.showFirst
+                          : CrossFadeState.showSecond,
+                      duration: Duration(
+                        milliseconds: (GlobalValues.animDuration ~/ 1.25),
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -123,6 +133,8 @@ class _ResultsModuleState extends State<ResultsModule> {
       ],
     );
   }
+
+  bool statModVis = false;
 
   /*
    *  Total Window Count Display  
