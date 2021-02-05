@@ -62,9 +62,6 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
   var timeTotal;
   var countTotal;
 
-  static const double mDRIVETIME = 25;
-  static const double mMIN_PRICE = 150;
-
   _MyHomePage() {
     activeWindow = OManager.getDefaultWindow();
     windowList.add(activeWindow);
@@ -127,7 +124,7 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
         // block end:
 
         body: buildModules(
-            availableScreen, Theme.of(context).textTheme.headline5),
+            availableScreen),
       ),
     );
   }
@@ -135,7 +132,7 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
   /*  -----------------------------------------------------------------------
    *                        BUILD CONTENT/MODULES
    *  -------------------------------------------------------------------- */
-  Container buildModules(double availableScreen, TextStyle numberStyle) {
+  Container buildModules(double availableScreen) {
     return Container(
       height: availableScreen,
       child: Column(
@@ -144,30 +141,14 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: ResultsModule(
-              statModule: OverviewModule(priceTotal, timeTotal, windowList),
               height: availableScreen,
               triggerExpandAnim: triggerExpandAnim,
-              children: [
-                priceTotal != null
-                    ? Text(
-                        '\$${Format.format(priceTotal, 2)}',
-                        style: numberStyle,
-                      )
-                    : Text(
-                        '\$0',
-                        style: numberStyle,
-                      ),
-                timeTotal != null
-                    ? Text(
-                        '${Format.formatTime(timeTotal)}',
-                        style: numberStyle,
-                      )
-                    : Text(
-                        '0:00',
-                        style: numberStyle,
-                      ),
-              ],
-              count: countTotal,
+              valueHolder: ResultsValueHolder(
+                priceTotal: priceTotal,
+                timeTotal: timeTotal,
+                countTotal: countTotal,
+                windowList: windowList,
+              ),
             ),
           ),
 
@@ -253,22 +234,24 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
         time += window.getTotalDuration();
       }
 
+      /// If all window have no price or time totals then
+      /// set values to zero
       if (windowPriceTotal == 0.0) {
         priceTotal = 0.0;
         timeTotal = Duration();
       } else {
         // Add Drive time
-        priceTotal = windowPriceTotal + mDRIVETIME;
+        priceTotal = windowPriceTotal + DRIVETIME;
 
-        // Round up to increment of 5, for pricing simplicity
+        // Round up to an increment of 5, for pricing simplicity
         var temp = priceTotal % 5;
         if (temp != 0) {
           priceTotal += (5 - temp);
         }
 
         // Ensure price is not below minimum
-        if (priceTotal < mMIN_PRICE) {
-          priceTotal = mMIN_PRICE;
+        if (priceTotal < PRICE_MIN) {
+          priceTotal = PRICE_MIN;
         }
 
         timeTotal = time;

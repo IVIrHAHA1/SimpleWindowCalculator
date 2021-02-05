@@ -1,5 +1,6 @@
 import 'package:SimpleWindowCalculator/Tools/Format.dart';
 import 'package:SimpleWindowCalculator/Tools/GlobalValues.dart';
+import 'package:SimpleWindowCalculator/objects/Window.dart';
 import 'package:SimpleWindowCalculator/widgets/OverviewModule.dart';
 import 'package:flutter/material.dart';
 
@@ -11,17 +12,14 @@ class ResultsModule extends StatefulWidget {
   // Height is the available screen size (*Because of appBar access)
   final double height;
 
-  final List<Text> children;
-  final double count;
+  final ResultsValueHolder valueHolder;
+
   final Function triggerExpandAnim;
-  final OverviewModule statModule;
 
   ResultsModule({
     @required this.height,
-    @required this.count,
     @required this.triggerExpandAnim,
-    this.statModule,
-    this.children,
+    this.valueHolder,
   });
 
   @override
@@ -58,16 +56,33 @@ class _ResultsModuleState extends State<ResultsModule> {
 
   @override
   Widget build(BuildContext context) {
+    TextStyle numberStyle = Theme.of(context).textTheme.headline5;
     // Price Circle
     ResultCircle priceCircle = ResultCircle(
       height: (collapsedHeight * .8),
-      textView: widget.children[0],
+      textView: widget.valueHolder.priceTotal != null
+          ? Text(
+              '\$${Format.format(widget.valueHolder.priceTotal, 2)}',
+              style: numberStyle,
+            )
+          : Text(
+              '\$0',
+              style: numberStyle,
+            ),
     );
 
     // Time Circle
     ResultCircle timeCircle = ResultCircle(
       height: (collapsedHeight * .6),
-      textView: widget.children[1],
+      textView: widget.valueHolder.timeTotal != null
+          ? Text(
+              '${Format.formatTime(widget.valueHolder.timeTotal)}',
+              style: numberStyle,
+            )
+          : Text(
+              '0:00',
+              style: numberStyle,
+            ),
     );
 
     // Column including window count and results mod
@@ -106,13 +121,16 @@ class _ResultsModuleState extends State<ResultsModule> {
                   ),
 
                   // OverviewList
-                  // TODO: Revisit Overview expanding when you learn about Futures
                   AnimatedContainer(
                     height: expanded ? (dynamicHeight - collapsedHeight) : 0,
                     duration: Duration(milliseconds: GlobalValues.animDuration),
                     // child: widget.statModule ?? Container(),
                     child: AnimatedCrossFade(
-                      firstChild: widget.statModule,
+                      firstChild: OverviewModule(
+                        widget.valueHolder.priceTotal,
+                        widget.valueHolder.timeTotal,
+                        widget.valueHolder.windowList,
+                      ),
                       secondChild: Container(),
                       crossFadeState: expanded
                           ? CrossFadeState.showFirst
@@ -156,9 +174,9 @@ class _ResultsModuleState extends State<ResultsModule> {
             ),
             color: Colors.white,
             child: Center(
-              child: widget.count != null
+              child: widget.valueHolder.countTotal != null
                   ? Text(
-                      '${Format.format(widget.count, 1)}',
+                      '${Format.format(widget.valueHolder.countTotal, 1)}',
                       style: Theme.of(context).textTheme.headline5,
                     )
                   : Text(
@@ -199,4 +217,26 @@ class ResultCircle extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Since the Results module only need the output of data, we can collect
+/// necessary data with the ResultsValueHolder
+class ResultsValueHolder {
+  final double countTotal;
+  final double priceTotal;
+  final Duration timeTotal;
+
+  List<Window> windowList;
+
+  /// Since the Results module only needs the output of data, we can collect
+  /// necessary data with the [ResultsValueHolder]
+  /// 
+  /// NOTE: For simplicity sake, we use a Class rather than passing the data 
+  /// directly into the [ResultsModule] Widget
+  ResultsValueHolder({
+    this.countTotal,
+    this.priceTotal,
+    this.timeTotal,
+    this.windowList,
+  });
 }
