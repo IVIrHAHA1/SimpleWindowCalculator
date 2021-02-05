@@ -12,9 +12,7 @@ class OManager {
       name: 'Sliding',
       duration: Duration(minutes: 10),
       price: 12.50,
-      image: File(
-        'assets/images/standard_window.png',
-      ),
+      image: File('assets/images/standard_window.png'),
     ),
 
     // French Window

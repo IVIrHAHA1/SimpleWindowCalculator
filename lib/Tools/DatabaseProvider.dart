@@ -96,7 +96,7 @@ class DatabaseProvider {
 
     /// TODO: Look into saving this data upon start up
     // No data has been saved yet, (INSERT PRESET DATA)
-    // Return preset windows
+    // Return preset windows 
     else {
       Batch batch = db.batch();
 

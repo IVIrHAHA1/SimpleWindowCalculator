@@ -2,12 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:SimpleWindowCalculator/Tools/DatabaseProvider.dart';
-import 'package:SimpleWindowCalculator/widgets/FactorCoin.dart';
 
 import '../objects/Factor.dart';
 import '../objects/OManager.dart';
-
-import 'package:flutter/material.dart';
 
 class Window {
   // Default Values

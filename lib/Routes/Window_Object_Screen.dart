@@ -208,6 +208,7 @@ class _WindowImageInputState extends State<_WindowImageInput> {
     PickedFile imageFile = await imagePicker.getImage(
       source: ImageSource.camera,
       maxWidth: 600,
+      maxHeight: 600,
     );
 
     // Make sure an image was taken
