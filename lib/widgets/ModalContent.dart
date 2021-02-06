@@ -7,11 +7,31 @@ import 'package:SimpleWindowCalculator/Tools/ImageLoader.dart';
 import '../objects/OManager.dart';
 import 'package:flutter/material.dart';
 
-class ModalContent extends StatelessWidget {
+class ModalContent extends StatefulWidget {
   final Function addWindow;
   final Color backgroundColor;
 
   ModalContent({this.addWindow, this.backgroundColor = Colors.white});
+
+  @override
+  _ModalContentState createState() => _ModalContentState();
+}
+
+class _ModalContentState extends State<ModalContent> {
+  TextEditingController _textEditingController;
+  String searchQuery;
+
+  @override
+  void initState() {
+    _textEditingController = TextEditingController(text: '');
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _textEditingController.dispose();
+    super.dispose();
+  }
 
   void createWindow(BuildContext context) {
     Navigator.of(context).push(
@@ -53,7 +73,6 @@ class ModalContent extends StatelessWidget {
       width: double.infinity,
       height: size,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
         color: Colors.transparent,
       ),
       child: Container(
@@ -63,10 +82,19 @@ class ModalContent extends StatelessWidget {
         ),
         height: size * .7,
         width: MediaQuery.of(context).size.width * .4,
-        padding: const EdgeInsets.symmetric(horizontal: 30),
-        alignment: Alignment.centerRight,
-        child: Text(
-          'search ...',
+        alignment: Alignment.topRight,
+        child: TextField(
+          controller: _textEditingController,
+          textAlignVertical: TextAlignVertical.center,
+          textAlign: TextAlign.right,
+          maxLines: 1,
+          decoration: InputDecoration(
+            contentPadding: const EdgeInsets.all(10),
+            isDense: false,
+            alignLabelWithHint: true,
+            border: InputBorder.none,
+            hintText: 'search ...',
+          ),
           style: TextStyle(
             fontSize: 16,
             fontFamily: 'OpenSans',
@@ -81,15 +109,20 @@ class ModalContent extends StatelessWidget {
   Container buildBody(double size, BuildContext context) {
     var imageSize = MediaQuery.of(context).size.width / 4;
     return Container(
-      color: backgroundColor,
+      color: widget.backgroundColor,
       //height: size,
       child: FutureBuilder<List<Window>>(
           initialData: OManager.presetWindows,
-          future: DatabaseProvider.instance.load('Pictux'),
+          future: DatabaseProvider.instance.load(_textEditingController.text),
           builder: (_, snapshot) {
             if (snapshot.hasData) {
               if (snapshot.data.length <= 0) {
-                return Container(child: Text("No data by the name of"));
+                return Container(
+                  alignment: Alignment.center,
+                  child: Text("no windows found by the name of ${_textEditingController.text}"),
+                  height: size,
+                  width: double.infinity,
+                );
               } else {
                 return GridView.count(
                   crossAxisCount: 3,
@@ -122,7 +155,7 @@ class ModalContent extends StatelessWidget {
                         );
                       },
                       onTap: () {
-                        addWindow(element);
+                        widget.addWindow(element);
                       },
                     );
                   }).toList(),
@@ -141,7 +174,7 @@ class ModalContent extends StatelessWidget {
       alignment: Alignment.center,
       height: size,
       width: double.infinity,
-      color: backgroundColor,
+      color: widget.backgroundColor,
       child: Card(
         elevation: 4,
         color: Theme.of(context).primaryColor,

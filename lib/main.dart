@@ -119,6 +119,7 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
       // block begin:
       color: Theme.of(context).primaryColor,
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.transparent,
         appBar: mAppBar,
         // block end:
