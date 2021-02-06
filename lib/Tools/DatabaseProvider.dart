@@ -46,7 +46,7 @@ class DatabaseProvider {
 
   _onCreate(Database db, int version) async {
     db.execute("CREATE TABLE $WINDOW_TABLE("
-        "$WINDOW_NAME_ID INTEGER PRIMARY KEY,"
+        "$WINDOW_NAME_ID TEXT PRIMARY KEY,"
         "$WINDOW_OBJECT TEXT"
         ")");
   }
@@ -62,20 +62,45 @@ class DatabaseProvider {
   }
 
   /// Load a single Window
-  Future<List<Map>> queryWindow(int windowHashCodeID) async {
+  Future<List<Map>> queryWindow(String windowName) async {
     Database db = await database;
 
     List<Map> mapList = await db.query(
       WINDOW_TABLE,
       columns: [WINDOW_OBJECT],
       where: "$WINDOW_NAME_ID = ?",
-      whereArgs: [windowHashCodeID],
+      whereArgs: [windowName],
     );
 
     if (mapList.length > 0) {
       return mapList;
     } else
       return null;
+  }
+
+  Future<List<Window>> load(String subString) async {
+    if (subString == null || subString.length <= 0) {
+      return await loadAll();
+    } else {
+      Database db = await database;
+
+      /// TODO: Will probably have to refine this, as its vulnerbal to sql injections
+      List<Map> mapList = await db.rawQuery(
+        "SELECT * FROM $WINDOW_TABLE WHERE $WINDOW_NAME_ID LIKE '%$subString%'",
+      );
+
+      if (mapList.length > 0) {
+        List<Window> windowList = List();
+
+        /// Get window from window json
+        for (Map map in mapList) {
+          windowList.add(Window.fromMap(jsonDecode(map[WINDOW_OBJECT])));
+        }
+        return windowList;
+      } else {
+        return List();
+      }
+    }
   }
 
   /// Load all Windows
@@ -96,9 +121,11 @@ class DatabaseProvider {
 
     /// TODO: Look into saving this data upon start up
     // No data has been saved yet, (INSERT PRESET DATA)
-    // Return preset windows 
+    // Return preset windows
     else {
       Batch batch = db.batch();
+
+      print('PROCESS: Initialized database, basic list');
 
       for (Window window in OManager.presetWindows)
         batch.insert(WINDOW_TABLE, window.toMap());

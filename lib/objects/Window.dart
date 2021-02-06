@@ -47,7 +47,7 @@ class Window {
 
   Map<String, dynamic> toMap() {
     return {
-      WINDOW_NAME_ID : this.name.hashCode,
+      WINDOW_NAME_ID : this.name,
       WINDOW_OBJECT : jsonEncode(this),
     };
   }

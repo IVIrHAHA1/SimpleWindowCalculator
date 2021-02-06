@@ -85,45 +85,49 @@ class ModalContent extends StatelessWidget {
       //height: size,
       child: FutureBuilder<List<Window>>(
           initialData: OManager.presetWindows,
-          future: DatabaseProvider.instance.loadAll(),
+          future: DatabaseProvider.instance.load('Pictux'),
           builder: (_, snapshot) {
             if (snapshot.hasData) {
-              return GridView.count(
-                crossAxisCount: 3,
-                scrollDirection: Axis.vertical,
-                children: snapshot.data.map((element) {
-                  return GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    child: Card(
-                      elevation: 2,
-                      child: Column(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.only(top:8),
-                            child: ImageLoader.fromFile(element.getImage(),
-                                borderRadius: 0),
-                            width: imageSize,
-                            height: imageSize,
-                          ),
-                          Text(element.getName()),
-                        ],
-                      ),
-                    ),
-                    onLongPress: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) {
-                            return WindowObjectScreen(element);
-                          },
+              if (snapshot.data.length <= 0) {
+                return Container(child: Text("No data by the name of"));
+              } else {
+                return GridView.count(
+                  crossAxisCount: 3,
+                  scrollDirection: Axis.vertical,
+                  children: snapshot.data.map((element) {
+                    return GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      child: Card(
+                        elevation: 2,
+                        child: Column(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.only(top: 8),
+                              child: ImageLoader.fromFile(element.getImage(),
+                                  borderRadius: 0),
+                              width: imageSize,
+                              height: imageSize,
+                            ),
+                            Text(element.getName()),
+                          ],
                         ),
-                      );
-                    },
-                    onTap: () {
-                      addWindow(element);
-                    },
-                  );
-                }).toList(),
-              );
+                      ),
+                      onLongPress: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) {
+                              return WindowObjectScreen(element);
+                            },
+                          ),
+                        );
+                      },
+                      onTap: () {
+                        addWindow(element);
+                      },
+                    );
+                  }).toList(),
+                );
+              }
             } else {
               /// TODO: TRY AND RECOVER FROM CRASH
               return Container(child: Text('Fatal Crash'));
