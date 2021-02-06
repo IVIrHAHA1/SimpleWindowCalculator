@@ -30,8 +30,10 @@ class ResultsModule extends StatefulWidget {
 class _ResultsModuleState extends State<ResultsModule> {
   // Amount the ResultsMod is going to occupy vs the "total-window-count" module
   static const double cardRatio = .75;
+
   /// The total height of both "total-window-count" and ResultsMod
   final double widgetSize;
+
   /// The height of only the ResultsMod
   double dynamicHeight, collapsedHeight;
 
@@ -128,10 +130,16 @@ class _ResultsModuleState extends State<ResultsModule> {
                     duration: Duration(milliseconds: GlobalValues.animDuration),
                     // child: widget.statModule ?? Container(),
                     child: AnimatedCrossFade(
-                      firstChild: OverviewModule(
-                        widget.valueHolder.priceTotal,
-                        widget.valueHolder.timeTotal,
-                        widget.valueHolder.windowList,
+                      firstChild: Container(
+                        constraints: BoxConstraints(
+                          maxHeight:
+                              widget.height - (widgetSize - collapsedHeight),
+                        ),
+                        child: OverviewModule(
+                          widget.valueHolder.priceTotal,
+                          widget.valueHolder.timeTotal,
+                          widget.valueHolder.windowList,
+                        ),
                       ),
                       secondChild: Container(),
                       crossFadeState: expanded

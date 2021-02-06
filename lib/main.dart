@@ -72,8 +72,8 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
   void initState() {
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: GlobalValues.animDuration),
-      reverseDuration: Duration(milliseconds: GlobalValues.animDuration),
+      duration: Duration(milliseconds: GlobalValues.animDuration ~/ 1.1),
+      reverseDuration: Duration(milliseconds: GlobalValues.animDuration ~/ 1.1),
     );
     super.initState();
   }
@@ -123,8 +123,7 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
         appBar: mAppBar,
         // block end:
 
-        body: buildModules(
-            availableScreen),
+        body: buildModules(availableScreen),
       ),
     );
   }

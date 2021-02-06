@@ -14,7 +14,6 @@ class OverviewModule extends StatelessWidget {
   final double totalPrice;
   final Duration totalDuration;
   final List windowList;
-  final pageController = PageController(initialPage: 0);
 
   OverviewModule(this.totalPrice, this.totalDuration, this.windowList);
 
@@ -25,28 +24,31 @@ class OverviewModule extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          TabBar(
-            tabs: [
-              Tab(
-                child: Text(
-                  'Job Details',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
+          Flexible(
+            flex: 0,
+            child: TabBar(
+              tabs: [
+                Tab(
+                  child: Text(
+                    'Job Details',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-              ),
-              Tab(
-                child: Text(
-                  'Tech Details',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
+                Tab(
+                  child: Text(
+                    'Tech Details',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           Flexible(
-            fit: FlexFit.tight,
+            flex: 1,
             child: TabBarView(
               children: [
                 Pallet(windowList),
