@@ -1,4 +1,5 @@
 import 'package:SimpleWindowCalculator/Animations/SizingTween.dart';
+import 'package:SimpleWindowCalculator/Tools/Calculator.dart';
 import 'package:SimpleWindowCalculator/Tools/GlobalValues.dart';
 import 'package:SimpleWindowCalculator/widgets/ModalContent.dart';
 
@@ -63,6 +64,8 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
   _MyHomePage() {
     activeWindow = OManager.getDefaultWindow();
     windowList.add(activeWindow);
+
+    Calculator.projectItems = windowList;
   }
 
   AnimationController _controller;

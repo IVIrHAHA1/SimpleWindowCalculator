@@ -1,3 +1,5 @@
+import 'package:SimpleWindowCalculator/objects/Window.dart';
+
 import 'GlobalValues.dart';
 
 /// A singleton class which calculates the totals of the project.
@@ -11,32 +13,35 @@ class Calculator with Notifier {
   static double projectPrice = 0;
   static Duration projectDuration = Duration();
 
-  static List<Calculatable> projectItems = List();
+  static List<Calculatable> projectItems;
 
   Calculator._();
   static final Calculator instance = Calculator._();
 
-  calculateResults() {
+  update() {
+    if(projectItems == null) {
+      throw Exception('NEED TO ASSIGN [projectItems]');
+    }
     // Calculate price before adjustments
-    var windowPriceTotal = 0.0;
+    var itemTotalPrice = 0.0;
     projectCount = 0.0;
     Duration time = Duration();
 
-    for (Calculatable window in projectItems) {
-      window.update();
-      windowPriceTotal += window._totalPrice;
-      projectCount += window.quantity;
-      time += window.totalDuration;
+    for (Calculatable item in projectItems) {
+      item.update();
+      itemTotalPrice += item._totalPrice;
+      projectCount += item.quantity;
+      time += item.totalDuration;
     }
 
     /// If all window have no price or time totals then
     /// set values to zero
-    if (windowPriceTotal == 0.0) {
+    if (itemTotalPrice == 0.0) {
       projectPrice = 0.0;
       projectDuration = Duration();
     } else {
       // Add Drive time
-      projectPrice = windowPriceTotal + DRIVETIME;
+      projectPrice = itemTotalPrice + DRIVETIME;
 
       // Round up to an increment of 5, for pricing simplicity
       var temp = projectPrice % 5;
