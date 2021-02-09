@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:SimpleWindowCalculator/Tools/Calculator.dart';
+import 'package:SimpleWindowCalculator/Util/Calculator.dart';
 import 'package:SimpleWindowCalculator/Tools/ImageLoader.dart';
 import 'package:flutter/services.dart';
 

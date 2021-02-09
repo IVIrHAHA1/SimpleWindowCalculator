@@ -1,13 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:SimpleWindowCalculator/Tools/Calculator.dart';
+import 'package:SimpleWindowCalculator/Util/Calculator.dart';
 import 'package:SimpleWindowCalculator/Tools/DatabaseProvider.dart';
+import 'package:SimpleWindowCalculator/Util/ItemsManager.dart';
 
 import '../objects/Factor.dart';
 import '../objects/OManager.dart';
 
-class Window with Calculatable {
+class Window with Calculatable, Item {
   // Default Values
   static const double _mPRICE = 12;
   static const String _mNAME = 'unnamed';
@@ -20,6 +21,8 @@ class Window with Calculatable {
   Map<Factors, Factor> factorList = Map();
 
   Window({double price = 0.0, Duration duration, this.name, this.image}) {
+    this.itemId = this.name.toLowerCase().hashCode;
+
     this.quantity = 0.0;
     this.price = price ?? _mPRICE;
     this.duration = duration ?? _mDURATION;
@@ -57,6 +60,7 @@ class Window with Calculatable {
     this.duration = Duration(seconds: jsonMap[_durationKey]);
     this.image = File(jsonMap[_imageKey]);
 
+    this.itemId = this.name.toLowerCase().hashCode;
     this.quantity = 0.0;
     this.totalPrice = 0.0;
     this.totalDuration = Duration();

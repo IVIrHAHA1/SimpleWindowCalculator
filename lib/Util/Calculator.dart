@@ -1,4 +1,4 @@
-import 'GlobalValues.dart';
+import '../Tools/GlobalValues.dart';
 
 /// A singleton class which calculates the totals of the project.
 /// 1. Total Count  [projectCount]
@@ -14,7 +14,15 @@ class Calculator with Notifier {
   List<Calculatable> projectItems;
 
   Calculator._();
-  static final Calculator instance = Calculator._();
+  static Calculator _instance = Calculator._();
+
+  static Calculator get instance {
+    if (_instance == null) {
+      _instance = Calculator._();
+    }
+
+    return _instance;
+  }
 
   update() {
     if (projectItems == null) {

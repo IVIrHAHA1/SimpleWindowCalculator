@@ -1,5 +1,5 @@
 import 'package:SimpleWindowCalculator/Animations/SizingTween.dart';
-import 'package:SimpleWindowCalculator/Tools/Calculator.dart';
+import 'package:SimpleWindowCalculator/Util/Calculator.dart';
 import 'package:SimpleWindowCalculator/Tools/GlobalValues.dart';
 import 'package:SimpleWindowCalculator/widgets/ModalContent.dart';
 
@@ -107,7 +107,7 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
               height: availableScreen,
               triggerExpandAnim: triggerExpandAnim,
               valueHolder: ResultsValueHolder(
-                priceTotal: Calculator.instance.projectCount,
+                priceTotal: Calculator.instance.projectPrice,
                 timeTotal: Calculator.instance.projectDuration,
                 countTotal: Calculator.instance.projectCount,
                 windowList: windowList,
@@ -197,12 +197,12 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
       window.setCount(count: 0);
       window.resetFactors();
       window = null;
-      // Reset Window List
-      windowList.clear();
-      activeWindow = OManager.getDefaultWindow();
-      windowList.add(activeWindow);
-      Calculator.instance.update();
     });
+    // Reset Window List
+    windowList.clear();
+    activeWindow = OManager.getDefaultWindow();
+    windowList.add(activeWindow);
+    Calculator.instance.update();
   }
 
   /*  -----------------------------------------------------------------------
