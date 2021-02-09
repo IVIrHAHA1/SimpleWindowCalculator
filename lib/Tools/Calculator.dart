@@ -24,7 +24,7 @@ class Calculator with Notifier {
 
     for (Calculatable window in projectItems) {
       window.update();
-      windowPriceTotal += window.totalPrice;
+      windowPriceTotal += window._totalPrice;
       projectCount += window.quantity;
       time += window.totalDuration;
     }
@@ -59,13 +59,16 @@ class Calculator with Notifier {
 
 mixin Calculatable {
   var quantity;
-
   double price;
-  double totalPrice;
   Duration duration;
+
   Duration totalDuration;
+  double _totalPrice;
 
   update();
+
+  get totalPrice => _totalPrice <= 0 ? 0.0 : _totalPrice;
+  set totalPrice(total) => _totalPrice = total;
 }
 
 /// Notifies any attached listeners

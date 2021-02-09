@@ -1,30 +1,33 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:SimpleWindowCalculator/Tools/Calculator.dart';
 import 'package:SimpleWindowCalculator/Tools/DatabaseProvider.dart';
 
 import '../objects/Factor.dart';
 import '../objects/OManager.dart';
 
-class Window {
+class Window with Calculatable {
   // Default Values
   static const double _mPRICE = 12;
   static const String _mNAME = 'unnamed';
   static const Duration _mDURATION = Duration(minutes: 10);
-  
-  double price;
+
   String name;
-  Duration duration;
-  File image; 
+  File image;
 
   double count;
+
   var _grandTotal;
   var _grandDuration;
 
   /// Set at runtime
   Map<Factors, Factor> factorList = Map();
 
-  Window({this.price = 0.0, this.duration, this.name, this.image}) {
+  Window({double price = 0.0, Duration duration, this.name, this.image}) {
+    this.price = price ?? _mPRICE;
+    this.duration = duration ?? _mDURATION;
+
     this._grandTotal = 0.0;
     this._grandDuration = Duration();
     _initFactors();
@@ -47,8 +50,8 @@ class Window {
 
   Map<String, dynamic> toMap() {
     return {
-      WINDOW_NAME_ID : this.name,
-      WINDOW_OBJECT : jsonEncode(this),
+      WINDOW_NAME_ID: this.name,
+      WINDOW_OBJECT: jsonEncode(this),
     };
   }
 
@@ -68,6 +71,7 @@ class Window {
  * to reflect correct pricing, quantaties and durations when   
  * all factors are taken into account.   
  */
+  @override
   void update() {
     var totalPrice = 0.0;
     var totalTime = Duration();
@@ -79,13 +83,13 @@ class Window {
       }
 
       // Step 2: Calculate Factor price modifier
-      totalPrice += factor.calculatePrice(this.getPrice());
-      totalTime += factor.calculateDuration(this.getDuration());
+      totalPrice += factor.calculatePrice(this.price);
+      totalTime += factor.calculateDuration(this.duration);
     });
 
     // Step 3: Add total standard price
-    totalPrice += this.getPrice() * this.getCount();
-    totalTime += this.getDuration() * this.getCount();
+    totalPrice += this.price * this.getCount();
+    totalTime += this.duration * this.getCount();
     _grandTotal = totalPrice;
     _grandDuration = totalTime;
   }
@@ -133,14 +137,6 @@ class Window {
     this.name = name;
   }
 
-  setPrice(double price) {
-    this.price = price;
-  }
-
-  setDuration(Duration duration) {
-    this.duration = duration;
-  }
-
   setImage(File image) {
     this.image = image;
   }
@@ -153,16 +149,8 @@ class Window {
     return this.count != null ? this.count : 0.0;
   }
 
-  getPrice() {
-    return price != null ? price : _mPRICE;
-  }
-
   getImage() {
     return this.image;
-  }
-
-  Duration getDuration() {
-    return duration != null ? duration : _mDURATION;
   }
 
   grandTotal() {

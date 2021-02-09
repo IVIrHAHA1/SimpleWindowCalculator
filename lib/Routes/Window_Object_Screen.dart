@@ -119,7 +119,7 @@ class WindowObjectScreen extends StatelessWidget {
         seconds: int.parse(sec),
       );
 
-      window.setDuration(duration);
+      window.duration = duration;
     } catch (Exception) {
       // TODO: Implement user error msg
     }
@@ -128,7 +128,7 @@ class WindowObjectScreen extends StatelessWidget {
   _updatePrice(String priceText) {
     try {
       var price = double.parse(priceText);
-      window.setPrice(price);
+      window.price = price;
     } catch (Exception) {
       // TODO: Implement user error msg
     }
@@ -145,12 +145,12 @@ class WindowObjectScreen extends StatelessWidget {
             updateData: _updateName,
           ),
           DetailInputBox(
-            label: window.getDuration().inSeconds.toString() ?? 'Time',
+            label: window.duration.inSeconds.toString() ?? 'Time',
             textInputType: TextInputType.number,
             updateData: _updateDuration,
           ),
           DetailInputBox(
-            label: window.getPrice().toString() ?? 'Price',
+            label: window.price.toString() ?? 'Price',
             textInputType: TextInputType.number,
             updateData: _updatePrice,
           ),

@@ -200,7 +200,7 @@ class WindowCounter extends StatelessWidget {
           ),
         ),
         Text(
-          '\$${Format.format((window.getFactor(factorKey).calculatePrice(window.getPrice())), 0)}',
+          '\$${Format.format((window.getFactor(factorKey).calculatePrice(window.price)), 0)}',
           style: TextStyle(color: Colors.white, fontSize: 8),
         ),
       ],
