@@ -77,7 +77,7 @@ class _WindowPreview extends StatelessWidget {
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     ),
                     Text(
-                      '\$${Format.format(window.grandTotal(), 2)}',
+                      '\$${Format.format(window.totalPrice, 2)}',
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     ),

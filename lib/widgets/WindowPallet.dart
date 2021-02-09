@@ -58,7 +58,7 @@ class _WindowPreview extends StatelessWidget {
             '${Format.format(window.getCount(),1)}',
             style: Theme.of(context).textTheme.headline5,
           ),
-          trailing: Text('\$${Format.format(window.grandTotal(),2)}'),
+          trailing: Text('\$${Format.format(window.totalPrice,2)}'),
         ),
         Container(
           width: double.infinity,

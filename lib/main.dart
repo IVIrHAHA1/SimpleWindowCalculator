@@ -229,7 +229,7 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
     setState(() {
       for (Window window in windowList) {
         window.update();
-        windowPriceTotal += window.grandTotal();
+        windowPriceTotal += window.totalPrice;
         countTotal += window.getCount();
         time += window.getTotalDuration();
       }

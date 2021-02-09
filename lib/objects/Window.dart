@@ -18,7 +18,6 @@ class Window with Calculatable {
 
   double count;
 
-  var _grandTotal;
   var _grandDuration;
 
   /// Set at runtime
@@ -28,7 +27,7 @@ class Window with Calculatable {
     this.price = price ?? _mPRICE;
     this.duration = duration ?? _mDURATION;
 
-    this._grandTotal = 0.0;
+    this.totalPrice = 0.0;
     this._grandDuration = Duration();
     _initFactors();
   }
@@ -61,7 +60,7 @@ class Window with Calculatable {
     this.duration = Duration(seconds: jsonMap[_durationKey]);
     this.image = File(jsonMap[_imageKey]);
 
-    this._grandTotal = 0.0;
+    this.totalPrice = 0.0;
     this._grandDuration = Duration();
     _initFactors();
   }
@@ -73,7 +72,7 @@ class Window with Calculatable {
  */
   @override
   void update() {
-    var totalPrice = 0.0;
+    var granPrice = 0.0;
     var totalTime = Duration();
 
     factorList.forEach((factorKey, factor) {
@@ -83,14 +82,14 @@ class Window with Calculatable {
       }
 
       // Step 2: Calculate Factor price modifier
-      totalPrice += factor.calculatePrice(this.price);
+      granPrice += factor.calculatePrice(this.price);
       totalTime += factor.calculateDuration(this.duration);
     });
 
     // Step 3: Add total standard price
-    totalPrice += this.price * this.getCount();
+    granPrice += this.price * this.getCount();
     totalTime += this.duration * this.getCount();
-    _grandTotal = totalPrice;
+    this.totalPrice = granPrice;
     _grandDuration = totalTime;
   }
 
@@ -151,10 +150,6 @@ class Window with Calculatable {
 
   getImage() {
     return this.image;
-  }
-
-  grandTotal() {
-    return _grandTotal;
   }
 
   getTotalDuration() {
