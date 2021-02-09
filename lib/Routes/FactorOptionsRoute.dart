@@ -60,7 +60,7 @@ class FactorOptionRoute extends ModalRoute {
         windowFunction: (window, factorKey, optionsController) {
           optionsController(
             () {
-              window.getFactor(factorKey).setCount(window.getCount());
+              window.getFactor(factorKey).setCount(window.quantity);
             },
             FactorOptions.apply,
           );

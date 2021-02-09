@@ -55,7 +55,7 @@ class _WindowPreview extends StatelessWidget {
       children: [
         ListTile(
           leading: Text(
-            '${Format.format(window.getCount(),1)}',
+            '${Format.format(window.quantity,1)}',
             style: Theme.of(context).textTheme.headline5,
           ),
           trailing: Text('\$${Format.format(window.totalPrice,2)}'),

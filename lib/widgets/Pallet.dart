@@ -72,7 +72,7 @@ class _WindowPreview extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '${Format.format(window.getCount(), 1)}',
+                      '${Format.format(window.quantity, 1)}',
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     ),

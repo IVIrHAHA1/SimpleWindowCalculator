@@ -4,10 +4,8 @@ import 'package:SimpleWindowCalculator/widgets/ModalContent.dart';
 
 import './Tools/HexColors.dart';
 import './objects/OManager.dart';
-import './widgets/OverviewModule.dart';
 import './widgets/WindowCounter.dart';
 
-import 'Tools/Format.dart';
 import 'widgets/ResultsModule.dart';
 import './objects/Window.dart';
 import 'package:flutter/material.dart';
@@ -197,7 +195,7 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
   _updateWindowList(Window newWindow, Window oldWindow) {
     setState(() {
       // STEP 1: Remove window with a zero count value
-      if (oldWindow.getCount() == 0) {
+      if (oldWindow.quantity == 0) {
         windowList.remove(oldWindow);
       }
 
@@ -230,8 +228,8 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
       for (Window window in windowList) {
         window.update();
         windowPriceTotal += window.totalPrice;
-        countTotal += window.getCount();
-        time += window.getTotalDuration();
+        countTotal += window.quantity ;
+        time += window.totalDuration;
       }
 
       /// If all window have no price or time totals then

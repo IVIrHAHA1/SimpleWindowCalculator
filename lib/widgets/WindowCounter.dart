@@ -129,7 +129,7 @@ class WindowCounter extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            '${Format.format(window.getCount(), 1)}',
+            '${Format.format(window.quantity, 1)}',
             style: Theme.of(context).textTheme.headline6,
           ),
           buildWindowPreview(context),

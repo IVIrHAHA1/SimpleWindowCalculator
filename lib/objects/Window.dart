@@ -16,19 +16,16 @@ class Window with Calculatable {
   String name;
   File image;
 
-  double count;
-
-  var _grandDuration;
-
   /// Set at runtime
   Map<Factors, Factor> factorList = Map();
 
   Window({double price = 0.0, Duration duration, this.name, this.image}) {
+    this.quantity = 0.0;
     this.price = price ?? _mPRICE;
     this.duration = duration ?? _mDURATION;
 
     this.totalPrice = 0.0;
-    this._grandDuration = Duration();
+    this.totalDuration = Duration();
     _initFactors();
   }
 
@@ -60,8 +57,9 @@ class Window with Calculatable {
     this.duration = Duration(seconds: jsonMap[_durationKey]);
     this.image = File(jsonMap[_imageKey]);
 
+    this.quantity = 0.0;
     this.totalPrice = 0.0;
-    this._grandDuration = Duration();
+    this.totalDuration = Duration();
     _initFactors();
   }
 
@@ -77,8 +75,8 @@ class Window with Calculatable {
 
     factorList.forEach((factorKey, factor) {
       // Step 1: Ensure accurate factor quantaties
-      if (factor.getCount() > this.getCount()) {
-        factor.setCount(this.getCount());
+      if (factor.getCount() > this.quantity) {
+        factor.setCount(this.quantity);
       }
 
       // Step 2: Calculate Factor price modifier
@@ -87,10 +85,10 @@ class Window with Calculatable {
     });
 
     // Step 3: Add total standard price
-    granPrice += this.price * this.getCount();
-    totalTime += this.duration * this.getCount();
+    granPrice += this.price * this.quantity;
+    totalTime += this.duration * this.quantity;
     this.totalPrice = granPrice;
-    _grandDuration = totalTime;
+    this.totalDuration = totalTime;
   }
 
   /*
@@ -99,17 +97,17 @@ class Window with Calculatable {
    */
   setCount({double count}) {
     // Keep window count updating here
-    this.count = count;
-    if (this.count < 0) this.count = 0;
+    this.quantity = count;
+    if (this.quantity < 0) this.quantity = 0;
   }
 
   /*
    *  Adds 'count' to existing count qty
    */
   amendCount(double count) {
-    this.count = this.getCount() + count;
+    this.quantity = this.quantity + count;
     // Do not count below zero
-    if (this.count < 0) this.count = 0;
+    if (this.quantity < 0) this.quantity = 0;
 
     bool countingExt = false;
 
@@ -144,16 +142,8 @@ class Window with Calculatable {
     return name != null ? name : _mNAME;
   }
 
-  getCount() {
-    return this.count != null ? this.count : 0.0;
-  }
-
   getImage() {
     return this.image;
-  }
-
-  getTotalDuration() {
-    return _grandDuration;
   }
 
   /*  -----------------------------------------------------------------------
@@ -188,9 +178,9 @@ class Window with Calculatable {
     Factor factor = factorList[factorKey];
 
     // Only increment if factor count is less than the number of windows.
-    if (factor.getCount() < this.getCount() && factorKey != Factors.sided)
+    if (factor.getCount() < this.quantity && factorKey != Factors.sided)
       factor.setCount(factor.getCount() + .5);
-    else if (factor.getCount() < this.getCount() && factorKey == Factors.sided)
+    else if (factor.getCount() < this.quantity && factorKey == Factors.sided)
       factor.setCount(factor.getCount() + 1);
   }
 
