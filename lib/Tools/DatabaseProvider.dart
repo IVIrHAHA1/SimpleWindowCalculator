@@ -62,7 +62,7 @@ class DatabaseProvider {
   }
 
   /// Load a single Window
-  Future<List<Map>> queryWindow(String windowName) async {
+  Future<Window> queryWindow(String windowName) async {
     Database db = await database;
 
     List<Map> mapList = await db.query(
@@ -73,7 +73,7 @@ class DatabaseProvider {
     );
 
     if (mapList.length > 0) {
-      return mapList;
+      return Window.fromMap(mapList.first[WINDOW_OBJECT]);
     } else
       return null;
   }
@@ -84,7 +84,7 @@ class DatabaseProvider {
     } else {
       Database db = await database;
 
-      /// TODO: Will probably have to refine this, as its vulnerbal to sql injections     
+      /// TODO: Will probably have to refine this, as its vulnerable to sql injections
       List<Map> mapList = await db.rawQuery(
         "SELECT * FROM $WINDOW_TABLE WHERE $WINDOW_NAME_ID LIKE '%$subString%'",
       );
