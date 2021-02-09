@@ -14,7 +14,7 @@ class Calculator with Notifier {
   List<Calculatable> projectItems;
 
   Calculator._();
-  static Calculator _instance = Calculator._();
+  static Calculator _instance;
 
   static Calculator get instance {
     if (_instance == null) {

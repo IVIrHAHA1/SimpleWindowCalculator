@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:SimpleWindowCalculator/Tools/DatabaseProvider.dart';
+import 'package:SimpleWindowCalculator/Util/ItemsManager.dart';
+import 'package:SimpleWindowCalculator/objects/Window.dart';
 
 import './Tools/HexColors.dart';
 import 'package:flutter/material.dart';
@@ -53,14 +55,25 @@ class MySplashScreen extends StatelessWidget {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    Timer(Duration(seconds: 3), () {
-      _router(context);
-    });
+  Future<void> _initData() async {
+    print('INITIALIZING DATA...');
 
     /// Set the active window
-    DatabaseProvider.instance.queryWindow(OManager.getDefaultWindow().name);
+    Window startingWindow = await DatabaseProvider.instance.queryWindow(
+      OManager.getDefaultWindow().name,
+    );
+
+    if (startingWindow != null) {
+      print('INITIALIZED ACTIVE WINDOW: ${startingWindow.name}');
+      ItemsManager.instance.activeItem = startingWindow;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    _initData().whenComplete(() {
+      _router(context);
+    });
 
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,

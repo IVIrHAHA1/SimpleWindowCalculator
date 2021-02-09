@@ -73,7 +73,7 @@ class DatabaseProvider {
     );
 
     if (mapList.length > 0) {
-      return Window.fromMap(jsonDecode(mapList.first[WINDOW_OBJECT]));
+      return Window.fromMap(jsonDecode(mapList.single[WINDOW_OBJECT]));
     } else
       return null;
   }

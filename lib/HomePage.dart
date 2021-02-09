@@ -1,6 +1,7 @@
 import 'package:SimpleWindowCalculator/Animations/SizingTween.dart';
 import 'package:SimpleWindowCalculator/Util/Calculator.dart';
 import 'package:SimpleWindowCalculator/Tools/GlobalValues.dart';
+import 'package:SimpleWindowCalculator/Util/ItemsManager.dart';
 import 'package:SimpleWindowCalculator/widgets/ModalContent.dart';
 
 import './Tools/HexColors.dart';
@@ -17,14 +18,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePage extends State with SingleTickerProviderStateMixin {
-  final List<Window> windowList = List();
-  Window activeWindow;
+ ItemsManager manager;
 
   _MyHomePage() {
-    activeWindow = OManager.getDefaultWindow();
-    windowList.add(activeWindow);
-
-    Calculator.instance.projectItems = windowList;
+    Calculator.instance.projectItems = (manager.itemsList as List<Window>);
   }
 
   AnimationController _controller;
