@@ -57,15 +57,11 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
   final List<Window> windowList = List();
   Window activeWindow;
 
-  var priceTotal;
-  var timeTotal;
-  var countTotal;
-
   _MyHomePage() {
     activeWindow = OManager.getDefaultWindow();
     windowList.add(activeWindow);
 
-    Calculator.projectItems = windowList;
+    Calculator.instance.projectItems = windowList;
   }
 
   AnimationController _controller;
@@ -76,6 +72,9 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
       duration: Duration(milliseconds: GlobalValues.animDuration ~/ 1.1),
       reverseDuration: Duration(milliseconds: GlobalValues.animDuration ~/ 1.1),
     );
+    Calculator.instance.attachListener(() {
+      setState(() {});
+    });
     super.initState();
   }
 
@@ -145,9 +144,9 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
               height: availableScreen,
               triggerExpandAnim: triggerExpandAnim,
               valueHolder: ResultsValueHolder(
-                priceTotal: priceTotal,
-                timeTotal: timeTotal,
-                countTotal: countTotal,
+                priceTotal: Calculator.instance.projectCount,
+                timeTotal: Calculator.instance.projectDuration,
+                countTotal: Calculator.instance.projectCount,
                 windowList: windowList,
               ),
             ),
@@ -166,7 +165,6 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
             child: WindowCounter(
               height: availableScreen * .5,
               window: activeWindow,
-              calculator: calculateResults,
               selectNewWindowFun: selectNewWindow,
             ),
           ),
@@ -218,48 +216,6 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
     });
   }
 
-  /*
-   *  Calculates and updates results 
-   */
-  calculateResults() {
-    // Calculate price before adjustments
-    var windowPriceTotal = 0.0;
-    countTotal = 0.0;
-    Duration time = Duration();
-
-    setState(() {
-      for (Window window in windowList) {
-        window.update();
-        windowPriceTotal += window.totalPrice;
-        countTotal += window.quantity ;
-        time += window.totalDuration;
-      }
-
-      /// If all window have no price or time totals then
-      /// set values to zero
-      if (windowPriceTotal == 0.0) {
-        priceTotal = 0.0;
-        timeTotal = Duration();
-      } else {
-        // Add Drive time
-        priceTotal = windowPriceTotal + DRIVETIME;
-
-        // Round up to an increment of 5, for pricing simplicity
-        var temp = priceTotal % 5;
-        if (temp != 0) {
-          priceTotal += (5 - temp);
-        }
-
-        // Ensure price is not below minimum
-        if (priceTotal < PRICE_MIN) {
-          priceTotal = PRICE_MIN;
-        }
-
-        timeTotal = time;
-      }
-    });
-  }
-
   _addNewWindow(Window newWindow) {
     // Save current window
     Window existingWindow = _updateWindowList(newWindow, activeWindow);
@@ -273,18 +229,16 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
   }
 
   _clearProject() {
-    setState(() {
-      // Reset Individual Window
-      windowList.forEach((window) {
-        window.setCount(count: 0);
-        window.resetFactors();
-        window = null;
-      });
+    // Reset Individual Window
+    windowList.forEach((window) {
+      window.setCount(count: 0);
+      window.resetFactors();
+      window = null;
       // Reset Window List
       windowList.clear();
       activeWindow = OManager.getDefaultWindow();
       windowList.add(activeWindow);
-      calculateResults();
+      Calculator.instance.update();
     });
   }
 

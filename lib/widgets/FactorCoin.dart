@@ -1,4 +1,5 @@
 import 'package:SimpleWindowCalculator/Routes/FactorOptionsRoute.dart';
+import 'package:SimpleWindowCalculator/Tools/Calculator.dart';
 import 'package:flutter/services.dart';
 
 import '../objects/OManager.dart';
@@ -11,14 +12,14 @@ class FactorCoin extends StatefulWidget {
   final Alignment alignment;
   final Factors factorKey;
   final Window window;
-  final Function updateResultsMod;
+  final isDummy;
 
   static const double iconRatio = 1 / 6;
 
   FactorCoin({
     @required this.size,
     @required this.factorKey,
-    this.updateResultsMod,
+    this.isDummy = true,
     this.window,
     this.backgroundColor = Colors.white,
     this.alignment = Alignment.center,
@@ -80,13 +81,13 @@ class _FactorCoinState extends State<FactorCoin> {
       case FactorOptions.apply:
         stateOperation();
         changeAttachmentStatus();
-        widget.updateResultsMod();
+        Calculator.instance.update();
         Navigator.of(context).pop();
         break;
 
       case FactorOptions.clear:
         stateOperation();
-        widget.updateResultsMod();
+        Calculator.instance.update();
         Navigator.of(context).pop();
         break;
 
@@ -98,7 +99,7 @@ class _FactorCoinState extends State<FactorCoin> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.updateResultsMod != null
+    return !widget.isDummy
         ? buildInteractiveCoin(context)
         : buildDummyCoin();
   }
@@ -132,7 +133,7 @@ class _FactorCoinState extends State<FactorCoin> {
                 modeIncrement
                     ? widget.window.incrementFactor(widget.factorKey)
                     : widget.window.decrementFactor(widget.factorKey);
-                widget.updateResultsMod();
+                Calculator.instance.update();
               },
               onLongPress: () {
                 HapticFeedback.lightImpact();

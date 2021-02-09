@@ -1,5 +1,3 @@
-import 'package:SimpleWindowCalculator/objects/Window.dart';
-
 import 'GlobalValues.dart';
 
 /// A singleton class which calculates the totals of the project.
@@ -9,17 +7,17 @@ import 'GlobalValues.dart';
 ///
 /// Can attach notifiers which will update any UI compontents.
 class Calculator with Notifier {
-  static double projectCount = 0;
-  static double projectPrice = 0;
-  static Duration projectDuration = Duration();
+  double projectCount = 0;
+  double projectPrice = 0;
+  Duration projectDuration = Duration();
 
-  static List<Calculatable> projectItems;
+  List<Calculatable> projectItems;
 
   Calculator._();
   static final Calculator instance = Calculator._();
 
   update() {
-    if(projectItems == null) {
+    if (projectItems == null) {
       throw Exception('NEED TO ASSIGN [projectItems]');
     }
     // Calculate price before adjustments

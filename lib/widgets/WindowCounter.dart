@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:SimpleWindowCalculator/Tools/Calculator.dart';
 import 'package:SimpleWindowCalculator/Tools/ImageLoader.dart';
 import 'package:flutter/services.dart';
 
@@ -16,16 +17,12 @@ class WindowCounter extends StatelessWidget {
   final Window window;
   double height;
 
-  // Updates ResultsModule from main
-  final Function calculator;
-
   // Promps the bottom sheet modal allowing user to select
   // a new window. Needed for Window Preview button.
   final Function selectNewWindowFun;
 
   WindowCounter({
     @required this.window,
-    @required this.calculator,
     @required this.selectNewWindowFun,
     this.height,
   });
@@ -72,7 +69,7 @@ class WindowCounter extends StatelessWidget {
               size: factorSize,
               alignment: Alignment.center,
               backgroundColor: HexColors.fromHex('#DCA065'),
-              updateResultsMod: calculator,
+              isDummy: false,
             ),
           ),
 
@@ -86,7 +83,7 @@ class WindowCounter extends StatelessWidget {
               size: factorSize,
               alignment: Alignment.topCenter,
               backgroundColor: HexColors.fromHex('#FFEDA5'),
-              updateResultsMod: calculator,
+              isDummy: false,
             ),
           ),
 
@@ -100,7 +97,7 @@ class WindowCounter extends StatelessWidget {
               size: factorSize,
               alignment: Alignment.topCenter,
               backgroundColor: HexColors.fromHex('#FFB9B9'),
-              updateResultsMod: calculator,
+              isDummy: false,
             ),
           ),
 
@@ -113,7 +110,7 @@ class WindowCounter extends StatelessWidget {
               window: window,
               size: factorSize,
               alignment: Alignment.center,
-              updateResultsMod: calculator,
+              isDummy: false,
             ),
           ),
         ],
@@ -250,12 +247,12 @@ class WindowCounter extends StatelessWidget {
                     onLongPress: () {
                       HapticFeedback.mediumImpact();
                       window.amendCount(.5);
-                      calculator();
+                      Calculator.instance.update();
                     },
                     onTap: () {
                       HapticFeedback.mediumImpact();
                       window.amendCount(1.0);
-                      calculator();
+                      Calculator.instance.update();
                     },
                     child: Card(
                       elevation: 5,
@@ -277,12 +274,12 @@ class WindowCounter extends StatelessWidget {
                     onLongPress: () {
                       HapticFeedback.mediumImpact();
                       window.amendCount(-.5);
-                      calculator();
+                      Calculator.instance.update();
                     },
                     onTap: () {
                       HapticFeedback.mediumImpact();
                       window.amendCount(-1.0);
-                      calculator();
+                      Calculator.instance.update();
                     },
                     child: Card(
                       elevation: 5,
