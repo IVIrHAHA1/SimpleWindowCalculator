@@ -1,4 +1,9 @@
 import '../Tools/GlobalValues.dart';
+/* ***DEVELOPER'S NOTE: 
+* This class can be further abstracted, by 
+* making Calculatable take charge of the update()
+* method.
+*/
 
 /// A singleton class which calculates the totals of the project.
 /// 1. Total Count  [projectCount]
@@ -24,6 +29,10 @@ class Calculator with Notifier {
     return _instance;
   }
 
+  /// Performs calculations on objects and thus updates
+  /// - [projectCount]
+  /// - [projectPrice]
+  /// - [projectDuration]
   update() {
     if (projectItems == null) {
       throw Exception('NEED TO ASSIGN [projectItems]');
@@ -64,10 +73,11 @@ class Calculator with Notifier {
     }
 
     // Notify of updated results
-    notifyListeners();
+    if (isListening) notifyListeners();
   }
 }
 
+/// Implementing the Calculatable mixin allows for Calculator interfacing.
 mixin Calculatable {
   var quantity;
   double price;
@@ -95,4 +105,6 @@ mixin Notifier {
   attachListener(Function listener) {
     _listeners.add(listener);
   }
+
+  bool get isListening => _listeners.isNotEmpty;
 }
