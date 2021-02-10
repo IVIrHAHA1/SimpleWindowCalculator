@@ -13,6 +13,7 @@ void main() {
   runApp(MyApp());
 }
 
+/// Initializing ThemeData (Colors and Textstyles)
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -46,7 +47,10 @@ class MyApp extends StatelessWidget {
   }
 }
 
+/// Splash Screen which instantiates any AppData (Database and default values) the user may need
+/// upon start up.
 class MySplashScreen extends StatelessWidget {
+  // Replaces the splash screen with the approriate route
   _router(BuildContext ctx) {
     Navigator.of(ctx).pushReplacement(
       MaterialPageRoute(
@@ -55,11 +59,13 @@ class MySplashScreen extends StatelessWidget {
     );
   }
 
+  // Instantiate the data as mentioned in the class description
   Future<void> _initData() async {
     print('INITIALIZING DATA...');
+    // Prepare the window list and Manager instance
     ItemsManager.init<Window>();
 
-    /// Set the active window
+    // Set the active window as dictated by the OManager
     Window startingWindow = await DatabaseProvider.instance.queryWindow(
       OManager.getDefaultWindow().name,
     );
@@ -82,6 +88,7 @@ class MySplashScreen extends StatelessWidget {
       backgroundColor: Theme.of(context).primaryColor,
       body: Container(
         alignment: Alignment.center,
+        /// TODO: Still needs to be finished
         child: Text('Hello world!'),
       ),
     );

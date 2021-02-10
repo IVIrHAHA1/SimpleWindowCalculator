@@ -4,7 +4,6 @@ import 'package:SimpleWindowCalculator/Tools/GlobalValues.dart';
 import 'package:SimpleWindowCalculator/Util/ItemsManager.dart';
 import 'package:SimpleWindowCalculator/widgets/ModalContent.dart';
 
-import './Tools/HexColors.dart';
 import './objects/OManager.dart';
 import './widgets/WindowCounter.dart';
 
@@ -49,10 +48,6 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     // Needs to be here because of clear onPressed
     AppBar mAppBar = AppBar(
-      // leading: Icon(
-      //   Icons.menu,
-      //   color: Colors.white,
-      // ),
       actions: [
         IconButton(
           onPressed: _clearProject,
