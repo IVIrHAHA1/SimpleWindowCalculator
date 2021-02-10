@@ -1,4 +1,5 @@
 import 'package:SimpleWindowCalculator/Animations/SizingTween.dart';
+import 'package:SimpleWindowCalculator/Tools/DatabaseProvider.dart';
 import 'package:SimpleWindowCalculator/Util/Calculator.dart';
 import 'package:SimpleWindowCalculator/Tools/GlobalValues.dart';
 import 'package:SimpleWindowCalculator/Util/ItemsManager.dart';
@@ -21,7 +22,7 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
 
   _MyHomePage() {
     this.manager = ItemsManager.instance;
-    Calculator.instance.projectItems = manager.itemsList;
+    Calculator.instance.projectItems = manager.items;
   }
 
   AnimationController _controller;
@@ -157,17 +158,12 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
     Navigator.of(context).pop();
   }
 
-  _clearProject() {
-    // Reset Individual Window
-    manager.itemsList.forEach((window) {
-      (window as Window).setCount(count: 0);
-      (window as Window).resetFactors();
-      window = null;
-    });
-    // Reset Window List
-    manager.itemsList.clear();
-    manager.activeItem = OManager.getDefaultWindow();
-    manager.itemsList.add(manager.activeItem);
+  _clearProject() async {
+    Window newDefault = await DatabaseProvider.instance.queryWindow(
+      OManager.getDefaultWindow().name,
+    );
+
+    manager.reset(setActiveItem: newDefault);
     Calculator.instance.update();
   }
 

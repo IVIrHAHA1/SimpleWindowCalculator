@@ -21,8 +21,6 @@ class Window with Calculatable, Item {
   Map<Factors, Factor> factorList = Map();
 
   Window({double price = 0.0, Duration duration, this.name, this.image}) {
-    this.itemId = this.name.toLowerCase().hashCode;
-
     this.quantity = 0.0;
     this.price = price ?? _mPRICE;
     this.duration = duration ?? _mDURATION;
@@ -60,12 +58,14 @@ class Window with Calculatable, Item {
     this.duration = Duration(seconds: jsonMap[_durationKey]);
     this.image = File(jsonMap[_imageKey]);
 
-    this.itemId = this.name.toLowerCase().hashCode;
     this.quantity = 0.0;
     this.totalPrice = 0.0;
     this.totalDuration = Duration();
     _initFactors();
   }
+
+  @override
+  get itemId => this.name.toLowerCase().hashCode;
 
 /*
  * This update method syncs and calculates this window object
@@ -111,7 +111,7 @@ class Window with Calculatable, Item {
   amendCount(double count) {
     this.quantity = this.quantity + count;
     // Do not count below zero
-    if (this.quantity < 0) this.quantity = 0;
+    if (this.quantity < 0) this.quantity = 0.0;
 
     bool countingExt = false;
 

@@ -18,8 +18,8 @@ class ItemsManager {
   ItemsManager._();
   static ItemsManager _instance;
 
-  /// The list of activated items. 
-  List itemsList;
+  /// The list of activated items.
+  List _itemsList;
   Item _activatedItem;
 
   /// Get the singleton instance of ItemsManger.
@@ -33,32 +33,40 @@ class ItemsManager {
 
   static init<T>() {
     _instance = ItemsManager._();
-    _instance.itemsList = List<T>();
+    _instance._itemsList = List<T>();
+  }
+
+  /// Clears the list and sets [activeItem] to the optional [setActiveItem]
+  reset({Item setActiveItem}) {
+    this._itemsList.clear();
+    this.activeItem = setActiveItem;
   }
 
   discardActiveItem() {
-    itemsList.remove(activeItem);
+    _itemsList.remove(activeItem);
+    activeItem = null;
   }
 
   set activeItem(Item item) {
-    if (itemsList.contains(item)) {
+    if (_itemsList.contains(item)) {
       try {
         this._activatedItem =
-            itemsList.singleWhere((element) => element == item);
+            _itemsList.singleWhere((element) => element == item);
       } catch (StateException) {
         throw Exception('More than one item was found in itemList');
       }
     } else {
-      itemsList.add(item);
+      _itemsList.add(item);
       _activatedItem = item;
     }
   }
 
+  get items => _itemsList;
   get activeItem => _activatedItem;
 }
 
 mixin Item {
-  int itemId;
+  get itemId;
 
   @override
   bool operator ==(other) {

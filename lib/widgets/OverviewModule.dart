@@ -51,7 +51,7 @@ class OverviewModule extends StatelessWidget {
             flex: 1,
             child: TabBarView(
               children: [
-                Pallet(ItemsManager.instance.itemsList),
+                Pallet(ItemsManager.instance.items),
                 TechDetails(totalPrice, totalDuration),
               ],
             ),
