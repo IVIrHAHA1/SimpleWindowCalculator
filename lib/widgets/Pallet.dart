@@ -1,9 +1,9 @@
-import '../Tools/GlobalValues.dart';
-import '../Tools/HexColors.dart';
+import '../GlobalValues.dart';
+import '../Util/HexColors.dart';
 import '../objects/OManager.dart';
 import '../widgets/FactorCoin.dart';
 
-import '../Tools/Format.dart';
+import '../Util/Format.dart';
 
 import '../objects/Window.dart';
 import 'package:flutter/material.dart';

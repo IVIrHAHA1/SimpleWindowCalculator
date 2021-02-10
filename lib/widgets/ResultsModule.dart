@@ -1,5 +1,5 @@
-import 'package:SimpleWindowCalculator/Tools/Format.dart';
-import 'package:SimpleWindowCalculator/Tools/GlobalValues.dart';
+import 'package:SimpleWindowCalculator/Util/Format.dart';
+import 'package:SimpleWindowCalculator/GlobalValues.dart';
 import 'package:SimpleWindowCalculator/objects/Window.dart';
 import 'package:SimpleWindowCalculator/widgets/OverviewModule.dart';
 import 'package:flutter/material.dart';

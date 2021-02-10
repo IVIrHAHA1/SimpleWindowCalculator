@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:SimpleWindowCalculator/objects/OManager.dart';
 import 'package:SimpleWindowCalculator/objects/Window.dart';
 import 'package:path/path.dart' as paths;
-import 'package:path_provider/path_provider.dart' as syspath;
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 

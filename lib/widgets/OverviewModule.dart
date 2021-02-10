@@ -1,4 +1,4 @@
-import 'package:SimpleWindowCalculator/Tools/GlobalValues.dart';
+import 'package:SimpleWindowCalculator/GlobalValues.dart';
 import 'package:SimpleWindowCalculator/Util/ItemsManager.dart';
 
 /**

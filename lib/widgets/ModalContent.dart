@@ -1,6 +1,6 @@
 import 'package:SimpleWindowCalculator/Routes/Window_Object_Screen.dart';
 import 'package:SimpleWindowCalculator/Tools/DatabaseProvider.dart';
-import 'package:SimpleWindowCalculator/Tools/GlobalValues.dart';
+import 'package:SimpleWindowCalculator/GlobalValues.dart';
 import 'package:SimpleWindowCalculator/objects/Window.dart';
 import 'package:SimpleWindowCalculator/Tools/ImageLoader.dart';
 

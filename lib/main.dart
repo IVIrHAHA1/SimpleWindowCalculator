@@ -4,7 +4,7 @@ import 'package:SimpleWindowCalculator/Tools/DatabaseProvider.dart';
 import 'package:SimpleWindowCalculator/Util/ItemsManager.dart';
 import 'package:SimpleWindowCalculator/objects/Window.dart';
 
-import './Tools/HexColors.dart';
+import 'Util/HexColors.dart';
 import 'package:flutter/material.dart';
 import 'HomePage.dart';
 import 'objects/OManager.dart';
@@ -64,6 +64,9 @@ class MySplashScreen extends StatelessWidget {
     print('INITIALIZING DATA...');
     // Prepare the window list and Manager instance
     ItemsManager.init<Window>();
+
+    // Initialize database if not created yet
+    
 
     // Set the active window as dictated by the OManager
     Window startingWindow = await DatabaseProvider.instance.queryWindow(

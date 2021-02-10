@@ -1,15 +1,15 @@
 import 'dart:math';
 
-import 'package:SimpleWindowCalculator/Util/Calculator.dart';
+import 'package:SimpleWindowCalculator/Tools/Calculator.dart';
 import 'package:SimpleWindowCalculator/Tools/ImageLoader.dart';
 import 'package:flutter/services.dart';
 
-import '../Tools/HexColors.dart';
+import '../Util/HexColors.dart';
 import '../objects/OManager.dart';
 import '../widgets/FactorCoin.dart';
 
-import '../Tools/Format.dart';
-import '../Tools/GlobalValues.dart';
+import '../Util/Format.dart';
+import '../GlobalValues.dart';
 import 'package:flutter/material.dart';
 import '../objects/Window.dart';
 

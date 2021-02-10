@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:SimpleWindowCalculator/Util/Calculator.dart';
+import 'package:SimpleWindowCalculator/Tools/Calculator.dart';
 import 'package:SimpleWindowCalculator/Tools/DatabaseProvider.dart';
 import 'package:SimpleWindowCalculator/Util/ItemsManager.dart';
 

@@ -1,5 +1,5 @@
 import 'package:SimpleWindowCalculator/Routes/FactorOptionsRoute.dart';
-import 'package:SimpleWindowCalculator/Util/Calculator.dart';
+import 'package:SimpleWindowCalculator/Tools/Calculator.dart';
 import 'package:flutter/services.dart';
 
 import '../objects/OManager.dart';

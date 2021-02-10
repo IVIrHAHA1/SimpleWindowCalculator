@@ -1,4 +1,4 @@
-import '../Tools/GlobalValues.dart';
+import '../GlobalValues.dart';
 /* ***DEVELOPER'S NOTE: 
 * This class can be further abstracted, by 
 * making Calculatable take charge of the update()
