@@ -18,10 +18,11 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePage extends State with SingleTickerProviderStateMixin {
- ItemsManager manager;
+  ItemsManager manager;
 
   _MyHomePage() {
-    Calculator.instance.projectItems = (manager.itemsList as List<Window>);
+    this.manager = ItemsManager.instance;
+    Calculator.instance.projectItems = manager.itemsList;
   }
 
   AnimationController _controller;
@@ -107,7 +108,6 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
                 priceTotal: Calculator.instance.projectPrice,
                 timeTotal: Calculator.instance.projectDuration,
                 countTotal: Calculator.instance.projectCount,
-                windowList: windowList,
               ),
             ),
           ),
@@ -124,7 +124,7 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
             size: availableScreen * .5,
             child: WindowCounter(
               height: availableScreen * .5,
-              window: activeWindow,
+              window: manager.activeItem,
               selectNewWindowFun: selectNewWindow,
             ),
           ),
@@ -149,40 +149,14 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
   /*  -----------------------------------------------------------------------
    *                            DATA MUNIPS
    *  -------------------------------------------------------------------- */
-  /*
-   *  This method updates the master list appropriately and assigns 
-   *  activeWindow if needed.
-   */
-  _updateWindowList(Window newWindow, Window oldWindow) {
-    setState(() {
-      // STEP 1: Remove window with a zero count value
-      if (oldWindow.quantity == 0) {
-        windowList.remove(oldWindow);
-      }
-
-      // STEP 2: Get window if it already exists in the master list
-      for (int i = 0; i < windowList.length; i++) {
-        // Found window already in list
-        if (windowList[i].getName() == newWindow.getName()) {
-          activeWindow = windowList[i];
-          return windowList[i];
-        }
-      }
-
-      // STEP 3: If the window is in fact "new" then add it to the master list
-      activeWindow = newWindow;
-      windowList.add(activeWindow);
-      return null;
-    });
-  }
-
   _addNewWindow(Window newWindow) {
-    // Save current window
-    Window existingWindow = _updateWindowList(newWindow, activeWindow);
+    if ((manager.activeItem as Window).quantity <= 0) {
+      manager.discardActiveItem();
+    }
 
     // Update Counter to new window
     setState(() {
-      activeWindow = existingWindow == null ? newWindow : existingWindow;
+      manager.activeItem = newWindow;
     });
 
     Navigator.of(context).pop();
@@ -190,15 +164,15 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
 
   _clearProject() {
     // Reset Individual Window
-    windowList.forEach((window) {
-      window.setCount(count: 0);
-      window.resetFactors();
+    manager.itemsList.forEach((window) {
+      (window as Window).setCount(count: 0);
+      (window as Window).resetFactors();
       window = null;
     });
     // Reset Window List
-    windowList.clear();
-    activeWindow = OManager.getDefaultWindow();
-    windowList.add(activeWindow);
+    manager.itemsList.clear();
+    manager.activeItem = OManager.getDefaultWindow();
+    manager.itemsList.add(manager.activeItem);
     Calculator.instance.update();
   }
 

@@ -1,4 +1,5 @@
 import 'package:SimpleWindowCalculator/Tools/GlobalValues.dart';
+import 'package:SimpleWindowCalculator/Util/ItemsManager.dart';
 
 /**
  * Overview module controllers the TabView which in turn conatains the
@@ -13,9 +14,8 @@ import 'package:flutter/material.dart';
 class OverviewModule extends StatelessWidget {
   final double totalPrice;
   final Duration totalDuration;
-  final List windowList;
 
-  OverviewModule(this.totalPrice, this.totalDuration, this.windowList);
+  OverviewModule(this.totalPrice, this.totalDuration);
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +51,7 @@ class OverviewModule extends StatelessWidget {
             flex: 1,
             child: TabBarView(
               children: [
-                Pallet(windowList),
+                Pallet(ItemsManager.instance.itemsList),
                 TechDetails(totalPrice, totalDuration),
               ],
             ),

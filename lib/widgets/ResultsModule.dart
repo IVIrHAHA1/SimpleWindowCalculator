@@ -138,7 +138,6 @@ class _ResultsModuleState extends State<ResultsModule> {
                         child: OverviewModule(
                           widget.valueHolder.priceTotal,
                           widget.valueHolder.timeTotal,
-                          widget.valueHolder.windowList,
                         ),
                       ),
                       secondChild: Container(),
@@ -234,8 +233,6 @@ class ResultsValueHolder {
   final double priceTotal;
   final Duration timeTotal;
 
-  List<Window> windowList;
-
   /// Since the Results module only needs the output of data, we can collect
   /// necessary data with the [ResultsValueHolder]
   ///
@@ -245,6 +242,5 @@ class ResultsValueHolder {
     this.countTotal,
     this.priceTotal,
     this.timeTotal,
-    this.windowList,
   });
 }

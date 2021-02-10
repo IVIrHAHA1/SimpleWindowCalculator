@@ -2,27 +2,37 @@ class ItemsManager {
   ItemsManager._();
   static ItemsManager _instance;
 
-  List<Item> itemsList = List();
+  List itemsList;
   Item _activatedItem;
 
   static ItemsManager get instance {
-    if (_instance == null) _instance = ItemsManager._();
+    if (_instance == null) {
+      throw Exception('Failed to initialize ItemsManager');
+    }
 
     return _instance;
   }
 
+  static init<T>() {
+    _instance = ItemsManager._();
+    _instance.itemsList = List<T>(); 
+  }
+
+  discardActiveItem() {
+    itemsList.remove(activeItem);
+  }
+
   set activeItem(Item item) {
-    try {
-      this._activatedItem = itemsList.singleWhere(
-        (element) => element.itemId == item.itemId,
-        orElse: () {
-          itemsList.add(item);
-          return item;
-        },
-      );
-    } catch (StateError) {
-      throw StateError(
-          "more than one item was put into itemsList. Verify logical error");
+    if (itemsList.contains(item)) {
+      try {
+        this._activatedItem =
+            itemsList.singleWhere((element) => element == item);
+      } catch (StateException) {
+        throw Exception('More than one item was found in itemList');
+      }
+    } else {
+      itemsList.add(item);
+      _activatedItem = item;
     }
   }
 
@@ -34,7 +44,6 @@ mixin Item {
 
   @override
   bool operator ==(other) {
-    print('checking this');
     return (other is Item) && other.itemId == this.itemId;
   }
 

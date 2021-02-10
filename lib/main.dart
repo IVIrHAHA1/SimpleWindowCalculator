@@ -57,6 +57,7 @@ class MySplashScreen extends StatelessWidget {
 
   Future<void> _initData() async {
     print('INITIALIZING DATA...');
+    ItemsManager.init<Window>();
 
     /// Set the active window
     Window startingWindow = await DatabaseProvider.instance.queryWindow(
@@ -64,9 +65,11 @@ class MySplashScreen extends StatelessWidget {
     );
 
     if (startingWindow != null) {
-      print('INITIALIZED ACTIVE WINDOW: ${startingWindow.name}');
       ItemsManager.instance.activeItem = startingWindow;
+      print('INITIALIZED ACTIVE WINDOW: ${ItemsManager.instance.activeItem.name}');
+      return;
     }
+    return;
   }
 
   @override
