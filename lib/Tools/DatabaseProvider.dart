@@ -77,7 +77,7 @@ class DatabaseProvider {
       return null;
   }
 
-  Future<List<Window>> load(String subString) async {
+  Future<List<Window>> querySearch(String subString) async {
     if (subString == null || subString.length <= 0) {
       return await loadAll();
     } else {
@@ -117,20 +117,42 @@ class DatabaseProvider {
       }
       return windowList;
     }
+    // No objects to load, so return empty list.
+    return List<Window>();
+  }
 
-    /// TODO: Look into saving this data upon start up
-    // No data has been saved yet, (INSERT PRESET DATA)
-    // Return preset windows
-    else {
-      Batch batch = db.batch();
+  /// TODO: Look into saving this data upon start up
+  // No data has been saved yet, (INSERT PRESET DATA)
+  // Return preset windows
+  // else {
+  //   Batch batch = db.batch();
 
-      print('PROCESS: Initialized database, basic list');
+  //   print('PROCESS: Initialized database, basic list');
 
-      for (Window window in OManager.presetWindows)
-        batch.insert(WINDOW_TABLE, window.toMap());
+  //   for (Window window in OManager.presetWindows)
+  //     batch.insert(WINDOW_TABLE, window.toMap());
 
-      batch.commit();
-      return OManager.presetWindows;
-    }
+  //   batch.commit();
+  //   return OManager.presetWindows;
+  Future<bool> isInitialized() async {
+    final directoryPath = await getDatabasesPath();
+    String path = paths.join(directoryPath, _databaseName);
+
+    bool exists = await databaseExists(path);
+
+    return exists;
+  }
+
+  fillDatabase(List<Window> list) async {
+    Database db = await database;
+
+    Batch batch = db.batch();
+
+    for (Window window in list)
+      batch.insert(WINDOW_TABLE, window.toMap());
+
+    batch.commit();
+    print('DB-PROCESS: Database initialized default values');
+    return;
   }
 }

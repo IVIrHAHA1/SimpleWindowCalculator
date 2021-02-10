@@ -113,7 +113,7 @@ class _ModalContentState extends State<ModalContent> {
       //height: size,
       child: FutureBuilder<List<Window>>(
           initialData: OManager.presetWindows,
-          future: DatabaseProvider.instance.load(_textEditingController.text),
+          future: DatabaseProvider.instance.querySearch(_textEditingController.text),
           builder: (_, snapshot) {
             if (snapshot.hasData) {
               if (snapshot.data.length <= 0) {

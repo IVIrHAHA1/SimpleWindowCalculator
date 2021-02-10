@@ -65,8 +65,12 @@ class MySplashScreen extends StatelessWidget {
     // Prepare the window list and Manager instance
     ItemsManager.init<Window>();
 
-    // Initialize database if not created yet
-    
+    // Initialize database if needed
+    bool hasDatabase = await DatabaseProvider.instance.isInitialized();
+    if (!hasDatabase) {
+      // TODO: Will create the GET_STARTED Route here
+      DatabaseProvider.instance.fillDatabase(OManager.presetWindows);
+    }
 
     // Set the active window as dictated by the OManager
     Window startingWindow = await DatabaseProvider.instance.queryWindow(
@@ -75,9 +79,11 @@ class MySplashScreen extends StatelessWidget {
 
     if (startingWindow != null) {
       ItemsManager.instance.activeItem = startingWindow;
-      print('INITIALIZED ACTIVE WINDOW: ${ItemsManager.instance.activeItem.name}');
+      print(
+          'INSTANTIATED ACTIVE WINDOW: ${ItemsManager.instance.activeItem.name}');
       return;
     }
+
     return;
   }
 
@@ -91,6 +97,7 @@ class MySplashScreen extends StatelessWidget {
       backgroundColor: Theme.of(context).primaryColor,
       body: Container(
         alignment: Alignment.center,
+
         /// TODO: Still needs to be finished
         child: Text('Hello world!'),
       ),
