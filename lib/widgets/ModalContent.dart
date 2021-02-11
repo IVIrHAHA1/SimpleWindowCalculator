@@ -37,14 +37,7 @@ class _ModalContentState extends State<ModalContent> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) {
-          return WindowObjectScreen(
-            Window(
-              /// TODO: DELETE THIS AFTER TESTING
-              name: 'test',
-              duration: Duration(minutes: 2),
-              price: 12.0,
-            ),
-          );
+          return WindowObjectScreen();
         },
       ),
     );
@@ -113,13 +106,15 @@ class _ModalContentState extends State<ModalContent> {
       //height: size,
       child: FutureBuilder<List<Window>>(
           initialData: OManager.presetWindows,
-          future: DatabaseProvider.instance.querySearch(_textEditingController.text),
+          future: DatabaseProvider.instance
+              .querySearch(_textEditingController.text),
           builder: (_, snapshot) {
             if (snapshot.hasData) {
               if (snapshot.data.length <= 0) {
                 return Container(
                   alignment: Alignment.center,
-                  child: Text("no windows found by the name of ${_textEditingController.text}"),
+                  child: Text(
+                      "no windows found by the name of ${_textEditingController.text}"),
                   height: size,
                   width: double.infinity,
                 );
@@ -149,7 +144,7 @@ class _ModalContentState extends State<ModalContent> {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (_) {
-                              return WindowObjectScreen(element);
+                              return WindowObjectScreen(window: element);
                             },
                           ),
                         );

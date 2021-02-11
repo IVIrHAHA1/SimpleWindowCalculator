@@ -20,7 +20,7 @@ class WindowObjectScreen extends StatefulWidget {
   ///
   final Window window;
 
-  WindowObjectScreen(this.window);
+  WindowObjectScreen({this.window});
 
   @override
   _WindowObjectScreenState createState() => _WindowObjectScreenState();
@@ -30,6 +30,16 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
   String name;
   Duration duration;
   double price;
+
+  @override
+  void initState() {
+    if (widget.window != null) {
+      this.name = widget.window.name;
+      this.duration = widget.window.duration;
+      this.price = widget.window.price;
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -99,11 +109,9 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
       height: size,
       alignment: Alignment.center,
       constraints: BoxConstraints.tightFor(width: size, height: size),
-      child: Card(
-        elevation: 4,
-        margin: EdgeInsets.all(16),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        child: _WindowImageInput(widget.window.getImage(), _updateImage),
+      child: _WindowImageInput(
+        widget.window != null ? widget.window.getImage() : null,
+        _updateImage,
       ),
     );
   }
@@ -152,7 +160,7 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           DetailInputBox(
-            label: widget.window.getName() ?? 'Name',
+            label: widget.window != null ? widget.window.getName() : 'Name',
             updateData: _updateName,
           ),
           MaterialButton(
@@ -162,21 +170,21 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 color: Theme.of(ctx).primaryColorLight,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(8),
-                  topRight: Radius.circular(8),
-                ),
+                borderRadius: BorderRadius.circular(8),
               ),
-              child: Text(duration != null
-                  ? '${_printDuration(duration)}'
-                  : 'choose time'),
+              child: Text(
+                duration != null
+                    ? '${_printDuration(duration)}'
+                    : 'choose time',
+                style: Theme.of(context).textTheme.subtitle1,
+              ),
             ),
             onPressed: () {
               _timePicker(ctx);
             },
           ),
           DetailInputBox(
-            label: widget.window.price.toString() ?? 'Price',
+            label: widget.window != null ? widget.window.price.toString() : 'Price',
             textInputType: TextInputType.number,
             updateData: _updatePrice,
           ),
@@ -277,24 +285,29 @@ class _WindowImageInputState extends State<_WindowImageInput> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: _obtainImage,
-      child: windowImage == null
-          ? Center(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: Text('No Image Available'),
-                  ),
-                  Icon(
-                    Icons.camera_alt,
-                    color: Colors.grey,
-                  ),
-                ],
-              ),
-            )
-          : Center(child: ImageLoader.fromFile(windowImage)),
+      child: Card(
+        elevation: 4,
+        margin: EdgeInsets.all(16),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        child: windowImage == null
+            ? Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: Text('No Image Available'),
+                    ),
+                    Icon(
+                      Icons.camera_alt,
+                      color: Colors.grey,
+                    ),
+                  ],
+                ),
+              )
+            : Center(child: ImageLoader.fromFile(windowImage)),
+      ),
     );
   }
 
@@ -360,20 +373,22 @@ class _DetailInputBoxState extends State<DetailInputBox> {
       width: MediaQuery.of(context).size.width * .5,
       decoration: BoxDecoration(
         color: Theme.of(context).primaryColorLight,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(8),
-          topRight: Radius.circular(8),
-        ),
+        borderRadius: BorderRadius.circular(8),
       ),
       child: TextField(
         keyboardType: widget.textInputType ?? TextInputType.text,
+        textAlign: TextAlign.center,
         onSubmitted: (String value) async {
           setState(() {
             textLabel = value;
           });
           widget.updateData(value);
         },
-        decoration: InputDecoration(hintText: textLabel),
+        decoration: InputDecoration(
+          hintText: textLabel,
+          border: InputBorder.none,
+          hintStyle: Theme.of(context).textTheme.subtitle1,
+        ),
       ),
     );
   }
