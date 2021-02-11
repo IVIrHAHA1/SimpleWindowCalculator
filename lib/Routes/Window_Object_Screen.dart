@@ -2,15 +2,17 @@ import 'dart:io';
 
 import 'package:SimpleWindowCalculator/Tools/DatabaseProvider.dart';
 import 'package:SimpleWindowCalculator/Tools/ImageLoader.dart';
+import 'package:SimpleWindowCalculator/Util/HexColors.dart';
 import 'package:path/path.dart' as paths;
 
 import '../objects/Window.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart' as syspaths;
+import 'package:flutter_picker/Picker.dart';
 
 /// Window screen which allows user to create or edit window objects
-class WindowObjectScreen extends StatelessWidget {
+class WindowObjectScreen extends StatefulWidget {
   /// NON-NULL if nothing to input, input a blank window object
   /// ```dart
   /// new WindowObjectScreen(Window());
@@ -21,11 +23,20 @@ class WindowObjectScreen extends StatelessWidget {
   WindowObjectScreen(this.window);
 
   @override
+  _WindowObjectScreenState createState() => _WindowObjectScreenState();
+}
+
+class _WindowObjectScreenState extends State<WindowObjectScreen> {
+  String name;
+  Duration duration;
+  double price;
+
+  @override
   Widget build(BuildContext context) {
     AppBar appBar = AppBar(
       centerTitle: true,
       title: Text(
-        window == null ? 'Create Window' : window.getName(),
+        widget.window == null ? 'Create Window' : widget.window.getName(),
         style: TextStyle(
           color: Colors.white,
         ),
@@ -52,7 +63,7 @@ class WindowObjectScreen extends StatelessWidget {
             // TODO: VERIFY WINDOW OBJECT
 
             /// Otherwise, reopen screen and ask user to fix any mistakes
-            DatabaseProvider.instance.insert(window);
+            DatabaseProvider.instance.insert(widget.window);
             Navigator.of(context).pop();
           },
         )
@@ -75,7 +86,7 @@ class WindowObjectScreen extends StatelessWidget {
         child: Column(
           children: [
             buildImage(keyBoardHeight > 0 ? 0 : (bodyHeight * .5)),
-            buildBoxes(bodyHeight * .5),
+            buildBoxes(bodyHeight * .5, context),
           ],
         ),
       ),
@@ -92,18 +103,18 @@ class WindowObjectScreen extends StatelessWidget {
         elevation: 4,
         margin: EdgeInsets.all(16),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        child: _WindowImageInput(window.getImage(), _updateImage),
+        child: _WindowImageInput(widget.window.getImage(), _updateImage),
       ),
     );
   }
 
   _updateImage(File windowImage) {
-    window.setImage(windowImage);
+    widget.window.setImage(windowImage);
   }
 
   _updateName(String name) {
-    window.setName(
-      name ?? window.getName(),
+    widget.window.setName(
+      name ?? widget.window.getName(),
     );
   }
 
@@ -119,7 +130,7 @@ class WindowObjectScreen extends StatelessWidget {
         seconds: int.parse(sec),
       );
 
-      window.duration = duration;
+      widget.window.duration = duration;
     } catch (Exception) {
       // TODO: Implement user error msg
     }
@@ -128,35 +139,122 @@ class WindowObjectScreen extends StatelessWidget {
   _updatePrice(String priceText) {
     try {
       var price = double.parse(priceText);
-      window.price = price;
+      widget.window.price = price;
     } catch (Exception) {
       // TODO: Implement user error msg
     }
   }
 
-  Widget buildBoxes(double size) {
+  Widget buildBoxes(double size, BuildContext ctx) {
     return Container(
       height: size,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           DetailInputBox(
-            label: window.getName() ?? 'Name',
+            label: widget.window.getName() ?? 'Name',
             updateData: _updateName,
           ),
-          DetailInputBox(
-            label: window.duration.inSeconds.toString() ?? 'Time',
-            textInputType: TextInputType.number,
-            updateData: _updateDuration,
+          MaterialButton(
+            child: Container(
+              height: (MediaQuery.of(ctx).size.height / 16),
+              width: MediaQuery.of(ctx).size.width * .5,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Theme.of(ctx).primaryColorLight,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(8),
+                  topRight: Radius.circular(8),
+                ),
+              ),
+              child: Text(duration != null
+                  ? '${_printDuration(duration)}'
+                  : 'choose time'),
+            ),
+            onPressed: () {
+              _timePicker(ctx);
+            },
           ),
           DetailInputBox(
-            label: window.price.toString() ?? 'Price',
+            label: widget.window.price.toString() ?? 'Price',
             textInputType: TextInputType.number,
             updateData: _updatePrice,
           ),
         ],
       ),
     );
+  }
+
+  String _printDuration(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+    return "$twoDigitMinutes:$twoDigitSeconds";
+  }
+
+  _timePicker(BuildContext ctx) {
+    Picker(
+      builderHeader: (_) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('minutes'),
+              Text('seconds'),
+            ],
+          ),
+        );
+      },
+      adapter: NumberPickerAdapter(
+        data: [
+          NumberPickerColumn(begin: 0, end: 100),
+          NumberPickerColumn(begin: 0, end: 59),
+        ],
+      ),
+      delimiter: [
+        PickerDelimiter(
+          child: Container(
+            width: 30.0,
+            alignment: Alignment.center,
+            child: Text(
+              ':',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        )
+      ],
+      hideHeader: false,
+      selectedTextStyle: TextStyle(
+        color: Colors.blue,
+      ),
+      textStyle: TextStyle(
+        color: Colors.black,
+      ),
+      title: Text(
+        "How long does it take to clean?",
+        style: TextStyle(color: Colors.black),
+      ),
+      onConfirm: (Picker picker, List value) {
+        int min = value[0];
+        int sec = value[1];
+
+        if (min == 0 && sec == 0) {
+          setState(() {
+            duration = null;
+          });
+        } else {
+          setState(() {
+            duration = Duration(
+              minutes: min,
+              seconds: sec,
+            );
+          });
+        }
+      },
+    ).showDialog(ctx);
   }
 }
 
