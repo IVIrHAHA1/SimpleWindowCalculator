@@ -51,21 +51,21 @@ class MyApp extends StatelessWidget {
 /// Splash Screen which instantiates any AppData (Database and default values) the user may need
 /// upon start up.
 class MySplashScreen extends StatelessWidget {
+  /// Replaces the SplashScreen route with MyHomePage(main page) after default data has been 
+  /// initialized. 
   _router(BuildContext ctx) {
     Navigator.of(ctx).pushReplacement(
       PageRouteBuilder(
         pageBuilder: (ctx, anim, anim2) => MyHomePage(),
         transitionsBuilder: (ctx, anim, anim2, child) {
+          /// Makes the splash screen fade out
           return FadeTransition(
             opacity: CurvedAnimation(
               parent: anim.drive(Tween(begin: 0.0, end: 1.0)),
               curve: Curves.easeIn,
               reverseCurve: Curves.easeIn,
             ),
-            child: FadeTransition(
-              opacity: anim.drive(Tween(begin: 0.0, end: 1.0)),
-              child: child,
-            ),
+            child: child,
           );
         },
         transitionDuration: Duration(milliseconds: 1200),
@@ -78,7 +78,7 @@ class MySplashScreen extends StatelessWidget {
     // Prepare the window list and Manager instance
     ItemsManager.init<Window>();
 
-    // Initialize database if needed
+    // Initialize database if needed and fill with default values.
     bool hasDatabase = await DatabaseProvider.instance.isInitialized();
     if (!hasDatabase) {
       // TODO: Will create the GET_STARTED Route here
@@ -95,11 +95,12 @@ class MySplashScreen extends StatelessWidget {
       print(
           'INSTANTIATED ACTIVE WINDOW: ${ItemsManager.instance.activeItem.name}');
       return;
+    } else {
+      throw Exception("FAILED TO INSTANTIATE STARTING WINDOW");
     }
-
-    return;
   }
 
+  /// TODO: This will be utilized when creating the get started process
   String _getSplashScreenImage(BuildContext ctx) {
     String assetString;
     switch (ResolveScreenDensity.of(ctx)) {
@@ -136,7 +137,6 @@ class MySplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var image = _getSplashScreenImage(context);
     _initData().whenComplete(() {
       _router(context);
     });
@@ -144,7 +144,6 @@ class MySplashScreen extends StatelessWidget {
     return Container(
       alignment: Alignment.center,
       color: Theme.of(context).colorScheme.primary,
-      padding: const EdgeInsets.symmetric(horizontal: 36),
       child: Text(
         'Hello Sunshine!',
         style: Theme.of(context).textTheme.headline6,
