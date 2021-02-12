@@ -65,6 +65,14 @@ flutter:
     - assets/images/solar_panel.png
     - assets/images/na_image.png
 
+  # Splash Screen images
+    - assets/ss_icon/app_icon_mdpi.png
+    - assets/ss_icon/app_icon_hdpi.png
+    - assets/ss_icon/app_icon_xhdpi.png
+    - assets/ss_icon/app_icon_xxhdpi.png
+    - assets/ss_icon/app_icon_xxhdpi.png
+
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:SimpleWindowCalculator/Tools/DatabaseProvider.dart';
 import 'package:SimpleWindowCalculator/Util/ItemsManager.dart';
+import 'package:SimpleWindowCalculator/Util/ResolveScreenDensity.dart';
 import 'package:SimpleWindowCalculator/objects/Window.dart';
 
 import 'Util/HexColors.dart';
@@ -50,16 +51,28 @@ class MyApp extends StatelessWidget {
 /// Splash Screen which instantiates any AppData (Database and default values) the user may need
 /// upon start up.
 class MySplashScreen extends StatelessWidget {
-  // Replaces the splash screen with the approriate route
   _router(BuildContext ctx) {
     Navigator.of(ctx).pushReplacement(
-      MaterialPageRoute(
-        builder: (_) => MyHomePage(),
+      PageRouteBuilder(
+        pageBuilder: (ctx, anim, anim2) => MyHomePage(),
+        transitionsBuilder: (ctx, anim, anim2, child) {
+          return FadeTransition(
+            opacity: CurvedAnimation(
+              parent: anim.drive(Tween(begin: 0.0, end: 1.0)),
+              curve: Curves.easeIn,
+              reverseCurve: Curves.easeIn,
+            ),
+            child: FadeTransition(
+              opacity: anim.drive(Tween(begin: 0.0, end: 1.0)),
+              child: child,
+            ),
+          );
+        },
+        transitionDuration: Duration(milliseconds: 1200),
       ),
     );
   }
 
-  // Instantiate the data as mentioned in the class description
   Future<void> _initData() async {
     print('INITIALIZING DATA...');
     // Prepare the window list and Manager instance
@@ -87,19 +100,54 @@ class MySplashScreen extends StatelessWidget {
     return;
   }
 
+  String _getSplashScreenImage(BuildContext ctx) {
+    String assetString;
+    switch (ResolveScreenDensity.of(ctx)) {
+      case ScreenDensities.idpi:
+        assetString = 'assets/ss_icon/app_icon_mdpi.png';
+        break;
+
+      case ScreenDensities.mdpi:
+        assetString = 'assets/ss_icon/app_icon_mdpi.png';
+        break;
+
+      case ScreenDensities.hdpi:
+        assetString = 'assets/ss_icon/app_icon_hdpi.png';
+        break;
+
+      case ScreenDensities.xhdpi:
+        assetString = 'assets/ss_icon/app_icon_xhdpi.png';
+        break;
+
+      case ScreenDensities.xxhdpi:
+        assetString = 'assets/ss_icon/app_icon_xxhdpi.png';
+        break;
+
+      case ScreenDensities.xxxhdpi:
+        assetString = 'assets/ss_icon/app_icon_xxxhdpi.png';
+        break;
+
+      default:
+        assetString = null;
+        break;
+    }
+    return assetString;
+  }
+
   @override
   Widget build(BuildContext context) {
+    var image = _getSplashScreenImage(context);
     _initData().whenComplete(() {
       _router(context);
     });
 
-    return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
-      body: Container(
-        alignment: Alignment.center,
-
-        /// TODO: Still needs to be finished
-        child: Text('Hello world!'),
+    return Container(
+      alignment: Alignment.center,
+      color: Theme.of(context).colorScheme.primary,
+      padding: const EdgeInsets.symmetric(horizontal: 36),
+      child: Text(
+        'Hello Sunshine!',
+        style: Theme.of(context).textTheme.headline6,
       ),
     );
   }
