@@ -4,6 +4,7 @@ import 'package:SimpleWindowCalculator/Tools/DatabaseProvider.dart';
 import 'package:SimpleWindowCalculator/Tools/ImageLoader.dart';
 import 'package:SimpleWindowCalculator/Util/HexColors.dart';
 import 'package:path/path.dart' as paths;
+import 'package:common_tools/StringFormater.dart' as formatter;
 
 import '../objects/Window.dart';
 import 'package:flutter/material.dart';
@@ -23,33 +24,53 @@ class WindowObjectScreen extends StatefulWidget {
   WindowObjectScreen({this.window});
 
   @override
-  _WindowObjectScreenState createState() => _WindowObjectScreenState();
+  _WindowObjectScreenState createState() => _WindowObjectScreenState(window);
 }
 
 class _WindowObjectScreenState extends State<WindowObjectScreen> {
   String name;
   Duration duration;
   double price;
+  Image image;
+
+  TextStyle textStyle, hintStyle;
+
+  static const Border inputBorder = const Border(
+    bottom: BorderSide(width: 2, color: Colors.white),
+  );
 
   @override
-  void initState() {
-    if (widget.window != null) {
-      this.name = widget.window.name;
-      this.duration = widget.window.duration;
-      this.price = widget.window.price;
-    }
+  initState() {
     super.initState();
+  }
+
+  /// Substantiate in case user is editing a Window
+  _WindowObjectScreenState(Window window) {
+    if (window != null) {
+      name = window.name;
+      duration = window.duration;
+      price = window.price;
+      image = ImageLoader.fromFile(window.getImage());
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    this.textStyle = Theme.of(context).textTheme.button.copyWith(
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
+        );
+
+    this.hintStyle = Theme.of(context).textTheme.button.copyWith(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+        );
+
     AppBar appBar = AppBar(
       centerTitle: true,
       title: Text(
-        widget.window == null ? 'Create Window' : widget.window.getName(),
-        style: TextStyle(
-          color: Colors.white,
-        ),
+        name ?? 'Create Window',
+        style: Theme.of(context).textTheme.headline6,
       ),
 
       // Cancel Creation/Deletion
@@ -70,7 +91,13 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
           ),
           onPressed: () async {
             /// If window object is acceptible, then add to database
-            // TODO: VERIFY WINDOW OBJECT
+
+            if (name != null &&
+                duration != null &&
+                price != null &&
+                image != null) {
+                  
+                }
 
             /// Otherwise, reopen screen and ask user to fix any mistakes
             DatabaseProvider.instance.insert(widget.window);
@@ -95,101 +122,102 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
         height: bodyHeight,
         child: Column(
           children: [
-            buildImage(keyBoardHeight > 0 ? 0 : (bodyHeight * .5)),
-            buildBoxes(bodyHeight * .5, context),
+            _buildImage(keyBoardHeight > 0 ? 0 : (bodyHeight * .5)),
+            _buildInputs(bodyHeight, context)
           ],
         ),
       ),
     );
   }
 
-  Widget buildImage(double size) {
+  Container _buildInputs(double bodyHeight, BuildContext context) {
+    String priceHint =
+        price != null ? formatter.Format.formatDouble(price, 2) : 'Price';
+
+    return Container(
+      height: bodyHeight * .5,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          _dataInputFields(
+              hint: name ?? 'Name',
+              userInput: (input) {
+                if (input.length > 0) {
+                  name = input;
+                  return true;
+                } else
+                  name = null;
+                return false;
+              }),
+          _buildTimeButton(context),
+          _dataInputFields(
+            hint: priceHint,
+            keyboardType: TextInputType.number,
+            userInput: (input) {
+              try {
+                var parsedPrice = double.parse(input);
+                price = parsedPrice;
+                return true;
+              } catch (Exception) {
+                price = null;
+                priceHint = 'Not a valid number';
+                return false;
+              }
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Image portion of the create a window screen
+  Widget _buildImage(double size) {
     return AnimatedContainer(
       duration: Duration(milliseconds: 200),
       height: size,
       alignment: Alignment.center,
       constraints: BoxConstraints.tightFor(width: size, height: size),
-      child: _WindowImageInput(
-        widget.window != null ? widget.window.getImage() : null,
-        _updateImage,
-      ),
+      child: _WindowImageInput(image,
+          // Assign new image if user takes a picture
+          (newImage) {
+        image = newImage;
+      }),
     );
   }
 
-  _updateImage(File windowImage) {
-    widget.window.setImage(windowImage);
-  }
-
-  _updateName(String name) {
-    widget.window.setName(
-      name ?? widget.window.getName(),
+  /// Input field for name and price
+  _dataInputFields({
+    var hint,
+    TextInputType keyboardType,
+    bool Function(String input) userInput,
+  }) {
+    return DetailInputBox(
+      hint: hint,
+      style: textStyle,
+      hintStyle: hintStyle,
+      textInputType: keyboardType,
+      validator: userInput,
     );
   }
 
-  _updateDuration(String timeText) {
-    try {
-      var time = double.parse(timeText);
-
-      var sec = ((time % 1) * 60).toString().split('.').first;
-      var minutes = (time - (time % 1)).toString().split('.').first;
-
-      Duration duration = Duration(
-        minutes: int.parse(minutes),
-        seconds: int.parse(sec),
-      );
-
-      widget.window.duration = duration;
-    } catch (Exception) {
-      // TODO: Implement user error msg
-    }
-  }
-
-  _updatePrice(String priceText) {
-    try {
-      var price = double.parse(priceText);
-      widget.window.price = price;
-    } catch (Exception) {
-      // TODO: Implement user error msg
-    }
-  }
-
-  Widget buildBoxes(double size, BuildContext ctx) {
-    return Container(
-      height: size,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          DetailInputBox(
-            label: widget.window != null ? widget.window.getName() : 'Name',
-            updateData: _updateName,
-          ),
-          MaterialButton(
-            child: Container(
-              height: (MediaQuery.of(ctx).size.height / 16),
-              width: MediaQuery.of(ctx).size.width * .5,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: Theme.of(ctx).primaryColorLight,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Text(
-                duration != null
-                    ? '${_printDuration(duration)}'
-                    : 'choose time',
-                style: Theme.of(context).textTheme.subtitle1,
-              ),
-            ),
-            onPressed: () {
-              _timePicker(ctx);
-            },
-          ),
-          DetailInputBox(
-            label: widget.window != null ? widget.window.price.toString() : 'Price',
-            textInputType: TextInputType.number,
-            updateData: _updatePrice,
-          ),
-        ],
+  /// Input field for a selection of time
+  MaterialButton _buildTimeButton(BuildContext ctx) {
+    return MaterialButton(
+      child: Container(
+        height: (MediaQuery.of(ctx).size.height / 16),
+        width: MediaQuery.of(ctx).size.width * .5,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: Theme.of(ctx).primaryColorLight,
+          border: inputBorder,
+        ),
+        child: duration != null
+            ? Text('${_printDuration(duration)}', style: textStyle)
+            : Text('Choose Time', style: hintStyle),
       ),
+      onPressed: () {
+        _timePicker(ctx);
+      },
     );
   }
 
@@ -267,8 +295,8 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
 }
 
 class _WindowImageInput extends StatefulWidget {
-  final File previewImage;
-  final Function onNewImage;
+  final Image previewImage;
+  final Function(Image newImage) onNewImage;
 
   _WindowImageInput(this.previewImage, this.onNewImage);
 
@@ -278,7 +306,7 @@ class _WindowImageInput extends StatefulWidget {
 }
 
 class _WindowImageInputState extends State<_WindowImageInput> {
-  File windowImage;
+  Image windowImage;
 
   _WindowImageInputState(this.windowImage);
   @override
@@ -306,7 +334,7 @@ class _WindowImageInputState extends State<_WindowImageInput> {
                   ],
                 ),
               )
-            : Center(child: ImageLoader.fromFile(windowImage)),
+            : Center(child: windowImage),
       ),
     );
   }
@@ -335,9 +363,9 @@ class _WindowImageInputState extends State<_WindowImageInput> {
 
       if (savedImage != null) {
         setState(() {
-          windowImage = savedImage;
+          windowImage = ImageLoader.fromFile(savedImage);
         });
-        widget.onNewImage(savedImage);
+        widget.onNewImage(windowImage);
       }
     }
   }
@@ -347,49 +375,96 @@ class _WindowImageInputState extends State<_WindowImageInput> {
  * --------------------------------------------------------------------------- */
 /// Text input boxes where necessary Window details will be gathered from user
 class DetailInputBox extends StatefulWidget {
-  final String label;
-  final Function updateData;
+  final String text;
+  final String hint;
+
+  /// Message to display when [validator] returns false
+  final String errorMessage;
+
+  /// Validate input, if invalid [DetailInputBox] will display [errorMessage]
+  final bool Function(String value) validator;
+  final TextStyle style;
+  final TextStyle hintStyle;
   final TextInputType textInputType;
 
   DetailInputBox({
-    this.label,
-    this.updateData,
-    this.textInputType,
+    this.text,
+    this.hint,
+    this.errorMessage,
+    this.style,
+    this.hintStyle,
+    @required this.validator,
+    this.textInputType = TextInputType.text,
   });
 
   @override
-  _DetailInputBoxState createState() => _DetailInputBoxState(label);
+  _DetailInputBoxState createState() => _DetailInputBoxState(text, hint);
 }
 
 class _DetailInputBoxState extends State<DetailInputBox> {
-  String textLabel;
+  String text, hint;
+  String onError;
 
-  _DetailInputBoxState(this.textLabel);
+  // focused node validates the input text
+  FocusNode _myFocusNode;
+  TextEditingController _controller;
+
+  _DetailInputBoxState(this.text, this.hint);
+
+  @override
+  void initState() {
+    _controller = TextEditingController();
+    _myFocusNode = FocusNode();
+    _myFocusNode.addListener(() {
+      if (!_myFocusNode.hasFocus) {
+        if (widget.validator(_controller.text)) {
+          setState(() {
+            onError = null;
+          });
+        } else {
+          onError = widget.errorMessage ?? "Invalid Entry";
+        }
+      }
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: (MediaQuery.of(context).size.height / 16),
-      width: MediaQuery.of(context).size.width * .5,
-      decoration: BoxDecoration(
-        color: Theme.of(context).primaryColorLight,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: TextField(
-        keyboardType: widget.textInputType ?? TextInputType.text,
-        textAlign: TextAlign.center,
-        onSubmitted: (String value) async {
-          setState(() {
-            textLabel = value;
-          });
-          widget.updateData(value);
-        },
-        decoration: InputDecoration(
-          hintText: textLabel,
-          border: InputBorder.none,
-          hintStyle: Theme.of(context).textTheme.subtitle1,
+    return Flexible(
+      child: Container(
+        height: (MediaQuery.of(context).size.height / 16),
+        width: MediaQuery.of(context).size.width * .5,
+        decoration: BoxDecoration(
+          color: Theme.of(context).primaryColorLight,
+          border: _WindowObjectScreenState.inputBorder,
+        ),
+        child: TextField(
+          keyboardType: widget.textInputType,
+          style: widget.style,
+          controller: _controller,
+          textAlign: TextAlign.center,
+          focusNode: _myFocusNode,
+          decoration: _getInputDecoration(),
         ),
       ),
+    );
+  }
+
+  // Decoration for TextField
+  InputDecoration _getInputDecoration() {
+    return InputDecoration(
+      hintText: hint,
+      hintStyle: widget.hintStyle,
+      errorText: onError,
+      contentPadding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
+      border: InputBorder.none,
     );
   }
 }
