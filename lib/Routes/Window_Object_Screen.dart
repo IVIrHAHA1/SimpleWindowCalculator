@@ -96,8 +96,13 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
                 duration != null &&
                 price != null &&
                 image != null) {
-                  
-                }
+              DatabaseProvider.instance.insert(Window(
+                name: name,
+                duration: duration,
+                price: price,
+                
+              ));
+            }
 
             /// Otherwise, reopen screen and ask user to fix any mistakes
             DatabaseProvider.instance.insert(widget.window);
