@@ -1,3 +1,4 @@
+import 'package:SimpleWindowCalculator/GlobalValues.dart';
 import 'package:SimpleWindowCalculator/Tools/DatabaseProvider.dart';
 import 'package:SimpleWindowCalculator/Tools/ImageLoader.dart';
 import 'package:common_tools/StringFormater.dart' as formatter;
@@ -91,15 +92,13 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
                 duration != null &&
                 price != null &&
                 imager.masterFile != null) {
-                  widget.window.name = name;
-                  widget.window.duration = duration;
-                  widget.window.price = price;
-                  widget.window.image = imager.masterFile;
+              widget.window.name = name;
+              widget.window.duration = duration;
+              widget.window.price = price;
+              widget.window.image = imager.masterFile;
 
-                  await DatabaseProvider.instance.insert(widget.window);
-                }
-
-            else if (name != null &&
+              await DatabaseProvider.instance.insert(widget.window);
+            } else if (name != null &&
                 duration != null &&
                 price != null &&
                 imager.masterFile != null) {
@@ -198,7 +197,7 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
     TextInputType keyboardType,
     Function(String input) userInput,
   }) {
-    return DetailInputBox(
+    return _ADetailInputBox(
       hint: hint,
       style: textStyle,
       hintStyle: hintStyle,
@@ -301,6 +300,9 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
   }
 }
 
+/*  WINDOW IMAGE INPUT                                                         *
+ * --------------------------------------------------------------------------- */
+/// Controls the image view
 class _WindowImageInput extends StatefulWidget {
   final Imager _imageController;
 
@@ -323,7 +325,10 @@ class _WindowImageInputState extends State<_WindowImageInput> {
       child: Card(
         elevation: 4,
         margin: EdgeInsets.all(16),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(
+          GlobalValues.cornerRadius,
+        )),
         child: windowImage == null
             ? Center(
                 child: Column(
@@ -341,7 +346,16 @@ class _WindowImageInputState extends State<_WindowImageInput> {
                   ],
                 ),
               )
-            : Center(child: windowImage),
+            : Container(
+                decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.circular(GlobalValues.cornerRadius),
+                  image: DecorationImage(
+                    image: windowImage.image,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
       ),
     );
   }
@@ -362,20 +376,20 @@ class _WindowImageInputState extends State<_WindowImageInput> {
 /*  DETAIL INPUT BOX WIDGET                                                    *
  * --------------------------------------------------------------------------- */
 /// Text input boxes where necessary Window details will be gathered from user
-class DetailInputBox extends StatefulWidget {
+class _ADetailInputBox extends StatefulWidget {
   final String text;
   final String hint;
 
   /// Message to display when [validator] returns false
   final String errorMessage;
 
-  /// Validate input, if invalid [DetailInputBox] will display [errorMessage]
+  /// Validate input, if invalid [_ADetailInputBox] will display [errorMessage]
   final Function(String value) validator;
   final TextStyle style;
   final TextStyle hintStyle;
   final TextInputType textInputType;
 
-  DetailInputBox({
+  _ADetailInputBox({
     this.text,
     this.hint,
     this.errorMessage,
@@ -386,10 +400,10 @@ class DetailInputBox extends StatefulWidget {
   });
 
   @override
-  _DetailInputBoxState createState() => _DetailInputBoxState(text, hint);
+  _ADetailInputBoxState createState() => _ADetailInputBoxState(text, hint);
 }
 
-class _DetailInputBoxState extends State<DetailInputBox> {
+class _ADetailInputBoxState extends State<_ADetailInputBox> {
   String text, hint;
   String onError;
 
@@ -397,7 +411,7 @@ class _DetailInputBoxState extends State<DetailInputBox> {
   FocusNode _myFocusNode;
   TextEditingController _controller;
 
-  _DetailInputBoxState(this.text, this.hint);
+  _ADetailInputBoxState(this.text, this.hint);
 
   @override
   void initState() {
