@@ -154,6 +154,29 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
     );
   }
 
+  bool nameExists = false;
+  _nameValidator(String input) async {
+    if (input.length > 3) {
+      nameExists = await DatabaseProvider.instance.contains(input);
+      if (!nameExists) {
+        name = input;
+        return name;
+      }
+    }
+    return null;
+  }
+
+  _numberValidator(String input) {
+    try {
+      var parsedPrice = double.parse(input);
+      price = parsedPrice;
+      return '\$ ${formatter.Format.formatDouble(price, 2)}';
+    } catch (Exception) {
+      price = null;
+      return null;
+    }
+  }
+
   Container _buildInputs(double bodyHeight, BuildContext context) {
     String priceHint = price != null
         ? '\$ ${formatter.Format.formatDouble(price, 2)}'
@@ -164,33 +187,29 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          _dataInputFields(
-              hint: name ?? 'Name',
-              userInput: (input) async {
-                if (input.length > 3) {
-                  bool exists = await DatabaseProvider.instance.contains(input);
-                  if (!exists) {
-                    name = input;
-                    return name;
-                  }
+          DetailInputBox(
+            hint: name ?? 'Name',
+            style: textStyle,
+            onError: (entry) {
+              if (nameExists) {
+                nameExists = false;
+                return "Name Is Unavailable";
+              } else if(entry.length <= 3)
+                return "Name Is Too Short";
+                else {
+                  return "Invalid Entry";
                 }
-                return null;
-              }),
-          _buildTimeButton(context),
-          _dataInputFields(
-            hint: priceHint,
-            keyboardType: TextInputType.number,
-            userInput: (input) {
-              try {
-                var parsedPrice = double.parse(input);
-                price = parsedPrice;
-                return '\$ ${formatter.Format.formatDouble(price, 2)}';
-              } catch (Exception) {
-                price = null;
-                priceHint = 'Not a valid number';
-                return null;
-              }
             },
+            hintStyle: hintStyle,
+            validator: _nameValidator,
+          ),
+          _buildTimeButton(context),
+          DetailInputBox(
+            hint: priceHint,
+            style: textStyle,
+            hintStyle: hintStyle,
+            textInputType: TextInputType.number,
+            validator: _numberValidator,
           ),
         ],
       ),
@@ -205,24 +224,6 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
       alignment: Alignment.center,
       constraints: BoxConstraints.tightFor(width: size, height: size),
       child: _WindowImageInput(imager),
-    );
-  }
-
-  // CREATE DATA INPUT FIELDS
-  /// Input field for name and price
-  _dataInputFields({
-    var hint,
-    var errorMsg,
-    TextInputType keyboardType,
-    Function(String input) userInput,
-  }) {
-    return DetailInputBox(
-      hint: hint,
-      style: textStyle,
-      errorMessage: errorMsg,
-      hintStyle: hintStyle,
-      textInputType: keyboardType,
-      validator: userInput,
     );
   }
 

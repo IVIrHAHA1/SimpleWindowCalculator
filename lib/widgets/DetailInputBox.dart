@@ -8,7 +8,7 @@ class DetailInputBox extends StatefulWidget {
   final String hint;
 
   /// Message to display when [validator] returns false
-  final String errorMessage;
+  final String Function(String invalidEntry) onError;
 
   /// Validate input, if invalid [DetailInputBox] will display [errorMessage]
   final Function(String value) validator;
@@ -23,7 +23,7 @@ class DetailInputBox extends StatefulWidget {
   DetailInputBox({
     this.text,
     this.hint,
-    this.errorMessage = 'Invalid Entry',
+    this.onError,
     this.style,
     this.hintStyle,
     @required this.validator,
@@ -36,7 +36,7 @@ class DetailInputBox extends StatefulWidget {
 
 class _DetailInputBoxState extends State<DetailInputBox> {
   String text, hint;
-  String onError;
+  String onErrorMsg;
 
   // focused node validates the input text
   FocusNode _myFocusNode;
@@ -60,7 +60,7 @@ class _DetailInputBoxState extends State<DetailInputBox> {
           setState(() {
             text = paramText;
             _controller.text = '';
-            onError = null;
+            onErrorMsg = null;
           });
         }
         // CONTROLLER HAD NO ENTRY
@@ -70,7 +70,7 @@ class _DetailInputBoxState extends State<DetailInputBox> {
         else if (_controller.text.length <= 0) {
           setState(() {
             _controller.text = '';
-            onError = null;
+            onErrorMsg = null;
           });
         }
         // INVALID
@@ -79,7 +79,9 @@ class _DetailInputBoxState extends State<DetailInputBox> {
         /// update any errors.
         else {
           text = null;
-          onError = widget.errorMessage ?? "Invalid Entry";
+          onErrorMsg = widget.onError != null
+              ? widget.onError(_controller.text)
+              : "Invalid Entry";
         }
       }
     });
@@ -119,7 +121,7 @@ class _DetailInputBoxState extends State<DetailInputBox> {
     return InputDecoration(
       hintText: text ?? hint,
       hintStyle: text != null ? widget.style : widget.hintStyle,
-      errorText: onError,
+      errorText: onErrorMsg,
       contentPadding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
       border: InputBorder.none,
     );
