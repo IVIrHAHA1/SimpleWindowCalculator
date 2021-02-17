@@ -102,7 +102,7 @@ mixin Notifier {
     }
   }
 
-  attachListener(Function listener) {
+  addListener(Function listener) {
     _listeners.add(listener);
   }
 

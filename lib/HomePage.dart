@@ -33,7 +33,7 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
       duration: Duration(milliseconds: GlobalValues.animDuration ~/ 1.1),
       reverseDuration: Duration(milliseconds: GlobalValues.animDuration ~/ 1.1),
     );
-    Calculator.instance.attachListener(() {
+    Calculator.instance.addListener(() {
       setState(() {});
     });
     super.initState();

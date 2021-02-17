@@ -48,16 +48,20 @@ mixin ImageConverter {
   File _file;
   Image _image;
 
-  /// When [file] is set, this image is produced automatically.
-  get image => _image;
+  /// When [masterFile] is set, this image is produced automatically.
+  get masterImage => _image;
 
-  /// The [file] from which an image is produced.
-  get file => _file;
+  /// The [masterFile] from which an image is produced.
+  get masterFile => _file;
 
-  /// When file is set, an [image] widget can now be obtained
-  set file(File imageFile) {
+  /// When file is set, an [masterImage] widget can now be obtained
+  set masterFile(File imageFile) {
     _file = imageFile;
-    _image = _convertToImage(_file);
+
+    if (_file != null)
+      _image = _convertToImage(_file);
+    else
+      _image = null;
   }
 
   /// Handle the unexpected nature of the image being a path or an asset.
@@ -72,20 +76,39 @@ mixin ImageConverter {
   }
 }
 
-class Imager with ImageFileProducer, ImageConverter {
+class Imager with ImageFileProducer, ImageConverter, Notifier {
+  /// Called when [masterFile] is assigned a value
+  Function(Image image, File file) onImageReceived;
 
-  Imager.fromFile(File imageFile) {
-    this.file = imageFile;
+  /// imageFile can be null. This will only cause both masterFile and
+  /// masterImage to be null.
+  Imager.fromFile(File imageFile, {this.onImageReceived}) {
+    this.masterFile = imageFile;
   }
+
+  Imager({this.onImageReceived});
 
   Future<Image> takePicture(
       {double maxHeight = 600, double maxWidth = 600}) async {
     File imageFile = await useCamera(maxHeight: maxHeight, maxWidth: maxWidth);
 
     if (imageFile != null) {
-      this.file = imageFile;
-      return this.image;
+      this.masterFile = imageFile;
+
+      // Notify listeners
+      if (onImageReceived != null)
+        this.onImageReceived(this.masterImage, this.masterFile);
+      if (this.isListening) notifyListeners();
+
+      return this.masterImage;
     } else
       return null;
+  }
+
+  /// Called when a new file image is obtained. See [onImageReceived] for a 
+  /// more comprehensive interface.
+  @override
+  addListener(Function listener) {
+    return super.addListener(listener);
   }
 }

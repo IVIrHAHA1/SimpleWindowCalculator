@@ -1,14 +1,9 @@
-import 'dart:io';
-
 import 'package:SimpleWindowCalculator/Tools/DatabaseProvider.dart';
 import 'package:SimpleWindowCalculator/Tools/ImageLoader.dart';
-import 'package:path/path.dart' as paths;
 import 'package:common_tools/StringFormater.dart' as formatter;
 
 import '../objects/Window.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart' as syspaths;
 import 'package:flutter_picker/Picker.dart';
 
 /// Window screen which allows user to create or edit window objects
@@ -30,8 +25,8 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
   String name;
   Duration duration;
   double price;
-  Image image;
 
+  Imager imager = Imager();
   TextStyle textStyle, hintStyle;
 
   static const Border inputBorder = const Border(
@@ -46,10 +41,11 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
   /// Substantiate in case user is editing a Window
   _WindowObjectScreenState(Window window) {
     if (window != null) {
-      name = window.name;
-      duration = window.duration;
-      price = window.price;
-      image = Imager.fromFile(window.getImage()).image;
+      print('default asigned');
+      this.imager.masterFile = window.getImageFile();
+      this.name = window.name;
+      this.duration = window.duration;
+      this.price = window.price;
     }
   }
 
@@ -90,16 +86,28 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
           ),
           onPressed: () async {
             /// If window object is acceptible, then add to database
-
-            if (name != null &&
+            if (widget.window != null &&
+                name != null &&
                 duration != null &&
                 price != null &&
-                image != null) {
-              DatabaseProvider.instance.insert(Window(
+                imager.masterFile != null) {
+                  widget.window.name = name;
+                  widget.window.duration = duration;
+                  widget.window.price = price;
+                  widget.window.image = imager.masterFile;
+
+                  await DatabaseProvider.instance.insert(widget.window);
+                }
+
+            else if (name != null &&
+                duration != null &&
+                price != null &&
+                imager.masterFile != null) {
+              await DatabaseProvider.instance.insert(Window(
                 name: name,
                 duration: duration,
                 price: price,
-                // TODO: FIX IMAGING THING
+                image: imager.masterFile,
               ));
             }
 
@@ -179,11 +187,7 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
       height: size,
       alignment: Alignment.center,
       constraints: BoxConstraints.tightFor(width: size, height: size),
-      child: _WindowImageInput(image,
-          // Assign new image if user takes a picture
-          (newImage) {
-        image = newImage;
-      }),
+      child: _WindowImageInput(imager),
     );
   }
 
@@ -298,20 +302,20 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
 }
 
 class _WindowImageInput extends StatefulWidget {
-  final Image previewImage;
-  final Function(Image newImage) onNewImage;
+  final Imager _imageController;
 
-  _WindowImageInput(this.previewImage, this.onNewImage);
+  _WindowImageInput(this._imageController);
 
   @override
   _WindowImageInputState createState() =>
-      _WindowImageInputState(this.previewImage);
+      _WindowImageInputState(this._imageController.masterImage);
 }
 
 class _WindowImageInputState extends State<_WindowImageInput> {
   Image windowImage;
 
   _WindowImageInputState(this.windowImage);
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -344,32 +348,13 @@ class _WindowImageInputState extends State<_WindowImageInput> {
 
   /// Open camera or (TODO:gallery) to get an image to preview window object
   void _obtainImageFile() async {
-    /// Allows for the utilization of the system camera, this saves the image
-    /// in temporary storage
-    ImagePicker imagePicker = ImagePicker();
-    PickedFile imageFile = await imagePicker.getImage(
-      source: ImageSource.camera,
-      maxWidth: 600,
-      maxHeight: 600,
-      preferredCameraDevice: CameraDevice.rear,
-    );
+    final savedImage = await widget._imageController
+        .takePicture(maxWidth: 600, maxHeight: 600);
 
-    // Make sure an image was taken
-    if (imageFile != null) {
-      /// This gives a directory to save the image
-      final appDir = await syspaths.getApplicationDocumentsDirectory();
-      final fileName = paths.basename(imageFile.path);
-
-      /// Now save the image into directory [appDir] with the file name [fileName]
-      final savedImage =
-          await File(imageFile.path).copy('${appDir.path}/$fileName');
-
-      if (savedImage != null) {
-        setState(() {
-          windowImage = Imager.fromFile(savedImage).image;
-        });
-        widget.onNewImage(windowImage);
-      }
+    if (savedImage != null) {
+      setState(() {
+        windowImage = savedImage;
+      });
     }
   }
 }
@@ -435,7 +420,7 @@ class _DetailInputBoxState extends State<DetailInputBox> {
         }
         // CONTROLLER HAD NO ENTRY
         /// Absorb no entry, that way to error is produced. Probably a
-        /// better way to implement this, but this way is clear what is 
+        /// better way to implement this, but this way is clear what is
         /// happening.
         else if (_controller.text.length <= 0) {
           setState(() {

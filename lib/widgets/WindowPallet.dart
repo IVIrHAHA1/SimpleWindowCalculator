@@ -27,7 +27,7 @@ class WindowPallet extends StatelessWidget {
                 scrollDirection: Axis.vertical,
                 child: Column(
                   children: windowList.map((window) {
-                    return window.getImage() != null
+                    return window.getImageFile() != null
                         ? _WindowPreview(window: window)
                         : Icon(Icons.explicit);
                   }).toList(),
@@ -66,7 +66,7 @@ class _WindowPreview extends StatelessWidget {
             children: [
               // Sets the width of the Column
               Container(
-                child: window.getImage(),
+                child: window.getImageFile(),
                 height: MediaQuery.of(context).size.height / 6,
               ),
               Positioned(

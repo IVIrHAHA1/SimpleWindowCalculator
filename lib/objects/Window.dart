@@ -146,9 +146,8 @@ class Window with Calculatable, Item {
     return name != null ? name : _mNAME;
   }
 
-  /// Returns a file of the image, use [ImageLoader.fromFile] to load this
-  /// approriately.
-  getImage() {
+  /// Returns a file of the image.
+  getImageFile() {
     return this.image;
   }
 
