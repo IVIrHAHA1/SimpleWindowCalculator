@@ -42,7 +42,8 @@ class ItemsManager {
     _instance._itemsList = List<T>();
   }
 
-  /// Clears the list and sets [activeItem] to the optional [setActiveItem]
+  /// Clears the list and sets [activeItem] to the optional [setActiveItem].
+  /// Default = null
   reset({Item setActiveItem}) {
     this._itemsList.clear();
     this.activeItem = setActiveItem;

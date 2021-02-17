@@ -1,4 +1,5 @@
 import 'package:SimpleWindowCalculator/Tools/ImageLoader.dart';
+import 'package:SimpleWindowCalculator/Util/ItemsManager.dart';
 
 import '../GlobalValues.dart';
 import '../Util/HexColors.dart';
@@ -59,17 +60,23 @@ class _ItemListing extends StatelessWidget {
         child: Row(
           children: [
             // Get Image
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(GlobalValues.cornerRadius),
-                image: DecorationImage(
-                    image: (Imager.fromFile(window.getImageFile())
-                        .masterImage as Image)
-                        .image, fit: 
-                        BoxFit.cover),
+            GestureDetector(
+              onTap: () {
+                ItemsManager.instance.activeItem = window;
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.circular(GlobalValues.cornerRadius),
+                  image: DecorationImage(
+                      image: (Imager.fromFile(window.getImageFile()).masterImage
+                              as Image)
+                          .image,
+                      fit: BoxFit.cover),
+                ),
+                height: height,
+                width: height,
               ),
-              height: height,
-              width: height,
             ),
 
             // Window results
