@@ -6,3 +6,5 @@ class GlobalValues {
 
 const double DRIVETIME = 25;
 const double PRICE_MIN = 150;
+
+const String DEFAULT_WINDOW_KEY = "SP_DEFAULT_WINDOW";

@@ -6,6 +6,7 @@ import 'package:SimpleWindowCalculator/Tools/ImageLoader.dart';
 import 'package:SimpleWindowCalculator/Util/ItemsManager.dart';
 import 'package:SimpleWindowCalculator/widgets/DetailInputBox.dart';
 import 'package:common_tools/StringFormater.dart' as formatter;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../objects/Window.dart';
 import 'package:flutter/material.dart';
@@ -98,12 +99,19 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
                 duration != null &&
                 price != null &&
                 imager.masterFile != null) {
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+
               Window newWindow = Window(
                 name: name,
                 duration: duration,
                 price: price,
                 image: imager.masterFile,
               );
+
+              if (widget.window.name == prefs.getString(DEFAULT_WINDOW_KEY) &&
+                  widget.window.name != name) {
+                prefs.setString(DEFAULT_WINDOW_KEY, name);
+              }
 
               /// Update if the editing-window is currently active
               if (ItemsManager.instance.activeItem == widget.window) {

@@ -4,7 +4,9 @@ import 'package:SimpleWindowCalculator/Tools/DatabaseProvider.dart';
 import 'package:SimpleWindowCalculator/Util/ItemsManager.dart';
 import 'package:SimpleWindowCalculator/Util/ResolveScreenDensity.dart';
 import 'package:SimpleWindowCalculator/objects/Window.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import 'GlobalValues.dart';
 import 'Util/HexColors.dart';
 import 'package:flutter/material.dart';
 import 'HomePage.dart';
@@ -78,15 +80,18 @@ class MySplashScreen extends StatelessWidget {
     // Prepare the window list and Manager instance
     ItemsManager.init<Window>();
 
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
     // Initialize database if needed and fill with default values.
     bool hasDatabase = await DatabaseProvider.instance.isInitialized();
     if (!hasDatabase) {
       // TODO: Will create the GET_STARTED Route here
       DatabaseProvider.instance.fillDatabase(OManager.presetWindows);
+      prefs.setString(DEFAULT_WINDOW_KEY, OManager.getDefaultWindow().name);
     }
 
     // Set the active window as dictated by the OManager
-    String defaultWindow = OManager.getDefaultWindow().name;
+    String defaultWindow = prefs.getString(DEFAULT_WINDOW_KEY);
     Window startingWindow = await DatabaseProvider.instance.queryWindow(
       defaultWindow,
     );
