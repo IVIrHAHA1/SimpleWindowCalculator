@@ -339,14 +339,25 @@ class WindowCounter extends StatelessWidget {
  * Builds window preview card. Needed because of dragging.
  */
   buildCard(Color color) {
+    Imager imager = Imager.fromFile(window.getImageFile());
+
     return Container(
       padding: const EdgeInsets.all(4),
       width: height * .5,
+      height: height * .5,
       decoration: BoxDecoration(
         color: color,
         borderRadius: BorderRadius.circular(8),
       ),
-      child: Imager.fromFile(window.getImageFile()).masterImage,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          image: DecorationImage(
+            image: imager.masterImage.image,
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
     );
   }
 }
