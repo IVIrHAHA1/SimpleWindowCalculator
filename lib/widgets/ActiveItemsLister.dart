@@ -66,7 +66,7 @@ class _ItemListing extends StatelessWidget {
                     image: (Imager.fromFile(window.getImageFile())
                         .masterImage as Image)
                         .image, fit: 
-                        BoxFit.fitHeight),
+                        BoxFit.cover),
               ),
               height: height,
               width: height,
