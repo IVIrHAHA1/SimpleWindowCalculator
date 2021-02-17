@@ -34,20 +34,20 @@ class Window with Calculatable, Item {
   static String _nameKey = 'NameKey';
   static String _priceKey = 'PriceKey';
   static String _durationKey = 'DurationKey';
-  static String _imageKey = 'ImageKey';
+  static String _imageFilePath = 'ImageKey';
 
   Map<String, dynamic> toJson() {
     return {
       _priceKey: price,
       _nameKey: name,
       _durationKey: duration.inSeconds,
-      _imageKey: image.path,
+      _imageFilePath: image.path,
     };
   }
 
   Map<String, dynamic> toMap() {
     return {
-      WINDOW_NAME_ID: this.name,
+      WINDOW_NAME_ID: this.name.toLowerCase(),
       WINDOW_OBJECT: jsonEncode(this),
     };
   }
@@ -56,7 +56,7 @@ class Window with Calculatable, Item {
     this.price = jsonMap[_priceKey];
     this.name = jsonMap[_nameKey];
     this.duration = Duration(seconds: jsonMap[_durationKey]);
-    this.image = File(jsonMap[_imageKey]);
+    this.image = File(jsonMap[_imageFilePath]);
 
     this.quantity = 0.0;
     this.totalPrice = 0.0;
@@ -66,7 +66,7 @@ class Window with Calculatable, Item {
 
   @override
   get itemId => this.name.toLowerCase().hashCode;
-
+  
 /*
  * This update method syncs and calculates this window object
  * to reflect correct pricing, quantaties and durations when   
@@ -146,7 +146,8 @@ class Window with Calculatable, Item {
     return name != null ? name : _mNAME;
   }
 
-  getImage() {
+  /// Returns a file of the image.
+  getImageFile() {
     return this.image;
   }
 

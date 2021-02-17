@@ -34,7 +34,7 @@ class _ModalContentState extends State<ModalContent> {
   }
 
   void createWindow(BuildContext context) {
-    Navigator.of(context).push(
+    Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (_) {
           return WindowObjectScreen();
@@ -131,8 +131,7 @@ class _ModalContentState extends State<ModalContent> {
                           children: [
                             Container(
                               padding: const EdgeInsets.only(top: 8),
-                              child: ImageLoader.fromFile(element.getImage(),
-                                  borderRadius: 0),
+                              child: Imager.fromFile(element.getImageFile()).masterImage,
                               width: imageSize,
                               height: imageSize,
                             ),
@@ -141,7 +140,7 @@ class _ModalContentState extends State<ModalContent> {
                         ),
                       ),
                       onLongPress: () {
-                        Navigator.of(context).push(
+                        Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
                             builder: (_) {
                               return WindowObjectScreen(window: element);

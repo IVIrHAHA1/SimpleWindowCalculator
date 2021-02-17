@@ -60,6 +60,32 @@ class DatabaseProvider {
     );
   }
 
+  delete(Window window) async {
+    Database db = await database;
+    String name = window.getName();
+
+    await db.delete(
+      WINDOW_TABLE,
+      where: "$WINDOW_NAME_ID = ?",
+      whereArgs: [name.toLowerCase()],
+    );
+  }
+
+  Future<int> replace(Window oldWindow, Window newWindow) async {
+    String name = oldWindow.getName();
+    Database db = await database;
+
+    int val = await db.update(
+      WINDOW_TABLE,
+      newWindow.toMap(),
+      where: "$WINDOW_NAME_ID = ?",
+      whereArgs: [name.toLowerCase()],
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+
+    return val;
+  }
+
   /// Load a single Window
   Future<Window> queryWindow(String windowName) async {
     Database db = await database;
@@ -68,13 +94,29 @@ class DatabaseProvider {
       WINDOW_TABLE,
       columns: [WINDOW_OBJECT],
       where: "$WINDOW_NAME_ID = ?",
-      whereArgs: [windowName],
+      whereArgs: [windowName.toLowerCase()],
     );
 
     if (mapList.length > 0) {
       return Window.fromMap(jsonDecode(mapList.single[WINDOW_OBJECT]));
     } else
       return null;
+  }
+
+  Future<bool> contains(String windowName) async {
+    Database db = await database;
+
+    List<Map> mapList = await db.query(
+      WINDOW_TABLE,
+      columns: [WINDOW_OBJECT],
+      where: "$WINDOW_NAME_ID = ?",
+      whereArgs: [windowName.toLowerCase()],
+    );
+
+    if (mapList.length > 0) {
+      return true;
+    } else
+      return false;
   }
 
   Future<List<Window>> querySearch(String subString) async {
@@ -148,8 +190,7 @@ class DatabaseProvider {
 
     Batch batch = db.batch();
 
-    for (Window window in list)
-      batch.insert(WINDOW_TABLE, window.toMap());
+    for (Window window in list) batch.insert(WINDOW_TABLE, window.toMap());
 
     batch.commit();
     print('DB-PROCESS: Database initialized default values');

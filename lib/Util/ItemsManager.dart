@@ -6,7 +6,7 @@
 ///   ** (See [ItemsManager.init()] to learn how to instantiate [itemsList])
 ///
 ///
-/// - Adding [Item]s to the [ItemsManager], simply assign any new [Item] to [activeItem].
+/// - To add [Item]s to the [ItemsManager], simply assign any new [Item] to [activeItem].
 ///   This will automatically ADD-TO or RETRIEVE the [Item] to/from [itemsList].
 ///   Therefore, only a single instance of an [Item] can exist in the [itemsList].
 ///

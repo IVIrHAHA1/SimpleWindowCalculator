@@ -1,14 +1,13 @@
-import 'dart:io';
+import 'dart:async';
 
+import 'package:SimpleWindowCalculator/GlobalValues.dart';
 import 'package:SimpleWindowCalculator/Tools/DatabaseProvider.dart';
 import 'package:SimpleWindowCalculator/Tools/ImageLoader.dart';
-import 'package:SimpleWindowCalculator/Util/HexColors.dart';
-import 'package:path/path.dart' as paths;
+import 'package:SimpleWindowCalculator/widgets/DetailInputBox.dart';
+import 'package:common_tools/StringFormater.dart' as formatter;
 
 import '../objects/Window.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart' as syspaths;
 import 'package:flutter_picker/Picker.dart';
 
 /// Window screen which allows user to create or edit window objects
@@ -23,7 +22,7 @@ class WindowObjectScreen extends StatefulWidget {
   WindowObjectScreen({this.window});
 
   @override
-  _WindowObjectScreenState createState() => _WindowObjectScreenState();
+  _WindowObjectScreenState createState() => _WindowObjectScreenState(window);
 }
 
 class _WindowObjectScreenState extends State<WindowObjectScreen> {
@@ -31,25 +30,46 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
   Duration duration;
   double price;
 
+  Imager imager = Imager();
+  TextStyle textStyle, hintStyle;
+
+  bool missingName = false,
+      missingDuration = false,
+      missingPrice = false,
+      missingImage = false;
+
   @override
-  void initState() {
-    if (widget.window != null) {
-      this.name = widget.window.name;
-      this.duration = widget.window.duration;
-      this.price = widget.window.price;
-    }
+  initState() {
     super.initState();
+  }
+
+  /// Substantiate in case user is editing a Window
+  _WindowObjectScreenState(Window window) {
+    if (window != null) {
+      this.imager.masterFile = window.getImageFile();
+      this.name = window.name;
+      this.duration = window.duration;
+      this.price = window.price;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    this.textStyle = Theme.of(context).textTheme.button.copyWith(
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
+        );
+
+    this.hintStyle = Theme.of(context).textTheme.button.copyWith(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+        );
+
     AppBar appBar = AppBar(
       centerTitle: true,
       title: Text(
-        widget.window == null ? 'Create Window' : widget.window.getName(),
-        style: TextStyle(
-          color: Colors.white,
-        ),
+        name ?? 'Create Window',
+        style: Theme.of(context).textTheme.headline6,
       ),
 
       // Cancel Creation/Deletion
@@ -58,7 +78,9 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
           Icons.highlight_off,
           color: Colors.white,
         ),
-        onPressed: () => Navigator.of(context).pop(),
+        onPressed: () async {
+          Navigator.of(context).pop();
+        },
       ),
 
       // Finished Creating/Editing
@@ -69,12 +91,43 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
             color: Colors.white,
           ),
           onPressed: () async {
-            /// If window object is acceptible, then add to database
-            // TODO: VERIFY WINDOW OBJECT
+            /// Replace window in database
+            if (widget.window != null &&
+                name != null &&
+                duration != null &&
+                price != null &&
+                imager.masterFile != null) {
+              Window newWindow = Window(
+                name: name,
+                duration: duration,
+                price: price,
+                image: imager.masterFile,
+              );
+
+              await DatabaseProvider.instance.replace(widget.window, newWindow);
+              Navigator.of(context).pop();
+            }
+
+            /// Add window to database
+            else if (name != null &&
+                duration != null &&
+                price != null &&
+                imager.masterFile != null) {
+              await DatabaseProvider.instance.insert(
+                Window(
+                  name: name,
+                  duration: duration,
+                  price: price,
+                  image: imager.masterFile,
+                ),
+              );
+              Navigator.of(context).pop();
+            }
 
             /// Otherwise, reopen screen and ask user to fix any mistakes
-            DatabaseProvider.instance.insert(widget.window);
-            Navigator.of(context).pop();
+            else {
+              _notifyMissing();
+            }
           },
         )
       ],
@@ -95,101 +148,148 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
         height: bodyHeight,
         child: Column(
           children: [
-            buildImage(keyBoardHeight > 0 ? 0 : (bodyHeight * .5)),
-            buildBoxes(bodyHeight * .5, context),
+            _buildImage(keyBoardHeight > 0 ? 0 : (bodyHeight * .5)),
+            _buildInputs(bodyHeight, context)
           ],
         ),
       ),
     );
   }
 
-  Widget buildImage(double size) {
+  /// Helps onError messaging to communicate to user whether a name already
+  /// exists in the database or not
+  bool nameExists = false;
+
+  /// Validates the name
+  _nameValidator(String input) async {
+    if (input.length > 3) {
+      nameExists = await DatabaseProvider.instance.contains(input);
+      if (!nameExists) {
+        name = input;
+        return name;
+      }
+    }
+    return null;
+  }
+
+  /// Validates the Price value
+  _numberValidator(String input) {
+    try {
+      var parsedPrice = double.parse(input);
+      price = parsedPrice;
+      return '\$ ${formatter.Format.formatDouble(price, 2)}';
+    } catch (Exception) {
+      price = null;
+      return null;
+    }
+  }
+
+  _notifyMissing() {
+    setState(() {
+      if (name == null) missingName = true;
+
+      if (duration == null) missingDuration = true;
+
+      if (price == null) missingPrice = true;
+
+      if (imager.masterFile == null) missingImage = true;
+    });
+  }
+
+  Container _buildInputs(double bodyHeight, BuildContext context) {
+    String priceHint = price != null
+        ? '\$ ${formatter.Format.formatDouble(price, 2)}'
+        : 'Price';
+
+    return Container(
+      height: bodyHeight * .5,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          // Name Detail Box
+          DetailInputBox(
+            hint: name ?? 'Name',
+            style: textStyle,
+            border: Border(
+              bottom: BorderSide(
+                width: 2,
+                color: missingName ? Colors.red : Colors.white,
+              ),
+            ),
+            onError: (entry) {
+              if (nameExists) {
+                nameExists = false;
+                return "Name Is Unavailable";
+              } else if (entry.length <= 3)
+                return "Name Is Too Short";
+              else {
+                return "Invalid Entry";
+              }
+            },
+            hintStyle: hintStyle,
+            validator: _nameValidator,
+          ),
+
+          // Time Detail Box
+          _buildTimeButton(context),
+
+          // Price Detail Box
+          DetailInputBox(
+            hint: priceHint,
+            style: textStyle,
+            hintStyle: hintStyle,
+            border: Border(
+              bottom: BorderSide(
+                width: 2,
+                color: missingPrice ? Colors.red : Colors.white,
+              ),
+            ),
+            textInputType: TextInputType.number,
+            validator: _numberValidator,
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Image portion of the create a window screen
+  Widget _buildImage(double size) {
     return AnimatedContainer(
       duration: Duration(milliseconds: 200),
       height: size,
       alignment: Alignment.center,
       constraints: BoxConstraints.tightFor(width: size, height: size),
-      child: _WindowImageInput(
-        widget.window != null ? widget.window.getImage() : null,
-        _updateImage,
-      ),
+      child: _WindowImageInput(imager, missingImage: missingImage),
     );
   }
 
-  _updateImage(File windowImage) {
-    widget.window.setImage(windowImage);
-  }
+  /// Input field for a selection of time
+  MaterialButton _buildTimeButton(BuildContext ctx) {
+    bool isHint =
+        widget.window != null && widget.window.duration == this.duration;
 
-  _updateName(String name) {
-    widget.window.setName(
-      name ?? widget.window.getName(),
-    );
-  }
-
-  _updateDuration(String timeText) {
-    try {
-      var time = double.parse(timeText);
-
-      var sec = ((time % 1) * 60).toString().split('.').first;
-      var minutes = (time - (time % 1)).toString().split('.').first;
-
-      Duration duration = Duration(
-        minutes: int.parse(minutes),
-        seconds: int.parse(sec),
-      );
-
-      widget.window.duration = duration;
-    } catch (Exception) {
-      // TODO: Implement user error msg
-    }
-  }
-
-  _updatePrice(String priceText) {
-    try {
-      var price = double.parse(priceText);
-      widget.window.price = price;
-    } catch (Exception) {
-      // TODO: Implement user error msg
-    }
-  }
-
-  Widget buildBoxes(double size, BuildContext ctx) {
-    return Container(
-      height: size,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          DetailInputBox(
-            label: widget.window != null ? widget.window.getName() : 'Name',
-            updateData: _updateName,
-          ),
-          MaterialButton(
-            child: Container(
-              height: (MediaQuery.of(ctx).size.height / 16),
-              width: MediaQuery.of(ctx).size.width * .5,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: Theme.of(ctx).primaryColorLight,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Text(
-                duration != null
-                    ? '${_printDuration(duration)}'
-                    : 'choose time',
-                style: Theme.of(context).textTheme.subtitle1,
-              ),
+    return MaterialButton(
+      child: Container(
+        height: (MediaQuery.of(ctx).size.height / 16),
+        width: MediaQuery.of(ctx).size.width * .5,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: Theme.of(ctx).primaryColorLight,
+          border: Border(
+            bottom: BorderSide(
+              width: 2,
+              color: missingDuration ? Colors.red : Colors.white,
             ),
-            onPressed: () {
-              _timePicker(ctx);
-            },
           ),
-          DetailInputBox(
-            label: widget.window != null ? widget.window.price.toString() : 'Price',
-            textInputType: TextInputType.number,
-            updateData: _updatePrice,
-          ),
-        ],
+        ),
+        child: duration != null
+            ? Text('${_printDuration(duration)}',
+                style: isHint ? hintStyle : textStyle)
+            : Text('Choose Time', style: hintStyle),
       ),
+      onPressed: () {
+        _timePicker(ctx);
+      },
     );
   }
 
@@ -266,29 +366,36 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
   }
 }
 
+/*  WINDOW IMAGE INPUT                                                         *
+ * --------------------------------------------------------------------------- */
+/// Controls the image view
 class _WindowImageInput extends StatefulWidget {
-  final File previewImage;
-  final Function onNewImage;
+  final Imager _imageController;
+  final bool missingImage;
 
-  _WindowImageInput(this.previewImage, this.onNewImage);
+  _WindowImageInput(this._imageController, {this.missingImage = false});
 
   @override
   _WindowImageInputState createState() =>
-      _WindowImageInputState(this.previewImage);
+      _WindowImageInputState(this._imageController.masterImage);
 }
 
 class _WindowImageInputState extends State<_WindowImageInput> {
-  File windowImage;
+  Image windowImage;
 
   _WindowImageInputState(this.windowImage);
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: _obtainImage,
+      onTap: _obtainImageFile,
       child: Card(
         elevation: 4,
         margin: EdgeInsets.all(16),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(
+          GlobalValues.cornerRadius,
+        )),
         child: windowImage == null
             ? Center(
                 child: Column(
@@ -301,95 +408,34 @@ class _WindowImageInputState extends State<_WindowImageInput> {
                     ),
                     Icon(
                       Icons.camera_alt,
-                      color: Colors.grey,
+                      color: widget.missingImage ? Colors.red : Colors.grey,
                     ),
                   ],
                 ),
               )
-            : Center(child: ImageLoader.fromFile(windowImage)),
+            : Container(
+                decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.circular(GlobalValues.cornerRadius),
+                  image: DecorationImage(
+                    image: windowImage.image,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
       ),
     );
   }
 
   /// Open camera or (TODO:gallery) to get an image to preview window object
-  void _obtainImage() async {
-    /// Allows for the utilization of the system camera, this saves the image
-    /// in temporary storage
-    ImagePicker imagePicker = ImagePicker();
-    PickedFile imageFile = await imagePicker.getImage(
-      source: ImageSource.camera,
-      maxWidth: 600,
-      maxHeight: 600,
-      preferredCameraDevice: CameraDevice.rear,
-    );
+  void _obtainImageFile() async {
+    final savedImage = await widget._imageController
+        .takePicture(maxWidth: 600, maxHeight: 600);
 
-    // Make sure an image was taken
-    if (imageFile != null) {
-      /// This gives a directory to save the image
-      final appDir = await syspaths.getApplicationDocumentsDirectory();
-      final fileName = paths.basename(imageFile.path);
-
-      /// Now save the image into directory [appDir] with the file name [fileName]
-      final savedImage =
-          await File(imageFile.path).copy('${appDir.path}/$fileName');
-
-      if (savedImage != null) {
-        setState(() {
-          windowImage = savedImage;
-        });
-        widget.onNewImage(savedImage);
-      }
+    if (savedImage != null) {
+      setState(() {
+        windowImage = savedImage;
+      });
     }
-  }
-}
-
-/*  DETAIL INPUT BOX WIDGET                                                    *
- * --------------------------------------------------------------------------- */
-/// Text input boxes where necessary Window details will be gathered from user
-class DetailInputBox extends StatefulWidget {
-  final String label;
-  final Function updateData;
-  final TextInputType textInputType;
-
-  DetailInputBox({
-    this.label,
-    this.updateData,
-    this.textInputType,
-  });
-
-  @override
-  _DetailInputBoxState createState() => _DetailInputBoxState(label);
-}
-
-class _DetailInputBoxState extends State<DetailInputBox> {
-  String textLabel;
-
-  _DetailInputBoxState(this.textLabel);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: (MediaQuery.of(context).size.height / 16),
-      width: MediaQuery.of(context).size.width * .5,
-      decoration: BoxDecoration(
-        color: Theme.of(context).primaryColorLight,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: TextField(
-        keyboardType: widget.textInputType ?? TextInputType.text,
-        textAlign: TextAlign.center,
-        onSubmitted: (String value) async {
-          setState(() {
-            textLabel = value;
-          });
-          widget.updateData(value);
-        },
-        decoration: InputDecoration(
-          hintText: textLabel,
-          border: InputBorder.none,
-          hintStyle: Theme.of(context).textTheme.subtitle1,
-        ),
-      ),
-    );
   }
 }
