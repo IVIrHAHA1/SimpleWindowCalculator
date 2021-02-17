@@ -7,7 +7,7 @@ import 'package:SimpleWindowCalculator/Util/ItemsManager.dart';
  * 
  */
 
-import '../widgets/Pallet.dart';
+import 'ActiveItemsLister.dart';
 import '../widgets/TechDetails.dart';
 import 'package:flutter/material.dart';
 
@@ -51,7 +51,7 @@ class OverviewModule extends StatelessWidget {
             flex: 1,
             child: TabBarView(
               children: [
-                Pallet(ItemsManager.instance.items),
+                ActiveItemsLister(ItemsManager.instance.items),
                 TechDetails(totalPrice, totalDuration),
               ],
             ),

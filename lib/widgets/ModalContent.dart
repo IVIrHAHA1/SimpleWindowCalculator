@@ -131,7 +131,17 @@ class _ModalContentState extends State<ModalContent> {
                           children: [
                             Container(
                               padding: const EdgeInsets.only(top: 8),
-                              child: Imager.fromFile(element.getImageFile()).masterImage,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image:
+                                        Imager.fromFile(element.getImageFile())
+                                            .masterImage
+                                            .image,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
                               width: imageSize,
                               height: imageSize,
                             ),
