@@ -1,3 +1,5 @@
+import 'package:SimpleWindowCalculator/Tools/ImageLoader.dart';
+
 import '../GlobalValues.dart';
 import '../Util/HexColors.dart';
 import '../objects/OManager.dart';
@@ -58,8 +60,16 @@ class _ItemListing extends StatelessWidget {
           children: [
             // Get Image
             Container(
-              child: Icon(Icons.attach_money_rounded),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(GlobalValues.cornerRadius),
+                image: DecorationImage(
+                    image: (Imager.fromFile(window.getImageFile())
+                        .masterImage as Image)
+                        .image, fit: 
+                        BoxFit.fitHeight),
+              ),
               height: height,
+              width: height,
             ),
 
             // Window results
