@@ -145,7 +145,7 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
   /*  -----------------------------------------------------------------------
    *                            DATA MUNIPS
    *  -------------------------------------------------------------------- */
-  _addNewWindow(Window newWindow) {
+  _activateNewWindow(Window newWindow) {
     if ((manager.activeItem as Window).quantity <= 0) {
       manager.discardActiveItem();
     }
@@ -176,7 +176,7 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
       context: context,
       builder: (_) {
         return ModalContent(
-          addWindow: _addNewWindow,
+          addWindow: _activateNewWindow,
         );
       },
     );

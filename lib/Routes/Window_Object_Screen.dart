@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:SimpleWindowCalculator/GlobalValues.dart';
 import 'package:SimpleWindowCalculator/Tools/DatabaseProvider.dart';
 import 'package:SimpleWindowCalculator/Tools/ImageLoader.dart';
+import 'package:SimpleWindowCalculator/Util/ItemsManager.dart';
 import 'package:SimpleWindowCalculator/widgets/DetailInputBox.dart';
 import 'package:common_tools/StringFormater.dart' as formatter;
 
@@ -103,6 +104,15 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
                 price: price,
                 image: imager.masterFile,
               );
+
+              /// Update if the editing-window is currently active
+              if (ItemsManager.instance.activeItem == widget.window) {
+                Window activeItem = ItemsManager.instance.activeItem;
+                activeItem.name = name;
+                activeItem.duration = duration;
+                activeItem.price = price;
+                activeItem.image = imager.masterFile;
+              }
 
               await DatabaseProvider.instance.replace(widget.window, newWindow);
               Navigator.of(context).pop();
