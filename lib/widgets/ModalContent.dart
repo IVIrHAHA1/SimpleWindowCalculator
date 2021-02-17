@@ -140,7 +140,7 @@ class _ModalContentState extends State<ModalContent> {
                         ),
                       ),
                       onLongPress: () {
-                        Navigator.of(context).push(
+                        Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
                             builder: (_) {
                               return WindowObjectScreen(window: element);

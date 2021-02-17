@@ -86,7 +86,7 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
             color: Colors.white,
           ),
           onPressed: () async {
-            /// If window object is acceptible, then add to database
+            /// Replace window in database
             if (widget.window != null &&
                 name != null &&
                 duration != null &&
@@ -98,7 +98,9 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
               widget.window.image = imager.masterFile;
 
               await DatabaseProvider.instance.insert(widget.window);
-            } else if (name != null &&
+            } 
+            /// Add window to database
+            else if (name != null &&
                 duration != null &&
                 price != null &&
                 imager.masterFile != null) {
@@ -143,7 +145,7 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
 
   Container _buildInputs(double bodyHeight, BuildContext context) {
     String priceHint =
-        price != null ? formatter.Format.formatDouble(price, 2) : 'Price';
+        price != null ? '\$ ${formatter.Format.formatDouble(price, 2)}' : 'Price';
 
     return Container(
       height: bodyHeight * .5,
@@ -208,6 +210,8 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
 
   /// Input field for a selection of time
   MaterialButton _buildTimeButton(BuildContext ctx) {
+    bool isHint = widget.window != null && widget.window.duration == this.duration;
+
     return MaterialButton(
       child: Container(
         height: (MediaQuery.of(ctx).size.height / 16),
@@ -218,7 +222,7 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
           border: inputBorder,
         ),
         child: duration != null
-            ? Text('${_printDuration(duration)}', style: textStyle)
+            ? Text('${_printDuration(duration)}', style: isHint ? hintStyle : textStyle)
             : Text('Choose Time', style: hintStyle),
       ),
       onPressed: () {
