@@ -47,7 +47,7 @@ class Window with Calculatable, Item {
 
   Map<String, dynamic> toMap() {
     return {
-      WINDOW_NAME_ID: this.name,
+      WINDOW_NAME_ID: this.name.toLowerCase(),
       WINDOW_OBJECT: jsonEncode(this),
     };
   }
@@ -66,7 +66,7 @@ class Window with Calculatable, Item {
 
   @override
   get itemId => this.name.toLowerCase().hashCode;
-
+  
 /*
  * This update method syncs and calculates this window object
  * to reflect correct pricing, quantaties and durations when   

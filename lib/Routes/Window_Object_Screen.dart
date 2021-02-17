@@ -42,7 +42,6 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
   /// Substantiate in case user is editing a Window
   _WindowObjectScreenState(Window window) {
     if (window != null) {
-      print('default asigned');
       this.imager.masterFile = window.getImageFile();
       this.name = window.name;
       this.duration = window.duration;
@@ -75,7 +74,9 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
           Icons.highlight_off,
           color: Colors.white,
         ),
-        onPressed: () => Navigator.of(context).pop(),
+        onPressed: () async {
+          Navigator.of(context).pop();
+        },
       ),
 
       // Finished Creating/Editing
@@ -92,28 +93,35 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
                 duration != null &&
                 price != null &&
                 imager.masterFile != null) {
-              widget.window.name = name;
-              widget.window.duration = duration;
-              widget.window.price = price;
-              widget.window.image = imager.masterFile;
+              Window newWindow = Window(
+                name: name,
+                duration: duration,
+                price: price,
+                image: imager.masterFile,
+              );
 
-              await DatabaseProvider.instance.insert(widget.window);
-            } 
+              await DatabaseProvider.instance.replace(widget.window, newWindow);
+            }
+
             /// Add window to database
             else if (name != null &&
                 duration != null &&
                 price != null &&
                 imager.masterFile != null) {
-              await DatabaseProvider.instance.insert(Window(
-                name: name,
-                duration: duration,
-                price: price,
-                image: imager.masterFile,
-              ));
+              await DatabaseProvider.instance.insert(
+                Window(
+                  name: name,
+                  duration: duration,
+                  price: price,
+                  image: imager.masterFile,
+                ),
+              );
             }
 
             /// Otherwise, reopen screen and ask user to fix any mistakes
-            DatabaseProvider.instance.insert(widget.window);
+            else {
+              // Make missing fields turn red
+            }
             Navigator.of(context).pop();
           },
         )
@@ -144,8 +152,9 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
   }
 
   Container _buildInputs(double bodyHeight, BuildContext context) {
-    String priceHint =
-        price != null ? '\$ ${formatter.Format.formatDouble(price, 2)}' : 'Price';
+    String priceHint = price != null
+        ? '\$ ${formatter.Format.formatDouble(price, 2)}'
+        : 'Price';
 
     return Container(
       height: bodyHeight * .5,
@@ -210,7 +219,8 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
 
   /// Input field for a selection of time
   MaterialButton _buildTimeButton(BuildContext ctx) {
-    bool isHint = widget.window != null && widget.window.duration == this.duration;
+    bool isHint =
+        widget.window != null && widget.window.duration == this.duration;
 
     return MaterialButton(
       child: Container(
@@ -222,7 +232,8 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
           border: inputBorder,
         ),
         child: duration != null
-            ? Text('${_printDuration(duration)}', style: isHint ? hintStyle : textStyle)
+            ? Text('${_printDuration(duration)}',
+                style: isHint ? hintStyle : textStyle)
             : Text('Choose Time', style: hintStyle),
       ),
       onPressed: () {
