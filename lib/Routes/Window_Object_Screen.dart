@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:SimpleWindowCalculator/GlobalValues.dart';
 import 'package:SimpleWindowCalculator/Tools/DatabaseProvider.dart';
 import 'package:SimpleWindowCalculator/Tools/ImageLoader.dart';
+import 'package:SimpleWindowCalculator/widgets/DetailInputBox.dart';
 import 'package:common_tools/StringFormater.dart' as formatter;
 
 import '../objects/Window.dart';
@@ -163,11 +166,15 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
         children: [
           _dataInputFields(
               hint: name ?? 'Name',
-              userInput: (input) {
-                if (input.length > 0) {
-                  name = input;
+              userInput: (input) async {
+                if (input.length > 3) {
+                  bool exists = await DatabaseProvider.instance.contains(input);
+                  if (!exists) {
+                    name = input;
+                    return name;
+                  }
                 }
-                return name;
+                return null;
               }),
           _buildTimeButton(context),
           _dataInputFields(
@@ -205,12 +212,14 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
   /// Input field for name and price
   _dataInputFields({
     var hint,
+    var errorMsg,
     TextInputType keyboardType,
     Function(String input) userInput,
   }) {
-    return _ADetailInputBox(
+    return DetailInputBox(
       hint: hint,
       style: textStyle,
+      errorMessage: errorMsg,
       hintStyle: hintStyle,
       textInputType: keyboardType,
       validator: userInput,
@@ -385,127 +394,5 @@ class _WindowImageInputState extends State<_WindowImageInput> {
         windowImage = savedImage;
       });
     }
-  }
-}
-
-/*  DETAIL INPUT BOX WIDGET                                                    *
- * --------------------------------------------------------------------------- */
-/// Text input boxes where necessary Window details will be gathered from user
-class _ADetailInputBox extends StatefulWidget {
-  final String text;
-  final String hint;
-
-  /// Message to display when [validator] returns false
-  final String errorMessage;
-
-  /// Validate input, if invalid [_ADetailInputBox] will display [errorMessage]
-  final Function(String value) validator;
-  final TextStyle style;
-  final TextStyle hintStyle;
-  final TextInputType textInputType;
-
-  _ADetailInputBox({
-    this.text,
-    this.hint,
-    this.errorMessage,
-    this.style,
-    this.hintStyle,
-    @required this.validator,
-    this.textInputType = TextInputType.text,
-  });
-
-  @override
-  _ADetailInputBoxState createState() => _ADetailInputBoxState(text, hint);
-}
-
-class _ADetailInputBoxState extends State<_ADetailInputBox> {
-  String text, hint;
-  String onError;
-
-  // focused node validates the input text
-  FocusNode _myFocusNode;
-  TextEditingController _controller;
-
-  _ADetailInputBoxState(this.text, this.hint);
-
-  @override
-  void initState() {
-    _controller = TextEditingController();
-    _myFocusNode = FocusNode();
-    _myFocusNode.addListener(() {
-      if (!_myFocusNode.hasFocus) {
-        String paramText = widget.validator(_controller.text);
-
-        if (paramText != null) {
-          // VALIDATED
-          /// Updates TextField to output validated result as a hint
-          /// abiding by the [text] parameters and style. Remove text
-          /// from the controller to allow valid hint to show.
-          setState(() {
-            text = paramText;
-            _controller.text = '';
-            onError = null;
-          });
-        }
-        // CONTROLLER HAD NO ENTRY
-        /// Absorb no entry, that way to error is produced. Probably a
-        /// better way to implement this, but this way is clear what is
-        /// happening.
-        else if (_controller.text.length <= 0) {
-          setState(() {
-            _controller.text = '';
-            onError = null;
-          });
-        }
-        // INVALID
-        /// User entered an invalid input, use TextField's default
-        /// error messaging. Keep text in [_controller] to let user
-        /// update any errors.
-        else {
-          text = null;
-          onError = widget.errorMessage ?? "Invalid Entry";
-        }
-      }
-    });
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Flexible(
-      child: Container(
-        height: (MediaQuery.of(context).size.height / 16),
-        width: MediaQuery.of(context).size.width * .5,
-        decoration: BoxDecoration(
-          color: Theme.of(context).primaryColorLight,
-          border: _WindowObjectScreenState.inputBorder,
-        ),
-        child: TextField(
-          keyboardType: widget.textInputType,
-          style: widget.style,
-          controller: _controller,
-          textAlign: TextAlign.center,
-          focusNode: _myFocusNode,
-          decoration: _getInputDecoration(),
-        ),
-      ),
-    );
-  }
-
-  // Decoration for TextField
-  InputDecoration _getInputDecoration() {
-    return InputDecoration(
-      hintText: text ?? hint,
-      hintStyle: text != null ? widget.style : widget.hintStyle,
-      errorText: onError,
-      contentPadding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
-      border: InputBorder.none,
-    );
   }
 }

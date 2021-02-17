@@ -103,9 +103,8 @@ class DatabaseProvider {
       return null;
   }
 
-  Future<bool> contains(Window window) async {
+  Future<bool> contains(String windowName) async {
     Database db = await database;
-    String windowName = window.getName();
 
     List<Map> mapList = await db.query(
       WINDOW_TABLE,
