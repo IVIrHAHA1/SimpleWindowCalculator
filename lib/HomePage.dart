@@ -4,6 +4,7 @@ import 'package:SimpleWindowCalculator/Tools/Calculator.dart';
 import 'package:SimpleWindowCalculator/GlobalValues.dart';
 import 'package:SimpleWindowCalculator/Util/ItemsManager.dart';
 import 'package:SimpleWindowCalculator/widgets/ModalContent.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import './objects/OManager.dart';
 import './widgets/WindowCounter.dart';
@@ -159,9 +160,9 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
   }
 
   _clearProject() async {
-    Window newDefault = await DatabaseProvider.instance.queryWindow(
-      OManager.getDefaultWindow().name,
-    );
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    Window newDefault = await DatabaseProvider.instance
+        .queryWindow(prefs.getString(DEFAULT_WINDOW_KEY));
 
     manager.reset(setActiveItem: newDefault);
     Calculator.instance.update();
