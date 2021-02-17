@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:SimpleWindowCalculator/Tools/DatabaseProvider.dart';
 import 'package:SimpleWindowCalculator/Tools/ImageLoader.dart';
-import 'package:SimpleWindowCalculator/Util/HexColors.dart';
 import 'package:path/path.dart' as paths;
 import 'package:common_tools/StringFormater.dart' as formatter;
 
@@ -50,7 +49,7 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
       name = window.name;
       duration = window.duration;
       price = window.price;
-      image = ImageLoader.fromFile(window.getImage());
+      image = Imager.fromFile(window.getImage()).image;
     }
   }
 
@@ -100,6 +99,7 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
                 name: name,
                 duration: duration,
                 price: price,
+                // TODO: FIX IMAGING THING
               ));
             }
 
@@ -315,7 +315,7 @@ class _WindowImageInputState extends State<_WindowImageInput> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: _obtainImage,
+      onTap: _obtainImageFile,
       child: Card(
         elevation: 4,
         margin: EdgeInsets.all(16),
@@ -343,7 +343,7 @@ class _WindowImageInputState extends State<_WindowImageInput> {
   }
 
   /// Open camera or (TODO:gallery) to get an image to preview window object
-  void _obtainImage() async {
+  void _obtainImageFile() async {
     /// Allows for the utilization of the system camera, this saves the image
     /// in temporary storage
     ImagePicker imagePicker = ImagePicker();
@@ -366,7 +366,7 @@ class _WindowImageInputState extends State<_WindowImageInput> {
 
       if (savedImage != null) {
         setState(() {
-          windowImage = ImageLoader.fromFile(savedImage);
+          windowImage = Imager.fromFile(savedImage).image;
         });
         widget.onNewImage(windowImage);
       }
