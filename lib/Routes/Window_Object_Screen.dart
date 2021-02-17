@@ -100,7 +100,6 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
                 name: name,
                 duration: duration,
                 price: price,
-                
               ));
             }
 
@@ -149,10 +148,8 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
               userInput: (input) {
                 if (input.length > 0) {
                   name = input;
-                  return true;
-                } else
-                  name = null;
-                return false;
+                }
+                return name;
               }),
           _buildTimeButton(context),
           _dataInputFields(
@@ -162,11 +159,11 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
               try {
                 var parsedPrice = double.parse(input);
                 price = parsedPrice;
-                return true;
+                return '\$ ${formatter.Format.formatDouble(price, 2)}';
               } catch (Exception) {
                 price = null;
                 priceHint = 'Not a valid number';
-                return false;
+                return null;
               }
             },
           ),
@@ -190,11 +187,12 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
     );
   }
 
+  // CREATE DATA INPUT FIELDS
   /// Input field for name and price
   _dataInputFields({
     var hint,
     TextInputType keyboardType,
-    bool Function(String input) userInput,
+    Function(String input) userInput,
   }) {
     return DetailInputBox(
       hint: hint,
@@ -387,7 +385,7 @@ class DetailInputBox extends StatefulWidget {
   final String errorMessage;
 
   /// Validate input, if invalid [DetailInputBox] will display [errorMessage]
-  final bool Function(String value) validator;
+  final Function(String value) validator;
   final TextStyle style;
   final TextStyle hintStyle;
   final TextInputType textInputType;
@@ -422,11 +420,35 @@ class _DetailInputBoxState extends State<DetailInputBox> {
     _myFocusNode = FocusNode();
     _myFocusNode.addListener(() {
       if (!_myFocusNode.hasFocus) {
-        if (widget.validator(_controller.text)) {
+        String paramText = widget.validator(_controller.text);
+
+        if (paramText != null) {
+          // VALIDATED
+          /// Updates TextField to output validated result as a hint
+          /// abiding by the [text] parameters and style. Remove text
+          /// from the controller to allow valid hint to show.
           setState(() {
+            text = paramText;
+            _controller.text = '';
             onError = null;
           });
-        } else {
+        }
+        // CONTROLLER HAD NO ENTRY
+        /// Absorb no entry, that way to error is produced. Probably a
+        /// better way to implement this, but this way is clear what is 
+        /// happening.
+        else if (_controller.text.length <= 0) {
+          setState(() {
+            _controller.text = '';
+            onError = null;
+          });
+        }
+        // INVALID
+        /// User entered an invalid input, use TextField's default
+        /// error messaging. Keep text in [_controller] to let user
+        /// update any errors.
+        else {
+          text = null;
           onError = widget.errorMessage ?? "Invalid Entry";
         }
       }
@@ -465,8 +487,8 @@ class _DetailInputBoxState extends State<DetailInputBox> {
   // Decoration for TextField
   InputDecoration _getInputDecoration() {
     return InputDecoration(
-      hintText: hint,
-      hintStyle: widget.hintStyle,
+      hintText: text ?? hint,
+      hintStyle: text != null ? widget.style : widget.hintStyle,
       errorText: onError,
       contentPadding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
       border: InputBorder.none,
