@@ -1,17 +1,17 @@
 import '../GlobalValues.dart';
 import '../Util/HexColors.dart';
 import '../objects/OManager.dart';
-import '../widgets/FactorCoin.dart';
+import 'FactorCoin.dart';
 
 import '../Util/Format.dart';
 
 import '../objects/Window.dart';
 import 'package:flutter/material.dart';
 
-class Pallet extends StatelessWidget {
+class ActiveItemsLister extends StatelessWidget {
   final List<Window> windowList;
 
-  Pallet(this.windowList);
+  ActiveItemsLister(this.windowList);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,10 @@ class Pallet extends StatelessWidget {
         scrollDirection: Axis.vertical,
         child: Column(
           children: windowList.map((window) {
-            return _WindowPreview(window: window);
+            return _ItemListing(
+              window: window,
+              height: MediaQuery.of(context).size.height / 8,
+            );
           }).toList(),
         ),
       ),
@@ -29,19 +32,18 @@ class Pallet extends StatelessWidget {
   }
 }
 
-class _WindowPreview extends StatelessWidget {
+class _ItemListing extends StatelessWidget {
   final Window window;
-  const _WindowPreview({
+  final double height;
+
+  const _ItemListing({
     Key key,
     @required this.window,
+    this.height = 200,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var getHeight = () {
-      return MediaQuery.of(context).size.height / 8;
-    };
-
     return Card(
       elevation: 8,
       shape: RoundedRectangleBorder(
@@ -56,8 +58,8 @@ class _WindowPreview extends StatelessWidget {
           children: [
             // Get Image
             Container(
-              child: Image.asset(window.getImageFile().path),
-              height: getHeight(),
+              child: Icon(Icons.attach_money_rounded),
+              height: height,
             ),
 
             // Window results
@@ -66,7 +68,7 @@ class _WindowPreview extends StatelessWidget {
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: GlobalValues.appMargin),
                 alignment: Alignment.topLeft,
-                height: getHeight(),
+                height: height,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -90,17 +92,17 @@ class _WindowPreview extends StatelessWidget {
             Flexible(
               fit: FlexFit.loose,
               child: Container(
-                height: getHeight(),
+                height: height,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     buildFactorOverview(
-                      getHeight(),
+                      height,
                       Factors.filthy,
                       HexColors.fromHex('#DCA065'),
                     ),
                     buildFactorOverview(
-                      getHeight(),
+                      height,
                       Factors.difficult,
                       HexColors.fromHex('#FFEDA5'),
                     ),
@@ -113,17 +115,17 @@ class _WindowPreview extends StatelessWidget {
             Flexible(
               fit: FlexFit.loose,
               child: Container(
-                height: getHeight(),
+                height: height,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     buildFactorOverview(
-                      getHeight(),
+                      height,
                       Factors.construction,
                       HexColors.fromHex('#FFB9B9'),
                     ),
                     buildFactorOverview(
-                      getHeight(),
+                      height,
                       Factors.sided,
                       null,
                     ),
