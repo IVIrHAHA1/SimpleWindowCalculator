@@ -33,9 +33,10 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
   Imager imager = Imager();
   TextStyle textStyle, hintStyle;
 
-  static const Border inputBorder = const Border(
-    bottom: BorderSide(width: 2, color: Colors.white),
-  );
+  bool missingName = false,
+      missingDuration = false,
+      missingPrice = false,
+      missingImage = false;
 
   @override
   initState() {
@@ -104,6 +105,7 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
               );
 
               await DatabaseProvider.instance.replace(widget.window, newWindow);
+              Navigator.of(context).pop();
             }
 
             /// Add window to database
@@ -119,13 +121,13 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
                   image: imager.masterFile,
                 ),
               );
+              Navigator.of(context).pop();
             }
 
             /// Otherwise, reopen screen and ask user to fix any mistakes
             else {
-              // Make missing fields turn red
+              _notifyMissing();
             }
-            Navigator.of(context).pop();
           },
         )
       ],
@@ -154,7 +156,11 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
     );
   }
 
+  /// Helps onError messaging to communicate to user whether a name already
+  /// exists in the database or not
   bool nameExists = false;
+
+  /// Validates the name
   _nameValidator(String input) async {
     if (input.length > 3) {
       nameExists = await DatabaseProvider.instance.contains(input);
@@ -166,6 +172,7 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
     return null;
   }
 
+  /// Validates the Price value
   _numberValidator(String input) {
     try {
       var parsedPrice = double.parse(input);
@@ -175,6 +182,18 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
       price = null;
       return null;
     }
+  }
+
+  _notifyMissing() {
+    setState(() {
+      if (name == null) missingName = true;
+
+      if (duration == null) missingDuration = true;
+
+      if (price == null) missingPrice = true;
+
+      if (imager.masterFile == null) missingImage = true;
+    });
   }
 
   Container _buildInputs(double bodyHeight, BuildContext context) {
@@ -187,27 +206,44 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
+          // Name Detail Box
           DetailInputBox(
             hint: name ?? 'Name',
             style: textStyle,
+            border: Border(
+              bottom: BorderSide(
+                width: 2,
+                color: missingName ? Colors.red : Colors.white,
+              ),
+            ),
             onError: (entry) {
               if (nameExists) {
                 nameExists = false;
                 return "Name Is Unavailable";
-              } else if(entry.length <= 3)
+              } else if (entry.length <= 3)
                 return "Name Is Too Short";
-                else {
-                  return "Invalid Entry";
-                }
+              else {
+                return "Invalid Entry";
+              }
             },
             hintStyle: hintStyle,
             validator: _nameValidator,
           ),
+
+          // Time Detail Box
           _buildTimeButton(context),
+
+          // Price Detail Box
           DetailInputBox(
             hint: priceHint,
             style: textStyle,
             hintStyle: hintStyle,
+            border: Border(
+              bottom: BorderSide(
+                width: 2,
+                color: missingPrice ? Colors.red : Colors.white,
+              ),
+            ),
             textInputType: TextInputType.number,
             validator: _numberValidator,
           ),
@@ -223,7 +259,7 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
       height: size,
       alignment: Alignment.center,
       constraints: BoxConstraints.tightFor(width: size, height: size),
-      child: _WindowImageInput(imager),
+      child: _WindowImageInput(imager, missingImage: missingImage),
     );
   }
 
@@ -239,7 +275,12 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: Theme.of(ctx).primaryColorLight,
-          border: inputBorder,
+          border: Border(
+            bottom: BorderSide(
+              width: 2,
+              color: missingDuration ? Colors.red : Colors.white,
+            ),
+          ),
         ),
         child: duration != null
             ? Text('${_printDuration(duration)}',
@@ -330,8 +371,9 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
 /// Controls the image view
 class _WindowImageInput extends StatefulWidget {
   final Imager _imageController;
+  final bool missingImage;
 
-  _WindowImageInput(this._imageController);
+  _WindowImageInput(this._imageController, {this.missingImage = false});
 
   @override
   _WindowImageInputState createState() =>
@@ -366,7 +408,7 @@ class _WindowImageInputState extends State<_WindowImageInput> {
                     ),
                     Icon(
                       Icons.camera_alt,
-                      color: Colors.grey,
+                      color: widget.missingImage ? Colors.red : Colors.grey,
                     ),
                   ],
                 ),

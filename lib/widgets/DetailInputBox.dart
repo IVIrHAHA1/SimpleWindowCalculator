@@ -15,6 +15,7 @@ class DetailInputBox extends StatefulWidget {
   final TextStyle style;
   final TextStyle hintStyle;
   final TextInputType textInputType;
+  final Border border;
 
   static const Border inputBorder = const Border(
     bottom: BorderSide(width: 2, color: Colors.white),
@@ -27,6 +28,7 @@ class DetailInputBox extends StatefulWidget {
     this.style,
     this.hintStyle,
     @required this.validator,
+    this.border = inputBorder,
     this.textInputType = TextInputType.text,
   });
 
@@ -98,11 +100,12 @@ class _DetailInputBoxState extends State<DetailInputBox> {
   Widget build(BuildContext context) {
     return Flexible(
       child: Container(
+        alignment: Alignment.center,
         height: (MediaQuery.of(context).size.height / 16),
         width: MediaQuery.of(context).size.width * .5,
         decoration: BoxDecoration(
           color: Theme.of(context).primaryColorLight,
-          border: DetailInputBox.inputBorder,
+          border: widget.border,
         ),
         child: TextField(
           keyboardType: widget.textInputType,
