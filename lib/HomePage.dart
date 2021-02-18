@@ -102,9 +102,9 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
         children: <Widget>[
           // Results
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
+            padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
             child: ResultsModule(
-              height: availableScreen,
+              height: availableScreen - 8.0,
               triggerExpandAnim: triggerExpandAnim,
               internalController: _controller,
               valueHolder: ResultsValueHolder(
