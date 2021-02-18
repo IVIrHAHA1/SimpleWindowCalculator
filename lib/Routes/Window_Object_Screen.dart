@@ -408,20 +408,7 @@ class _WindowImageInputState extends State<_WindowImageInput> {
   _WindowImageInputState(this.windowImage);
 
   void _selectCapureType() {
-    showModalBottomSheet(
-      backgroundColor: Colors.transparent,
-      context: context,
-      builder: (_) {
-        return Container(
-          child: Column(
-            children: [
-              Text('Use Camera'),
-              Text('Use Gallery'),
-            ],
-          ),
-        );
-      },
-    );
+    
   }
 
   @override
