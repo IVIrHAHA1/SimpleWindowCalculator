@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:SimpleWindowCalculator/Tools/Calculator.dart';
 import 'package:SimpleWindowCalculator/Tools/ImageLoader.dart';
+import 'package:SimpleWindowCalculator/objects/Factor.dart';
 import 'package:flutter/services.dart';
 
 import '../Util/HexColors.dart';
@@ -13,9 +14,9 @@ import '../GlobalValues.dart';
 import 'package:flutter/material.dart';
 import '../objects/Window.dart';
 
-class WindowCounter extends StatelessWidget {
+class WindowCounter extends StatefulWidget {
   final Window window;
-  double height;
+  final double height;
 
   // Promps the bottom sheet modal allowing user to select
   // a new window. Needed for Window Preview button.
@@ -28,17 +29,22 @@ class WindowCounter extends StatelessWidget {
   });
 
   @override
+  _WindowCounterState createState() => _WindowCounterState();
+}
+
+class _WindowCounterState extends State<WindowCounter> {
+  @override
   Widget build(BuildContext context) {
     // final box = context.findRenderObject() as RenderBox;
 
     // if (box != null) height = box.size.height;
 
-    final factorSize = height / 6.5;
+    final factorSize = widget.height / 6.5;
     // ErrorMargin is used to keep the the radius circular rather than
     // an ellipse (when used in conjuction with radii)
     final double errorMargin = factorSize * .8;
     // Using the center of FactorCoin as the point of reference
-    final double radii = (height / 2);
+    final double radii = (widget.height / 2);
 
     // Inner Factor Position
     final double ifp_y = radii * sin(pi / 8) + radii - errorMargin;
@@ -52,7 +58,7 @@ class WindowCounter extends StatelessWidget {
     final double ofp_y_top = radii * sin(-pi / 3.75) + radii - errorMargin;
 
     return Container(
-      height: height,
+      height: widget.height,
       child: Stack(
         children: [
           buildPreview(context, factorSize),
@@ -64,7 +70,7 @@ class WindowCounter extends StatelessWidget {
             right: ofp_x,
             child: FactorCoin(
               factorKey: Factors.filthy,
-              window: window,
+              window: widget.window,
               size: factorSize,
               alignment: Alignment.center,
               backgroundColor: HexColors.fromHex('#DCA065'),
@@ -78,7 +84,7 @@ class WindowCounter extends StatelessWidget {
             right: ifp_x,
             child: FactorCoin(
               factorKey: Factors.difficult,
-              window: window,
+              window: widget.window,
               size: factorSize,
               alignment: Alignment.topCenter,
               backgroundColor: HexColors.fromHex('#FFEDA5'),
@@ -92,7 +98,7 @@ class WindowCounter extends StatelessWidget {
             right: ifp_x,
             child: FactorCoin(
               factorKey: Factors.construction,
-              window: window,
+              window: widget.window,
               size: factorSize,
               alignment: Alignment.topCenter,
               backgroundColor: HexColors.fromHex('#FFB9B9'),
@@ -106,7 +112,7 @@ class WindowCounter extends StatelessWidget {
             right: ofp_x,
             child: FactorCoin(
               factorKey: Factors.sided,
-              window: window,
+              window: widget.window,
               size: factorSize,
               alignment: Alignment.center,
               isDummy: false,
@@ -125,12 +131,12 @@ class WindowCounter extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            '${Format.format(window.quantity, 1)}',
+            '${Format.format(widget.window.quantity, 1)}',
             style: Theme.of(context).textTheme.headline6,
           ),
           buildWindowPreview(context),
           Text(
-            '${window.getName()}',
+            '${widget.window.getName()}',
             style: Theme.of(context).textTheme.headline6,
           ),
 
@@ -178,34 +184,38 @@ class WindowCounter extends StatelessWidget {
     Alignment alignment,
     Factors factorKey,
   ) {
-    return Column(
-      children: [
-        Text(
-          '${Format.format(window.getFactor(factorKey).getCount(), 1)}',
-          style: TextStyle(color: Colors.white, fontSize: 8),
-        ),
-        Opacity(
-          opacity: .75,
-          child: FactorCoin(
-            factorKey: factorKey,
-            window: window,
-            size: factorSize / 2,
-            alignment: alignment,
-            backgroundColor:
-                colorCode != null ? HexColors.fromHex(colorCode) : null,
+    Factor factor = widget.window.getFactor(factorKey);
+    return Visibility(
+      visible: factor.getCount() > 0 || factor.isAffixed(),
+      child: Column(
+        children: [
+          Text(
+            '${Format.format(factor.getCount(), 1)}',
+            style: TextStyle(color: Colors.white, fontSize: 8),
           ),
-        ),
-        Text(
-          '\$${Format.format((window.getFactor(factorKey).calculatePrice(window.price)), 0)}',
-          style: TextStyle(color: Colors.white, fontSize: 8),
-        ),
-      ],
+          Opacity(
+            opacity: .75,
+            child: FactorCoin(
+              factorKey: factorKey,
+              window: widget.window,
+              size: factorSize / 2,
+              alignment: alignment,
+              backgroundColor:
+                  colorCode != null ? HexColors.fromHex(colorCode) : null,
+            ),
+          ),
+          Text(
+            '\$${Format.format((factor.calculatePrice(widget.window.price)), 0)}',
+            style: TextStyle(color: Colors.white, fontSize: 8),
+          ),
+        ],
+      ),
     );
   }
 
   buildController(BuildContext ctx, double factorSize) {
     final double factorPadding = factorSize * .9;
-    final double _innerCircleSize = height - factorPadding * 2;
+    final double _innerCircleSize = widget.height - factorPadding * 2;
     final double buttonSize = _innerCircleSize * .25;
 
     // Calculate Button Positioning
@@ -220,9 +230,9 @@ class WindowCounter extends StatelessWidget {
 
     return Stack(overflow: Overflow.clip, children: [
       Positioned(
-        height: height,
-        width: height,
-        right: -height / 2,
+        height: widget.height,
+        width: widget.height,
+        right: -widget.height / 2,
         child: Container(
           padding: EdgeInsets.all(factorPadding),
           decoration: BoxDecoration(
@@ -245,12 +255,12 @@ class WindowCounter extends StatelessWidget {
                   GestureDetector(
                     onLongPress: () {
                       HapticFeedback.mediumImpact();
-                      window.amendCount(.5);
+                      widget.window.amendCount(.5);
                       Calculator.instance.update();
                     },
                     onTap: () {
                       HapticFeedback.mediumImpact();
-                      window.amendCount(1.0);
+                      widget.window.amendCount(1.0);
                       Calculator.instance.update();
                     },
                     child: Card(
@@ -272,12 +282,12 @@ class WindowCounter extends StatelessWidget {
                   GestureDetector(
                     onLongPress: () {
                       HapticFeedback.mediumImpact();
-                      window.amendCount(-.5);
+                      widget.window.amendCount(-.5);
                       Calculator.instance.update();
                     },
                     onTap: () {
                       HapticFeedback.mediumImpact();
-                      window.amendCount(-1.0);
+                      widget.window.amendCount(-1.0);
                       Calculator.instance.update();
                     },
                     child: Card(
@@ -300,7 +310,7 @@ class WindowCounter extends StatelessWidget {
   }
 
   buildWindowPreview(BuildContext context) {
-    final double previewSize = height * .5;
+    final double previewSize = widget.height * .5;
 
     return Container(
       color: Colors.transparent,
@@ -312,19 +322,20 @@ class WindowCounter extends StatelessWidget {
           onAccept: (updateVisuals) {
             // Updates the FactorCoin visuals
             updateVisuals();
+            setState(() {});
           },
           builder: (ctx, candidates, rejects) {
             return candidates.length > 0
                 // Convey to user that FactorCoin is expected
                 ? GestureDetector(
                     onTap: () {
-                      selectNewWindowFun(context);
+                      widget.selectNewWindowFun(context);
                     },
                     child: buildCard(Colors.blueGrey),
                   )
                 : GestureDetector(
                     onTap: () {
-                      selectNewWindowFun(context);
+                      widget.selectNewWindowFun(context);
                     },
                     child: buildCard(Colors.transparent),
                   );
@@ -334,16 +345,13 @@ class WindowCounter extends StatelessWidget {
     );
   }
 
-/*
- * Builds window preview card. Needed because of dragging.
- */
   buildCard(Color color) {
-    Imager imager = Imager.fromFile(window.getImageFile());
+    Imager imager = Imager.fromFile(widget.window.getImageFile());
 
     return Container(
       padding: const EdgeInsets.all(4),
-      width: height * .5,
-      height: height * .5,
+      width: widget.height * .5,
+      height: widget.height * .5,
       decoration: BoxDecoration(
         color: color,
         borderRadius: BorderRadius.circular(8),
