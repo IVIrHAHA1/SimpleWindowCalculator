@@ -106,6 +106,7 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
             child: ResultsModule(
               height: availableScreen,
               triggerExpandAnim: triggerExpandAnim,
+              internalController: _controller,
               valueHolder: ResultsValueHolder(
                 priceTotal: Calculator.instance.projectPrice,
                 timeTotal: Calculator.instance.projectDuration,

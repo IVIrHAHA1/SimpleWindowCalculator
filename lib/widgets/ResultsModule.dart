@@ -15,11 +15,13 @@ class ResultsModule extends StatefulWidget {
   final ResultsValueHolder valueHolder;
 
   final Function triggerExpandAnim;
+  final AnimationController internalController;
 
   ResultsModule({
     @required this.height,
     @required this.triggerExpandAnim,
     this.valueHolder,
+    this.internalController,
   });
 
   @override
@@ -39,6 +41,14 @@ class _ResultsModuleState extends State<ResultsModule> {
 
   /// State of an expaned ResultsMod or a collapsed ResultsMod
   bool expanded;
+
+  Animation opacityAnim;
+  @override
+  void initState() {
+    opacityAnim =
+        Tween<double>(begin: 0.0, end: 1.0).animate(widget.internalController);
+    super.initState();
+  }
 
   _ResultsModuleState(this.widgetSize) {
     this.collapsedHeight = widgetSize * cardRatio;
@@ -129,8 +139,9 @@ class _ResultsModuleState extends State<ResultsModule> {
                     height: expanded ? (dynamicHeight - collapsedHeight) : 0,
                     duration: Duration(milliseconds: GlobalValues.animDuration),
                     // child: widget.statModule ?? Container(),
-                    child: AnimatedCrossFade(
-                      firstChild: Container(
+                    child: FadeTransition(
+                      opacity: opacityAnim,
+                      child: Container(
                         constraints: BoxConstraints(
                           maxHeight:
                               widget.height - (widgetSize - collapsedHeight),
@@ -139,13 +150,6 @@ class _ResultsModuleState extends State<ResultsModule> {
                           widget.valueHolder.priceTotal,
                           widget.valueHolder.timeTotal,
                         ),
-                      ),
-                      secondChild: Container(),
-                      crossFadeState: expanded
-                          ? CrossFadeState.showFirst
-                          : CrossFadeState.showSecond,
-                      duration: Duration(
-                        milliseconds: (GlobalValues.animDuration ~/ 1.25),
                       ),
                     ),
                   ),
