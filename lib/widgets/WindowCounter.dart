@@ -75,6 +75,9 @@ class _WindowCounterState extends State<WindowCounter> {
               alignment: Alignment.center,
               backgroundColor: HexColors.fromHex('#DCA065'),
               isDummy: false,
+              onStatusChanged: (_) {
+                setState(() {});
+              },
             ),
           ),
 
@@ -89,6 +92,9 @@ class _WindowCounterState extends State<WindowCounter> {
               alignment: Alignment.topCenter,
               backgroundColor: HexColors.fromHex('#FFEDA5'),
               isDummy: false,
+              onStatusChanged: (_) {
+                setState(() {});
+              },
             ),
           ),
 
@@ -103,6 +109,9 @@ class _WindowCounterState extends State<WindowCounter> {
               alignment: Alignment.topCenter,
               backgroundColor: HexColors.fromHex('#FFB9B9'),
               isDummy: false,
+              onStatusChanged: (_) {
+                setState(() {});
+              },
             ),
           ),
 
@@ -116,6 +125,9 @@ class _WindowCounterState extends State<WindowCounter> {
               size: factorSize,
               alignment: Alignment.center,
               isDummy: false,
+              onStatusChanged: (_) {
+                setState(() {});
+              },
             ),
           ),
         ],
@@ -322,7 +334,6 @@ class _WindowCounterState extends State<WindowCounter> {
           onAccept: (updateVisuals) {
             // Updates the FactorCoin visuals
             updateVisuals();
-            setState(() {});
           },
           builder: (ctx, candidates, rejects) {
             return candidates.length > 0
