@@ -409,7 +409,7 @@ class _WindowImageInputState extends State<_WindowImageInput> {
   _WindowImageInputState(this.windowImage);
 
   void _selectCapureType() {
-    Navigator.push(context, OptionsModal());
+    Navigator.push(context, OptionsModal(optionListener: _obtainImageFile));
   }
 
   @override
@@ -459,9 +459,9 @@ class _WindowImageInputState extends State<_WindowImageInput> {
   }
 
   /// Open camera or (TODO:gallery) to get an image to preview window object
-  void _obtainImageFile() async {
+  void _obtainImageFile(ImagerMechanism method) async {
     final savedImage = await widget._imageController
-        .takePicture(maxWidth: 600, maxHeight: 600);
+        .getPicture(method, maxWidth: 600, maxHeight: 600);
 
     if (savedImage != null) {
       setState(() {

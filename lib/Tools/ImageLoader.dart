@@ -11,7 +11,7 @@ import 'package:image_picker/image_picker.dart';
 mixin ImageFileProducer {
   /// Allows for the utilization of the system camera, this saves the image
   /// in temporary storage
-  Future<File> useCamera(
+  static Future<File> useCamera(
       {double maxHeight = 600, double maxWidth = 600}) async {
     ImagePicker imagePicker = ImagePicker();
     PickedFile pickedFile = await imagePicker.getImage(
@@ -39,7 +39,33 @@ mixin ImageFileProducer {
     return null;
   }
 
-  /// TODO: create a [useGallery]
+  static Future<File> useGallery(
+      {double maxHeight = 600, double maxWidth = 600}) async {
+    ImagePicker imagePicker = ImagePicker();
+    PickedFile pickedFile = await imagePicker.getImage(
+      source: ImageSource.gallery,
+      maxWidth: maxWidth,
+      maxHeight: maxHeight,
+      preferredCameraDevice: CameraDevice.rear,
+    );
+
+    // Make sure an image was taken
+    if (pickedFile != null) {
+      /// This gives a directory to save the image
+      final appDir = await syspaths.getApplicationDocumentsDirectory();
+      final fileName = paths.basename(pickedFile.path);
+
+      /// Now save the image into directory [appDir] with the file name [fileName]
+      final savedImage =
+          await File(pickedFile.path).copy('${appDir.path}/$fileName');
+
+      /// Assign File
+      if (savedImage != null) {
+        return savedImage;
+      }
+    }
+    return null;
+  }
 }
 
 /// Creates an Image widget from a camera, this can be further expanded upon by
@@ -76,7 +102,12 @@ mixin ImageConverter {
   }
 }
 
-class Imager with ImageFileProducer, ImageConverter, Notifier {
+enum ImagerMechanism {
+  camera,
+  gallery,
+}
+
+class Imager with ImageConverter, Notifier {
   /// Called when [masterFile] is assigned a value
   Function(Image image, File file) onImageReceived;
 
@@ -88,9 +119,21 @@ class Imager with ImageFileProducer, ImageConverter, Notifier {
 
   Imager({this.onImageReceived});
 
-  Future<Image> takePicture(
+  Future<Image> getPicture(ImagerMechanism method,
       {double maxHeight = 600, double maxWidth = 600}) async {
-    File imageFile = await useCamera(maxHeight: maxHeight, maxWidth: maxWidth);
+    File imageFile;
+
+    switch (method) {
+      case ImagerMechanism.camera:
+        imageFile = await ImageFileProducer.useCamera(
+            maxHeight: maxHeight, maxWidth: maxWidth);
+        break;
+
+      case ImagerMechanism.gallery:
+        imageFile = await ImageFileProducer.useGallery(
+            maxHeight: maxHeight, maxWidth: maxWidth);
+        break;
+    }
 
     if (imageFile != null) {
       this.masterFile = imageFile;
@@ -105,7 +148,7 @@ class Imager with ImageFileProducer, ImageConverter, Notifier {
       return null;
   }
 
-  /// Called when a new file image is obtained. See [onImageReceived] for a 
+  /// Called when a new file image is obtained. See [onImageReceived] for a
   /// more comprehensive interface.
   @override
   addListener(Function listener) {
