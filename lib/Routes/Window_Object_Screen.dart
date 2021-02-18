@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:SimpleWindowCalculator/GlobalValues.dart';
+import 'package:SimpleWindowCalculator/Pages/OptionsModal.dart';
 import 'package:SimpleWindowCalculator/Tools/DatabaseProvider.dart';
 import 'package:SimpleWindowCalculator/Tools/ImageLoader.dart';
 import 'package:SimpleWindowCalculator/Util/ItemsManager.dart';
@@ -408,7 +409,7 @@ class _WindowImageInputState extends State<_WindowImageInput> {
   _WindowImageInputState(this.windowImage);
 
   void _selectCapureType() {
-    
+    Navigator.push(context, OptionsModal());
   }
 
   @override
