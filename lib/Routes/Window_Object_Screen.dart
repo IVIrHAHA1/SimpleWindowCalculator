@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:SimpleWindowCalculator/GlobalValues.dart';
 import 'package:SimpleWindowCalculator/Pages/OptionsModal.dart';
 import 'package:SimpleWindowCalculator/Tools/DatabaseProvider.dart';
@@ -70,10 +68,17 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
 
     AppBar appBar = AppBar(
       centerTitle: true,
-      title: Text(
-        name ?? 'Create Window',
-        style: Theme.of(context).textTheme.headline6,
-      ),
+      title: widget.window != null
+          ? IconButton(
+              onPressed: () {
+                // TODO: Handle deletion
+              },
+              icon: Icon(
+                Icons.delete_forever_outlined,
+                color: Colors.white,
+              ),
+            )
+          : Text('Create Window', style: Theme.of(context).textTheme.headline6),
 
       // Cancel Creation/Deletion
       leading: IconButton(
@@ -458,7 +463,6 @@ class _WindowImageInputState extends State<_WindowImageInput> {
     );
   }
 
-  /// Open camera or (TODO:gallery) to get an image to preview window object
   void _obtainImageFile(ImagerMechanism method) async {
     final savedImage = await widget._imageController
         .getPicture(method, maxWidth: 600, maxHeight: 600);
