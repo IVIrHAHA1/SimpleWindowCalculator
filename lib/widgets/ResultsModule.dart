@@ -111,6 +111,7 @@ class _ResultsModuleState extends State<ResultsModule> {
             ),
             elevation: 5,
             child: Container(
+              padding: const EdgeInsets.only(top: 12.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -135,10 +136,7 @@ class _ResultsModuleState extends State<ResultsModule> {
                   ),
 
                   // OverviewList
-                  AnimatedContainer(
-                    height: expanded ? (dynamicHeight - collapsedHeight) : 0,
-                    duration: Duration(milliseconds: GlobalValues.animDuration),
-                    // child: widget.statModule ?? Container(),
+                  Flexible(
                     child: FadeTransition(
                       opacity: opacityAnim,
                       child: Container(
