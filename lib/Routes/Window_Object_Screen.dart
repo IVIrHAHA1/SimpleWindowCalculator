@@ -277,7 +277,11 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
       height: size,
       alignment: Alignment.center,
       constraints: BoxConstraints.tightFor(width: size, height: size),
-      child: _WindowImageInput(imager, missingImage: missingImage),
+      child: AnimatedOpacity(
+        opacity: size != 0 ? 1.0 : 0.0,
+        duration: Duration(milliseconds: 200),
+        child: _WindowImageInput(imager, missingImage: missingImage),
+      ),
     );
   }
 
@@ -420,13 +424,17 @@ class _WindowImageInputState extends State<_WindowImageInput> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 8.0),
-                      child: Text('No Image Available'),
+                    Flexible(
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: Text('No Image Available'),
+                      ),
                     ),
-                    Icon(
-                      Icons.camera_alt,
-                      color: widget.missingImage ? Colors.red : Colors.grey,
+                    Flexible(
+                      child: Icon(
+                        Icons.camera_alt,
+                        color: widget.missingImage ? Colors.red : Colors.grey,
+                      ),
                     ),
                   ],
                 ),
