@@ -27,6 +27,8 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
   }
 
   AnimationController _controller;
+  Animation opacityAnim;
+
   @override
   void initState() {
     _controller = AnimationController(
@@ -34,6 +36,8 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
       duration: Duration(milliseconds: GlobalValues.animDuration ~/ 1.1),
       reverseDuration: Duration(milliseconds: GlobalValues.animDuration ~/ 1.1),
     );
+
+    opacityAnim = Tween<double>(begin: 1.0, end: 0.0).animate(_controller);
     Calculator.instance.addListener(() {
       setState(() {});
     });
@@ -94,6 +98,7 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
     return Container(
       height: availableScreen,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           // Results
           Padding(
@@ -109,20 +114,15 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
             ),
           ),
 
-          // Empty space seperator
-          Flexible(
-            fit: FlexFit.tight,
-            child: Container(),
-          ),
-
           // Counter Module
-          SizingTween(
-            controller: _controller,
-            size: availableScreen * .5,
-            child: WindowCounter(
-              height: availableScreen * .5,
-              window: manager.activeItem,
-              selectNewWindowFun: selectNewWindow,
+          Flexible(
+            child: FadeTransition(
+              opacity: opacityAnim,
+              child: WindowCounter(
+                height: availableScreen * .5,
+                window: manager.activeItem,
+                selectNewWindowFun: selectNewWindow,
+              ),
             ),
           ),
         ],

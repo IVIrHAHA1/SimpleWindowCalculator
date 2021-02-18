@@ -22,7 +22,7 @@ class _SizingTweenState extends State<SizingTween> {
   @override
   void initState() {
     _animation =
-        Tween<double>(begin: widget.size, end: 0).animate(widget.controller);
+        Tween<double>(begin: 1, end: 0).animate(widget.controller);
 
     _animation2 = Tween<double>(begin: 1, end: 0).animate(widget.controller);
 
@@ -36,7 +36,7 @@ class _SizingTweenState extends State<SizingTween> {
       child: widget.child,
       builder: (_, Widget child) {
         return Container(
-          height: _animation.value,
+          height: _animation.value * widget.size,
           child: Opacity(
             opacity: _animation2.value,
             child: child,

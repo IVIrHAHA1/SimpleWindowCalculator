@@ -11,6 +11,7 @@ import 'Util/HexColors.dart';
 import 'package:flutter/material.dart';
 import 'HomePage.dart';
 import 'objects/OManager.dart';
+import 'tester.dart';
 
 void main() {
   runApp(MyApp());
