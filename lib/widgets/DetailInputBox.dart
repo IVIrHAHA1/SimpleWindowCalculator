@@ -98,23 +98,21 @@ class _DetailInputBoxState extends State<DetailInputBox> {
 
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-      child: Container(
-        alignment: Alignment.center,
-        height: (MediaQuery.of(context).size.height / 16),
-        width: MediaQuery.of(context).size.width * .5,
-        decoration: BoxDecoration(
-          color: Theme.of(context).primaryColorLight,
-          border: widget.border,
-        ),
-        child: TextField(
-          keyboardType: widget.textInputType,
-          style: widget.style,
-          controller: _controller,
-          textAlign: TextAlign.center,
-          focusNode: _myFocusNode,
-          decoration: _getInputDecoration(),
-        ),
+    return Container(
+      alignment: Alignment.center,
+      height: (MediaQuery.of(context).size.height / 16),
+      decoration: BoxDecoration(
+        color: Theme.of(context).primaryColorLight,
+        border: widget.border,
+      ),
+      child: TextField(
+        keyboardType: widget.textInputType,
+        maxLines: 1,
+        style: widget.style,
+        controller: _controller,
+        textAlign: TextAlign.center,
+        focusNode: _myFocusNode,
+        decoration: _getInputDecoration(),
       ),
     );
   }

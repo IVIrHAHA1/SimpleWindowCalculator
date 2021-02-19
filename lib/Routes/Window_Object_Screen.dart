@@ -168,9 +168,10 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
       appBar: appBar,
       backgroundColor: Theme.of(context).primaryColor,
       body: Container(
-        alignment: Alignment.center,
         height: bodyHeight,
+        width: double.infinity,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             _buildImage(keyBoardHeight > 0 ? 0 : (bodyHeight * .5)),
             _buildInputs(bodyHeight, context)
@@ -186,7 +187,7 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
 
   /// Validates the name
   _nameValidator(String input) async {
-    if (input.length > 3) {
+    if (input.length > 3 && input.length < 16) {
       nameExists = await DatabaseProvider.instance.contains(input);
       if (!nameExists) {
         name = input;
@@ -227,51 +228,85 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
 
     return Container(
       height: bodyHeight * .5,
+      width: MediaQuery.of(context).size.width * .5,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           // Name Detail Box
-          DetailInputBox(
-            hint: name ?? 'Name',
-            style: textStyle,
-            border: Border(
-              bottom: BorderSide(
-                width: 2,
-                color: missingName ? Colors.red : Colors.white,
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              DetailInputBox(
+                hint: name ?? 'Name',
+                style: textStyle,
+                border: Border(
+                  bottom: BorderSide(
+                    width: 2,
+                    color: missingName ? Colors.red : Colors.white,
+                  ),
+                ),
+                onError: (entry) {
+                  if (nameExists) {
+                    nameExists = false;
+                    return "Unavailable";
+                  } else if (entry.length <= 3) {
+                    return "Too Short";
+                  } else if (entry.length > 16) {
+                    return "Too Long";
+                  } else {
+                    return "Invalid Entry";
+                  }
+                },
+                hintStyle: hintStyle,
+                validator: _nameValidator,
               ),
-            ),
-            onError: (entry) {
-              if (nameExists) {
-                nameExists = false;
-                return "Name Is Unavailable";
-              } else if (entry.length <= 3)
-                return "Name Is Too Short";
-              else {
-                return "Invalid Entry";
-              }
-            },
-            hintStyle: hintStyle,
-            validator: _nameValidator,
+              _inputTitle('name'),
+            ],
           ),
 
           // Time Detail Box
-          _buildTimeButton(context),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildTimeButton(context),
+              _inputTitle('duration'),
+            ],
+          ),
 
           // Price Detail Box
-          DetailInputBox(
-            hint: priceHint,
-            style: textStyle,
-            hintStyle: hintStyle,
-            border: Border(
-              bottom: BorderSide(
-                width: 2,
-                color: missingPrice ? Colors.red : Colors.white,
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              DetailInputBox(
+                hint: priceHint,
+                style: textStyle,
+                hintStyle: hintStyle,
+                border: Border(
+                  bottom: BorderSide(
+                    width: 2,
+                    color: missingPrice ? Colors.red : Colors.white,
+                  ),
+                ),
+                textInputType: TextInputType.number,
+                validator: _numberValidator,
               ),
-            ),
-            textInputType: TextInputType.number,
-            validator: _numberValidator,
+              _inputTitle('price')
+            ],
           ),
         ],
+      ),
+    );
+  }
+
+  _inputTitle(String title) {
+    return Container(
+      alignment: Alignment.centerRight,
+      child: Text(
+        '$title',
+        style: Theme.of(context)
+            .textTheme
+            .subtitle2
+            .copyWith(color: Colors.blueGrey),
       ),
     );
   }
@@ -292,14 +327,13 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
   }
 
   /// Input field for a selection of time
-  MaterialButton _buildTimeButton(BuildContext ctx) {
+  _buildTimeButton(BuildContext ctx) {
     bool isHint =
         widget.window != null && widget.window.duration == this.duration;
 
-    return MaterialButton(
+    return InkWell(
       child: Container(
         height: (MediaQuery.of(ctx).size.height / 16),
-        width: MediaQuery.of(ctx).size.width * .5,
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: Theme.of(ctx).primaryColorLight,
@@ -315,7 +349,7 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
                 style: isHint ? hintStyle : textStyle)
             : Text('Choose Time', style: hintStyle),
       ),
-      onPressed: () {
+      onTap: () {
         _timePicker(ctx);
       },
     );
