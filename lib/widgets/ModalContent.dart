@@ -123,44 +123,52 @@ class _ModalContentState extends State<ModalContent> {
                   crossAxisCount: 3,
                   scrollDirection: Axis.vertical,
                   children: snapshot.data.map((element) {
-                    return GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      child: Card(
-                        elevation: 2,
+                    return Card(
+                      elevation: 2,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
                         child: Column(
                           children: [
-                            Container(
-                              padding: const EdgeInsets.only(top: 8),
+                            Flexible(
+                              fit: FlexFit.tight,
                               child: Container(
                                 decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8.0),
                                   image: DecorationImage(
-                                    image:
-                                        Imager.fromFile(element.getImageFile())
-                                            .masterImage
-                                            .image,
-                                    fit: BoxFit.cover,
+                                    image: Imager.fromFile(element.getImageFile())
+                                        .masterImage
+                                        .image,
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
+                                child: Material(
+                                  color: Colors.transparent,
+                                  shadowColor: Colors.transparent,
+                                  child: InkWell(
+                                    splashColor: Colors.blue,
+                                    onLongPress: () {
+                                      Navigator.of(context).pushReplacement(
+                                        MaterialPageRoute(
+                                          builder: (_) {
+                                            return WindowObjectScreen(window: element);
+                                          },
+                                        ),
+                                      );
+                                    },
+                                    onTap: () {
+                                      widget.addWindow(element);
+                                    },
                                   ),
                                 ),
                               ),
-                              width: imageSize,
-                              height: imageSize,
                             ),
-                            Text(element.getName()),
+                            Flexible(
+                              flex: 0,
+                              child: Text('${element.name.toLowerCase()}'),
+                            ),
                           ],
                         ),
                       ),
-                      onLongPress: () {
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                            builder: (_) {
-                              return WindowObjectScreen(window: element);
-                            },
-                          ),
-                        );
-                      },
-                      onTap: () {
-                        widget.addWindow(element);
-                      },
                     );
                   }).toList(),
                 );

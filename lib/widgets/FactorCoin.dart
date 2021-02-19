@@ -14,6 +14,8 @@ class FactorCoin extends StatefulWidget {
   final Window window;
   final isDummy;
 
+  final Function(bool) onStatusChanged;
+
   static const double iconRatio = 1 / 6;
 
   FactorCoin({
@@ -23,6 +25,7 @@ class FactorCoin extends StatefulWidget {
     this.window,
     this.backgroundColor = Colors.white,
     this.alignment = Alignment.center,
+    this.onStatusChanged,
   });
 
   @override
@@ -52,6 +55,7 @@ class _FactorCoinState extends State<FactorCoin> {
       disabled ? disabled = false : disabled = true;
     });
     widget.window.affixFactor(widget.factorKey, disabled);
+    widget.onStatusChanged(widget.window.getFactor(widget.factorKey).isAffixed());
   }
 
 // Changes mode from incrementing to decrementing and vice-versa

@@ -83,33 +83,33 @@ class FactorOptionRoute extends ModalRoute {
           );
         }),
 
-    _Option(
-        icon: Icon(
-          Icons.check_circle_outline,
-          color: HexColors.fromHex('#2F3037'),
-        ),
-        title: 'Apply To Project',
-        subtitle: '(feature coming soon)',
-        windowFunction: (window, factorKey, optionsController) {
-          optionsController(
-            () {
-              //window.getFactor(factorKey).setCount(0);
-            },
-            FactorOptions.edit,
-          );
-        }),
+    // _Option(
+    //     icon: Icon(
+    //       Icons.check_circle_outline,
+    //       color: HexColors.fromHex('#2F3037'),
+    //     ),
+    //     title: 'Apply To Project',
+    //     subtitle: '(feature coming soon)',
+    //     windowFunction: (window, factorKey, optionsController) {
+    //       optionsController(
+    //         () {
+    //           //window.getFactor(factorKey).setCount(0);
+    //         },
+    //         FactorOptions.edit,
+    //       );
+    //     }),
 
-    // Edit Factor
-    _Option(
-        icon: Icon(
-          Icons.edit,
-          color: HexColors.fromHex('#2F3037'),
-        ),
-        title: 'Edit Factor',
-        subtitle: '(feature coming soon)',
-        windowFunction: (window, factorKey, optionsController) {
-          optionsController(null, FactorOptions.edit);
-        }),
+    // // Edit Factor
+    // _Option(
+    //     icon: Icon(
+    //       Icons.edit,
+    //       color: HexColors.fromHex('#2F3037'),
+    //     ),
+    //     title: 'Edit Factor',
+    //     subtitle: '(feature coming soon)',
+    //     windowFunction: (window, factorKey, optionsController) {
+    //       optionsController(null, FactorOptions.edit);
+    //     }),
   ];
 
   // Callback to FactorCoin, so setState methods can be utillized.
@@ -130,10 +130,10 @@ class FactorOptionRoute extends ModalRoute {
   Widget buildPage(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation) {
     final double horizontalPadding = MediaQuery.of(context).size.width / 16;
-    final double verticalPadding = MediaQuery.of(context).size.height / 16;
+    final double verticalPadding = MediaQuery.of(context).size.height / 6;
 
     final double popUpHeight =
-        (verticalPadding * 14) - MediaQuery.of(context).padding.top;
+        (verticalPadding * 5) - MediaQuery.of(context).padding.top;
 
     final double popUpWidth = (horizontalPadding * 14);
 
@@ -170,31 +170,38 @@ class FactorOptionRoute extends ModalRoute {
             top: verticalPadding,
           ),
           child: Column(
+            mainAxisSize: MainAxisSize.max,
             children: [
-              buildHeader(context, popUpHeight, popUpWidth),
+              Flexible(
+                flex: 0,
+                child: buildHeader(context, popUpHeight, popUpWidth),
+              ),
 
               // Body
-              Container(
-                alignment: Alignment.centerLeft,
-                padding: EdgeInsets.only(left: popUpWidth * paddingRatio),
-                height: popUpHeight * .7,
+              Flexible(
+                flex: 1,
                 child: Container(
-                  height: popUpHeight * .7,
-                  width: popUpWidth * .75,
-                  color: Colors.transparent,
-                  child: ListView.builder(
-                    itemCount: options.length,
-                    itemBuilder: (ctx, index) {
-                      return buildTile(
-                        options[index],
-                        context,
-                      );
-                    },
+                  alignment: Alignment.centerLeft,
+                  padding: EdgeInsets.only(left: popUpWidth * paddingRatio),
+                  child: Container(
+                    color: Colors.transparent,
+                    child: ListView.builder(
+                      itemCount: options.length,
+                      itemBuilder: (ctx, index) {
+                        return buildTile(
+                          options[index],
+                          context,
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),
 
-              buildFooter(popUpHeight, context)
+              Flexible(
+                flex: 0,
+                child: buildFooter(popUpHeight, context),
+              )
             ],
           ),
         ),
