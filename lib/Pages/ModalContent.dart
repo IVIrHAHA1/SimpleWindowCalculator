@@ -63,38 +63,72 @@ class _ModalContentState extends State<ModalContent> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: GlobalValues.appMargin),
       alignment: Alignment.topRight,
-      width: double.infinity,
+      width: MediaQuery.of(context).size.width,
       height: size,
       decoration: BoxDecoration(
         color: Colors.transparent,
       ),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          color: Colors.white,
-        ),
-        height: size * .7,
-        width: MediaQuery.of(context).size.width * .4,
-        alignment: Alignment.topRight,
-        child: TextField(
-          controller: _textEditingController,
-          textAlignVertical: TextAlignVertical.center,
-          textAlign: TextAlign.right,
-          maxLines: 1,
-          decoration: InputDecoration(
-            contentPadding: const EdgeInsets.all(10),
-            isDense: false,
-            alignLabelWithHint: true,
-            border: InputBorder.none,
-            hintText: 'search ...',
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Flexible(
+            fit: FlexFit.tight,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 16.0),
+              child: Container(
+                alignment: Alignment.center,
+                height: size * .7,
+                child: MaterialButton(
+                  onPressed: () {
+                    /// TODO: HANDLE MODE CHANGE
+                  },
+                  child: Text(
+                    "Edit Mode",
+                    style: Theme.of(context).textTheme.button.copyWith(
+                          color: Colors.black,
+                        ),
+                  ),
+                ),
+                decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.circular(GlobalValues.cornerRadius),
+                  color: Theme.of(context).primaryColorLight,
+                ),
+              ),
+            ),
           ),
-          style: TextStyle(
-            fontSize: 16,
-            fontFamily: 'OpenSans',
-            fontStyle: FontStyle.italic,
-            color: Colors.black87,
+          Flexible(
+            flex: 0,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: Colors.white,
+              ),
+              height: size * .7,
+              width: MediaQuery.of(context).size.width * .5,
+              alignment: Alignment.topRight,
+              child: TextField(
+                controller: _textEditingController,
+                textAlignVertical: TextAlignVertical.center,
+                textAlign: TextAlign.right,
+                maxLines: 1,
+                decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.all(10),
+                  isDense: false,
+                  alignLabelWithHint: true,
+                  border: InputBorder.none,
+                  hintText: 'search ...',
+                ),
+                style: TextStyle(
+                  fontSize: 16,
+                  fontFamily: 'OpenSans',
+                  fontStyle: FontStyle.italic,
+                  color: Colors.black87,
+                ),
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -135,9 +169,10 @@ class _ModalContentState extends State<ModalContent> {
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(8.0),
                                   image: DecorationImage(
-                                    image: Imager.fromFile(element.getImageFile())
-                                        .masterImage
-                                        .image,
+                                    image:
+                                        Imager.fromFile(element.getImageFile())
+                                            .masterImage
+                                            .image,
                                     fit: BoxFit.fill,
                                   ),
                                 ),
@@ -150,7 +185,8 @@ class _ModalContentState extends State<ModalContent> {
                                       Navigator.of(context).pushReplacement(
                                         MaterialPageRoute(
                                           builder: (_) {
-                                            return WindowObjectScreen(window: element);
+                                            return WindowObjectScreen(
+                                                window: element);
                                           },
                                         ),
                                       );
