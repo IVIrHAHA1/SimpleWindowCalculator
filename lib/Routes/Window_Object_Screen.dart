@@ -68,17 +68,10 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
 
     AppBar appBar = AppBar(
       centerTitle: true,
-      title: widget.window != null
-          ? IconButton(
-              onPressed: () {
-                // TODO: Handle deletion
-              },
-              icon: Icon(
-                Icons.delete_forever_outlined,
-                color: Colors.white,
-              ),
-            )
-          : Text('Create Window', style: Theme.of(context).textTheme.headline6),
+      title: Text(
+        name.toUpperCase() ?? 'CREATE WINDOW',
+        style: Theme.of(context).textTheme.headline6,
+      ),
 
       // Cancel Creation/Deletion
       leading: IconButton(
@@ -269,7 +262,7 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               _buildTimeButton(context),
-              _inputTitle('duration'),
+              _inputTitle('time'),
             ],
           ),
 
