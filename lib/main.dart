@@ -24,6 +24,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
+        disabledColor: Colors.grey,
+        iconTheme: IconThemeData(
+          color: Colors.white,
+        ),
         fontFamily: 'OpenSans',
         textTheme: ThemeData.light().textTheme.copyWith(
               headline6: TextStyle(
@@ -53,8 +57,8 @@ class MyApp extends StatelessWidget {
 /// Splash Screen which instantiates any AppData (Database and default values) the user may need
 /// upon start up.
 class MySplashScreen extends StatelessWidget {
-  /// Replaces the SplashScreen route with MyHomePage(main page) after default data has been 
-  /// initialized. 
+  /// Replaces the SplashScreen route with MyHomePage(main page) after default data has been
+  /// initialized.
   _router(BuildContext ctx) {
     Navigator.of(ctx).pushReplacement(
       PageRouteBuilder(

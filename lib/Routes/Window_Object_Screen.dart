@@ -56,6 +56,8 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double keyBoardHeight = MediaQuery.of(context).viewInsets.bottom;
+
     this.textStyle = Theme.of(context).textTheme.button.copyWith(
           color: Colors.black,
           fontWeight: FontWeight.bold,
@@ -67,9 +69,15 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
         );
 
     AppBar appBar = AppBar(
+      actionsIconTheme: IconThemeData(
+        color: Colors.white,
+      ),
+      iconTheme: IconThemeData(
+        color: Colors.white,
+      ),
       centerTitle: true,
       title: Text(
-        name.toUpperCase() ?? 'CREATE WINDOW',
+        name != null ? name.toUpperCase() : 'CREATE WINDOW',
         style: Theme.of(context).textTheme.headline6,
       ),
 
@@ -77,7 +85,6 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
       leading: IconButton(
         icon: Icon(
           Icons.highlight_off,
-          color: Colors.white,
         ),
         onPressed: () async {
           Navigator.of(context).pop();
@@ -87,65 +94,70 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
       // Finished Creating/Editing
       actions: [
         IconButton(
+          disabledColor: Colors.grey,
           icon: Icon(
             Icons.check_circle_outline,
-            color: Colors.white,
           ),
-          onPressed: () async {
-            /// Replace window in database
-            if (widget.window != null &&
-                name != null &&
-                duration != null &&
-                price != null &&
-                imager.masterFile != null) {
-              SharedPreferences prefs = await SharedPreferences.getInstance();
+          onPressed: keyBoardHeight > 0
+              ? null
+              : () async {
+                  /// Replace window in database
+                  if (widget.window != null &&
+                      name != null &&
+                      duration != null &&
+                      price != null &&
+                      imager.masterFile != null) {
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
 
-              Window newWindow = Window(
-                name: name,
-                duration: duration,
-                price: price,
-                image: imager.masterFile,
-              );
+                    Window newWindow = Window(
+                      name: name,
+                      duration: duration,
+                      price: price,
+                      image: imager.masterFile,
+                    );
 
-              if (widget.window.name == prefs.getString(DEFAULT_WINDOW_KEY) &&
-                  widget.window.name != name) {
-                prefs.setString(DEFAULT_WINDOW_KEY, name);
-              }
+                    if (widget.window.name ==
+                            prefs.getString(DEFAULT_WINDOW_KEY) &&
+                        widget.window.name != name) {
+                      prefs.setString(DEFAULT_WINDOW_KEY, name);
+                    }
 
-              /// Update if the editing-window is currently active
-              if (ItemsManager.instance.activeItem == widget.window) {
-                Window activeItem = ItemsManager.instance.activeItem;
-                activeItem.name = name;
-                activeItem.duration = duration;
-                activeItem.price = price;
-                activeItem.image = imager.masterFile;
-              }
+                    /// Update if the editing-window is currently active
+                    if (ItemsManager.instance.activeItem == widget.window) {
+                      Window activeItem = ItemsManager.instance.activeItem;
+                      activeItem.name = name;
+                      activeItem.duration = duration;
+                      activeItem.price = price;
+                      activeItem.image = imager.masterFile;
+                    }
 
-              await DatabaseProvider.instance.replace(widget.window, newWindow);
-              Navigator.of(context).pop();
-            }
+                    await DatabaseProvider.instance
+                        .replace(widget.window, newWindow);
+                    Navigator.of(context).pop();
+                  }
 
-            /// Add window to database
-            else if (name != null &&
-                duration != null &&
-                price != null &&
-                imager.masterFile != null) {
-              await DatabaseProvider.instance.insert(
-                Window(
-                  name: name,
-                  duration: duration,
-                  price: price,
-                  image: imager.masterFile,
-                ),
-              );
-              Navigator.of(context).pop();
-            }
+                  /// Add window to database
+                  else if (name != null &&
+                      duration != null &&
+                      price != null &&
+                      imager.masterFile != null) {
+                    await DatabaseProvider.instance.insert(
+                      Window(
+                        name: name,
+                        duration: duration,
+                        price: price,
+                        image: imager.masterFile,
+                      ),
+                    );
+                    Navigator.of(context).pop();
+                  }
 
-            /// Otherwise, reopen screen and ask user to fix any mistakes
-            else {
-              _notifyMissing();
-            }
-          },
+                  /// Otherwise, reopen screen and ask user to fix any mistakes
+                  else {
+                    _notifyMissing();
+                  }
+                },
         )
       ],
     );
@@ -154,7 +166,6 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
     double bodyHeight = MediaQuery.of(context).size.height -
         appBar.preferredSize.height -
         MediaQuery.of(context).padding.top;
-    double keyBoardHeight = MediaQuery.of(context).viewInsets.bottom;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -262,7 +273,7 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               _buildTimeButton(context),
-              _inputTitle('time'),
+              _inputTitle('mm:ss'),
             ],
           ),
 
