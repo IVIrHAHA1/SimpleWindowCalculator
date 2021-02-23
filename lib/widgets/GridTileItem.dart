@@ -3,23 +3,26 @@ import 'package:SimpleWindowCalculator/Tools/ImageLoader.dart';
 import 'package:flutter/material.dart';
 import 'package:SimpleWindowCalculator/objects/Window.dart';
 
-class GridTileItem extends StatefulWidget {
+class GridTileItem extends StatelessWidget{
   final Window item;
+
+  /// Function to be called when pressed. If [onSelected] is not null, then
+  /// this function is disabled.
   final Function(Window) onPressed;
+
+  /// Function to be called when this item is selected and only when initially selected.
+  /// Disables onPressed. Return whether item was successfully selected.
+  final Function(Window) onSelected;
   final bool selectable;
+  final bool selected;
 
-  GridTileItem({@required this.item, this.onPressed, this.selectable = false});
-
-  @override
-  _GridTileItemState createState() => _GridTileItemState();
-}
-
-class _GridTileItemState extends State<GridTileItem> {
-  bool selected;
-
-  _GridTileItemState() {
-    this.selected = false;
-  }
+  GridTileItem({
+    @required this.item,
+    this.onPressed,
+    this.selectable = false,
+    this.onSelected,
+    this.selected,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +39,8 @@ class _GridTileItemState extends State<GridTileItem> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8.0),
                   image: DecorationImage(
-                    image: Imager.fromFile(widget.item.getImageFile())
-                        .masterImage
-                        .image,
+                    image:
+                        Imager.fromFile(item.getImageFile()).masterImage.image,
                     fit: BoxFit.fill,
                   ),
                 ),
@@ -47,14 +49,14 @@ class _GridTileItemState extends State<GridTileItem> {
                   shadowColor: Colors.transparent,
                   child: InkWell(
                     splashColor: Colors.blue,
-                    onTap: widget.selectable
+                    onTap: selectable
                         ? () {
-                            setState(() {
-                              selected = !selected;
-                            });
+                            onSelected(
+                              item,
+                            );
                           }
                         : () {
-                            widget.onPressed(widget.item);
+                            onPressed(item);
                           },
                   ),
                 ),
@@ -62,7 +64,7 @@ class _GridTileItemState extends State<GridTileItem> {
             ),
             Flexible(
               flex: 0,
-              child: Text('${widget.item.name.toLowerCase()}'),
+              child: Text('${item.name.toLowerCase()}'),
             ),
           ],
         ),

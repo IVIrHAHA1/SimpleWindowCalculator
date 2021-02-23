@@ -1,9 +1,7 @@
-import 'package:SimpleWindowCalculator/Animations/SizingTween.dart';
 import 'package:SimpleWindowCalculator/Routes/Window_Object_Screen.dart';
 import 'package:SimpleWindowCalculator/Tools/DatabaseProvider.dart';
 import 'package:SimpleWindowCalculator/GlobalValues.dart';
 import 'package:SimpleWindowCalculator/objects/Window.dart';
-import 'package:SimpleWindowCalculator/Tools/ImageLoader.dart';
 import 'package:SimpleWindowCalculator/widgets/GridTileItem.dart';
 
 import '../objects/OManager.dart';
@@ -19,13 +17,12 @@ class ModalContent extends StatefulWidget {
   _ModalContentState createState() => _ModalContentState();
 }
 
-class _ModalContentState extends State<ModalContent>
-    with SingleTickerProviderStateMixin {
+class _ModalContentState extends State<ModalContent> {
   TextEditingController _textEditingController;
   String searchQuery;
 
   bool _editMode;
-  AnimationController _animController;
+  Window selectedWindow;
 
   _ModalContentState() {
     _editMode = false;
@@ -34,17 +31,12 @@ class _ModalContentState extends State<ModalContent>
   @override
   void initState() {
     _textEditingController = TextEditingController(text: '');
-    _animController = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: GlobalValues.animDuration),
-    );
     super.initState();
   }
 
   @override
   void dispose() {
     _textEditingController.dispose();
-    _animController.dispose();
     super.dispose();
   }
 
@@ -99,7 +91,6 @@ class _ModalContentState extends State<ModalContent>
                 height: size * .7,
                 child: MaterialButton(
                   onPressed: () {
-                    _animController.forward();
                     setState(() {
                       _editMode = !_editMode;
                     });
@@ -159,6 +150,15 @@ class _ModalContentState extends State<ModalContent>
     );
   }
 
+  newSelection(Window selection) {
+    setState(() {
+      if (selectedWindow != selection)
+        selectedWindow = selection;
+      else
+        selectedWindow = null;
+    });
+  }
+
   Container buildBody(double size, BuildContext context) {
     return Container(
       color: widget.backgroundColor,
@@ -184,7 +184,9 @@ class _ModalContentState extends State<ModalContent>
                     return GridTileItem(
                       item: element,
                       onPressed: widget.addWindow,
+                      onSelected: newSelection,
                       selectable: _editMode,
+                      selected: selectedWindow == element && _editMode,
                     );
                   }).toList(),
                 );
@@ -197,6 +199,7 @@ class _ModalContentState extends State<ModalContent>
     );
   }
 
+  /// Footer background, animation and buttons.
   buildButtonFooter(double size, BuildContext context) {
     Widget createBtn = buildFooterButton('create', () => createWindow(context));
     Widget editBtns = Row(
@@ -215,8 +218,8 @@ class _ModalContentState extends State<ModalContent>
         duration: Duration(milliseconds: 200),
         child: _editMode ? editBtns : createBtn,
         transitionBuilder: (childWidget, parentAnim) {
-          Animation anim = Tween(begin: Offset(0, 1), end: Offset(0, 0))
-              .animate(parentAnim);
+          Animation anim =
+              Tween(begin: Offset(0, 1), end: Offset(0, 0)).animate(parentAnim);
 
           return SlideTransition(
             position: anim,
@@ -227,6 +230,7 @@ class _ModalContentState extends State<ModalContent>
     );
   }
 
+  /// Builds the button aesthetics to be used for the footer
   Card buildFooterButton(String text, Function onPressed) {
     return Card(
       elevation: 4,

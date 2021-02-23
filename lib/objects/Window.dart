@@ -218,4 +218,10 @@ class Window with Calculatable, Item {
         ? factorModeList[key] = setMode
         : factorModeList.putIfAbsent(key, () => setMode);
   }
+
+  @override
+  String toString() {
+    return "$name - $quantity @ $price";
+  }
+
 }
