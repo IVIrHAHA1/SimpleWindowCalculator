@@ -207,9 +207,45 @@ class _ModalContentState extends State<ModalContent> {
         Flexible(
           child: buildFooterButton(
             'delete',
-            selectedWindow != null || !_editMode ? () {
-              // TODO: Implement Deletion
-            } : null,
+            selectedWindow != null || !_editMode
+                ? () {
+                    showDialog(
+                      context: context,
+                      child: AlertDialog(
+                        titleTextStyle:
+                            Theme.of(context).textTheme.headline6.copyWith(
+                                  color: Colors.black,
+                                ),
+                        title: Text(
+                          "Remove \"${selectedWindow.name.toLowerCase()}\"?",
+                        ),
+                        actions: [
+                          FlatButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text('No')),
+                          FlatButton(onPressed: () {}, child: Text('Yes')),
+                        ],
+                      ),
+                    );
+                    // showDialog(
+                    //   context: context,
+                    //   barrierDismissible: true,
+                    //   child: Center(
+                    //     child: Container(
+                    //       width: MediaQuery.of(context).size.width / 2,
+                    //       height: MediaQuery.of(context).size.height / 4,
+                    //       color: Colors.white,
+                    //       child: Text(
+                    //         'hello',
+                    //         style: Theme.of(context).textTheme.caption,
+                    //       ),
+                    //     ),
+                    //   ),
+                    // );
+                  }
+                : null,
           ),
         ),
         Flexible(
