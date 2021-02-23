@@ -3,6 +3,7 @@ import 'package:SimpleWindowCalculator/Tools/DatabaseProvider.dart';
 import 'package:SimpleWindowCalculator/GlobalValues.dart';
 import 'package:SimpleWindowCalculator/objects/Window.dart';
 import 'package:SimpleWindowCalculator/Tools/ImageLoader.dart';
+import 'package:SimpleWindowCalculator/widgets/GridTileItem.dart';
 
 import '../objects/OManager.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,12 @@ class ModalContent extends StatefulWidget {
 class _ModalContentState extends State<ModalContent> {
   TextEditingController _textEditingController;
   String searchQuery;
+
+  bool _editMode;
+
+  _ModalContentState() {
+    _editMode = false;
+  }
 
   @override
   void initState() {
@@ -71,19 +78,25 @@ class _ModalContentState extends State<ModalContent> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
+          // Edit Button
           Flexible(
             fit: FlexFit.tight,
             child: Padding(
-              padding: const EdgeInsets.only(right: 16.0),
-              child: Container(
+              padding: const EdgeInsets.only(right: 32.0),
+              child: AnimatedContainer(
+                duration: Duration(
+                  milliseconds: GlobalValues.animDuration,
+                ),
                 alignment: Alignment.center,
                 height: size * .7,
                 child: MaterialButton(
                   onPressed: () {
-                    /// TODO: HANDLE MODE CHANGE
+                    setState(() {
+                      _editMode = !_editMode;
+                    });
                   },
                   child: Text(
-                    "Edit Mode",
+                    _editMode ? "Editing" : "Edit Mode",
                     style: Theme.of(context).textTheme.button.copyWith(
                           color: Colors.black,
                         ),
@@ -92,11 +105,15 @@ class _ModalContentState extends State<ModalContent> {
                 decoration: BoxDecoration(
                   borderRadius:
                       BorderRadius.circular(GlobalValues.cornerRadius),
-                  color: Theme.of(context).primaryColorLight,
+                  color: _editMode
+                      ? Theme.of(context).primaryColorLight
+                      : Colors.grey,
                 ),
               ),
             ),
           ),
+
+          // Search Bar
           Flexible(
             flex: 0,
             child: Container(
@@ -134,10 +151,8 @@ class _ModalContentState extends State<ModalContent> {
   }
 
   Container buildBody(double size, BuildContext context) {
-    var imageSize = MediaQuery.of(context).size.width / 4;
     return Container(
       color: widget.backgroundColor,
-      //height: size,
       child: FutureBuilder<List<Window>>(
           initialData: OManager.presetWindows,
           future: DatabaseProvider.instance
@@ -157,54 +172,10 @@ class _ModalContentState extends State<ModalContent> {
                   crossAxisCount: 3,
                   scrollDirection: Axis.vertical,
                   children: snapshot.data.map((element) {
-                    return Card(
-                      elevation: 2,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            Flexible(
-                              fit: FlexFit.tight,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8.0),
-                                  image: DecorationImage(
-                                    image:
-                                        Imager.fromFile(element.getImageFile())
-                                            .masterImage
-                                            .image,
-                                    fit: BoxFit.fill,
-                                  ),
-                                ),
-                                child: Material(
-                                  color: Colors.transparent,
-                                  shadowColor: Colors.transparent,
-                                  child: InkWell(
-                                    splashColor: Colors.blue,
-                                    onLongPress: () {
-                                      Navigator.of(context).pushReplacement(
-                                        MaterialPageRoute(
-                                          builder: (_) {
-                                            return WindowObjectScreen(
-                                                window: element);
-                                          },
-                                        ),
-                                      );
-                                    },
-                                    onTap: () {
-                                      widget.addWindow(element);
-                                    },
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Flexible(
-                              flex: 0,
-                              child: Text('${element.name.toLowerCase()}'),
-                            ),
-                          ],
-                        ),
-                      ),
+                    return GridTileItem(
+                      item: element,
+                      onPressed: widget.addWindow,
+                      selectable: _editMode,
                     );
                   }).toList(),
                 );

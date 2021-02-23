@@ -1,4 +1,3 @@
-import 'package:SimpleWindowCalculator/Animations/SizingTween.dart';
 import 'package:SimpleWindowCalculator/Tools/DatabaseProvider.dart';
 import 'package:SimpleWindowCalculator/Tools/Calculator.dart';
 import 'package:SimpleWindowCalculator/GlobalValues.dart';
@@ -6,7 +5,6 @@ import 'package:SimpleWindowCalculator/Util/ItemsManager.dart';
 import 'package:SimpleWindowCalculator/Pages/ModalContent.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import './objects/OManager.dart';
 import './widgets/WindowCounter.dart';
 
 import 'widgets/ResultsModule.dart';
