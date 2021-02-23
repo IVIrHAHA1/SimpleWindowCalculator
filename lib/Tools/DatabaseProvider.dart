@@ -64,11 +64,13 @@ class DatabaseProvider {
     Database db = await database;
     String name = window.getName();
 
-    await db.delete(
+    int id = await db.delete(
       WINDOW_TABLE,
       where: "$WINDOW_NAME_ID = ?",
       whereArgs: [name.toLowerCase()],
     );
+
+    return id;
   }
 
   Future<int> replace(Window oldWindow, Window newWindow) async {
@@ -150,7 +152,7 @@ class DatabaseProvider {
 
     List<Map> mapList = await db.rawQuery("SELECT * FROM $WINDOW_TABLE");
 
-    if (mapList.length >= OManager.presetWindows.length) {
+    if (mapList.length >= 1) {
       List<Window> windowList = List();
 
       /// Get window from window json
@@ -163,7 +165,15 @@ class DatabaseProvider {
     return List<Window>();
   }
 
-  /// TODO: Look into saving this data upon start up
+  Future<int> entryLength() async {
+    Database db = await database;
+
+    var result = await db.rawQuery("SELECT COUNT(*) FROM $WINDOW_TABLE");
+
+    int count = Sqflite.firstIntValue(result);
+    return count;
+  }
+
   // No data has been saved yet, (INSERT PRESET DATA)
   // Return preset windows
   // else {

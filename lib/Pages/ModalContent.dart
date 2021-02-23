@@ -1,8 +1,12 @@
+import 'dart:async';
+
 import 'package:SimpleWindowCalculator/Routes/Window_Object_Screen.dart';
 import 'package:SimpleWindowCalculator/Tools/DatabaseProvider.dart';
 import 'package:SimpleWindowCalculator/GlobalValues.dart';
+import 'package:SimpleWindowCalculator/Util/ItemsManager.dart';
 import 'package:SimpleWindowCalculator/objects/Window.dart';
 import 'package:SimpleWindowCalculator/widgets/GridTileItem.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../objects/OManager.dart';
 import 'package:flutter/material.dart';
@@ -150,13 +154,54 @@ class _ModalContentState extends State<ModalContent> {
     );
   }
 
-  newSelection(Window selection) {
+  bool _allowDeletion = false;
+
+  /// TODO: Extract this method and create an interface. THINK S.O.L.I.D
+  _deleteSelection() async {
+    // Ensure the deletion of this window does not break anything
+    if (_allowDeletion) {
+      /// Delete from database
+      await DatabaseProvider.instance.delete(selectedWindow);
+
+      // Update SharedPrefs if needed
+      SharedPreferences sp = await SharedPreferences.getInstance();
+      String defaultWindowName = sp.getString(DEFAULT_WINDOW_KEY);
+      if (selectedWindow.name == defaultWindowName) {
+        List<Window> availWindows = await DatabaseProvider.instance.loadAll();
+        if (availWindows.length > 0) {
+          sp.setString(DEFAULT_WINDOW_KEY, availWindows.first.name);
+        }
+      }
+
+      // Update activeItems/HomePage if needed
+      ItemsManager itemsManager = ItemsManager.instance;
+      itemsManager.forceRemove(selectedWindow);
+
+      if (itemsManager.activeItem == null) {
+        Window defaultWindow = await DatabaseProvider.instance
+            .queryWindow(sp.getString(DEFAULT_WINDOW_KEY));
+
+        itemsManager.activeItem = defaultWindow;
+      }
+    }
+
+    /// TODO: If not, alert user about having at least one window
+    else {}
+  }
+
+  newSelection(Window selection) async {
     setState(() {
       if (selectedWindow != selection)
         selectedWindow = selection;
       else
         selectedWindow = null;
     });
+    int count = await DatabaseProvider.instance.entryLength();
+    if (count >= 1) {
+      _allowDeletion = true;
+    } else {
+      _allowDeletion = false;
+    }
   }
 
   Container buildBody(double size, BuildContext context) {
@@ -219,31 +264,28 @@ class _ModalContentState extends State<ModalContent> {
                         title: Text(
                           "Remove \"${selectedWindow.name.toLowerCase()}\"?",
                         ),
+                        content:
+                            selectedWindow == ItemsManager.instance.activeItem
+                                ? Text('about to remove active window')
+                                : null,
                         actions: [
                           FlatButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: Text('No')),
-                          FlatButton(onPressed: () {}, child: Text('Yes')),
+                            child: Text('No'),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                          FlatButton(
+                            child: Text('Yes'),
+                            onPressed: () {
+                              _deleteSelection();
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            },
+                          ),
                         ],
                       ),
                     );
-                    // showDialog(
-                    //   context: context,
-                    //   barrierDismissible: true,
-                    //   child: Center(
-                    //     child: Container(
-                    //       width: MediaQuery.of(context).size.width / 2,
-                    //       height: MediaQuery.of(context).size.height / 4,
-                    //       color: Colors.white,
-                    //       child: Text(
-                    //         'hello',
-                    //         style: Theme.of(context).textTheme.caption,
-                    //       ),
-                    //     ),
-                    //   ),
-                    // );
                   }
                 : null,
           ),

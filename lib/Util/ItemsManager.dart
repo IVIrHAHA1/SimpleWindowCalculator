@@ -51,13 +51,36 @@ class ItemsManager {
 
   ///Removes [Item] and returns the removed item.
   ///
-  ///If no item was found, returns null
+  ///If no item was found or the item is currently active, returns null.
   remove(Item item) {
     // Removing with index to keep the List.length true.
     // Otherwise, by using the List.remove method, the list will contain null elements.
     int index = _itemsList.indexOf(item);
     if (index >= 0) {
-      return _itemsList.removeAt(index);
+      Item prospect = _itemsList[index];
+      if (prospect == activeItem) {
+        return null;
+      } else {
+        return _itemsList.removeAt(index);
+      }
+    } else
+      return null;
+  }
+
+  /// Like using [remove], however, ignores whether the item is active.
+  /// If active item is removed, [activeItem] equals null;
+  ///
+  /// If no item was found, returns null.
+  forceRemove(Item item) {
+    // Removing with index to keep the List.length true.
+    // Otherwise, by using the List.remove method, the list will contain null elements.
+    int index = _itemsList.indexOf(item);
+    if (index >= 0) {
+      Item removedItem = _itemsList.removeAt(index);
+      if (removedItem == activeItem) {
+        activeItem = null;
+      }
+      return removedItem;
     } else
       return null;
   }
@@ -82,6 +105,10 @@ class ItemsManager {
       _itemsList.removeAt(index);
       _activatedItem = null;
     }
+  }
+
+  bool contains(Item item) {
+    return _itemsList.contains(item);
   }
 
   /// Set the active item, which can then be interfaced with. When setting [activeItem]
