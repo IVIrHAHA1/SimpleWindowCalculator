@@ -204,8 +204,28 @@ class _ModalContentState extends State<ModalContent> {
     Widget createBtn = buildFooterButton('create', () => createWindow(context));
     Widget editBtns = Row(
       children: [
-        Flexible(child: buildFooterButton('delete', () {})),
-        Flexible(child: buildFooterButton('edit', () {})),
+        Flexible(
+          child: buildFooterButton(
+            'delete',
+            selectedWindow != null || !_editMode ? () {
+              // TODO: Implement Deletion
+            } : null,
+          ),
+        ),
+        Flexible(
+            child: buildFooterButton(
+          'edit',
+          selectedWindow != null && _editMode
+              ? () {
+                  Navigator.of(context)
+                      .pushReplacement(MaterialPageRoute(builder: (ctx) {
+                    return WindowObjectScreen(
+                      window: selectedWindow,
+                    );
+                  }));
+                }
+              : null,
+        )),
       ],
     );
 
@@ -234,7 +254,7 @@ class _ModalContentState extends State<ModalContent> {
   Card buildFooterButton(String text, Function onPressed) {
     return Card(
       elevation: 4,
-      color: Theme.of(context).primaryColor,
+      color: onPressed != null ? Theme.of(context).primaryColor : Colors.grey,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),
