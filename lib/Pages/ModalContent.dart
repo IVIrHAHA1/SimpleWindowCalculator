@@ -1,3 +1,4 @@
+import 'package:SimpleWindowCalculator/Animations/SizingTween.dart';
 import 'package:SimpleWindowCalculator/Routes/Window_Object_Screen.dart';
 import 'package:SimpleWindowCalculator/Tools/DatabaseProvider.dart';
 import 'package:SimpleWindowCalculator/GlobalValues.dart';
@@ -18,11 +19,13 @@ class ModalContent extends StatefulWidget {
   _ModalContentState createState() => _ModalContentState();
 }
 
-class _ModalContentState extends State<ModalContent> {
+class _ModalContentState extends State<ModalContent>
+    with SingleTickerProviderStateMixin {
   TextEditingController _textEditingController;
   String searchQuery;
 
   bool _editMode;
+  AnimationController _animController;
 
   _ModalContentState() {
     _editMode = false;
@@ -31,12 +34,17 @@ class _ModalContentState extends State<ModalContent> {
   @override
   void initState() {
     _textEditingController = TextEditingController(text: '');
+    _animController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: GlobalValues.animDuration),
+    );
     super.initState();
   }
 
   @override
   void dispose() {
     _textEditingController.dispose();
+    _animController.dispose();
     super.dispose();
   }
 
@@ -91,6 +99,7 @@ class _ModalContentState extends State<ModalContent> {
                 height: size * .7,
                 child: MaterialButton(
                   onPressed: () {
+                    _animController.forward();
                     setState(() {
                       _editMode = !_editMode;
                     });
@@ -188,32 +197,56 @@ class _ModalContentState extends State<ModalContent> {
     );
   }
 
-  Container buildButtonFooter(double size, BuildContext context) {
+  buildButtonFooter(double size, BuildContext context) {
+    Widget createBtn = buildFooterButton('create', () => createWindow(context));
+    Widget editBtns = Row(
+      children: [
+        Flexible(child: buildFooterButton('delete', () {})),
+        Flexible(child: buildFooterButton('edit', () {})),
+      ],
+    );
+
     return Container(
       alignment: Alignment.center,
       height: size,
       width: double.infinity,
       color: widget.backgroundColor,
-      child: Card(
-        elevation: 4,
-        color: Theme.of(context).primaryColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: InkWell(
-          onTap: () => createWindow(context),
-          splashColor: Theme.of(context).primaryColorLight,
-          child: Container(
-            alignment: Alignment.center,
-            width: MediaQuery.of(context).size.width * .5,
-            child: Text(
-              'create',
-              style: TextStyle(
-                  fontFamily: 'OpenSans',
-                  color: Colors.white,
-                  fontSize: 16,
-                  letterSpacing: 2),
-            ),
+      child: AnimatedSwitcher(
+        duration: Duration(milliseconds: 200),
+        child: _editMode ? editBtns : createBtn,
+        transitionBuilder: (childWidget, parentAnim) {
+          Animation anim = Tween(begin: Offset(0, 1), end: Offset(0, 0))
+              .animate(parentAnim);
+
+          return SlideTransition(
+            position: anim,
+            child: childWidget,
+          );
+        },
+      ),
+    );
+  }
+
+  Card buildFooterButton(String text, Function onPressed) {
+    return Card(
+      elevation: 4,
+      color: Theme.of(context).primaryColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: InkWell(
+        onTap: onPressed,
+        splashColor: Theme.of(context).primaryColorLight,
+        child: Container(
+          alignment: Alignment.center,
+          width: MediaQuery.of(context).size.width * .5,
+          child: Text(
+            text,
+            style: TextStyle(
+                fontFamily: 'OpenSans',
+                color: Colors.white,
+                fontSize: 16,
+                letterSpacing: 2),
           ),
         ),
       ),
