@@ -39,6 +39,11 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
     Calculator.instance.addListener(() {
       setState(() {});
     });
+    manager.addListener(() {
+      Calculator.instance.projectItems = ItemsManager.instance.items;
+
+      setState(() {});
+    });
     super.initState();
   }
 

@@ -1,3 +1,5 @@
+import 'package:SimpleWindowCalculator/Tools/Calculator.dart';
+
 /// Manages "active items" and puts forth an active item, which can then be interfaced with.
 ///
 /// - "active items" or [itemsList] is a list of type [T] which is nothing more than a list
@@ -14,7 +16,7 @@
 ///
 ///
 /// As a singleton class, [ItemsManager] is accessable across the entire project.
-class ItemsManager {
+class ItemsManager with Notifier{
   ItemsManager._();
   static ItemsManager _instance;
 
@@ -78,7 +80,7 @@ class ItemsManager {
     if (index >= 0) {
       Item removedItem = _itemsList.removeAt(index);
       if (removedItem == activeItem) {
-        activeItem = null;
+        _activatedItem = null;
       }
       return removedItem;
     } else

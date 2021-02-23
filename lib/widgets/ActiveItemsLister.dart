@@ -24,6 +24,7 @@ class ActiveItemsLister extends StatelessWidget {
         scrollDirection: Axis.vertical,
         child: Column(
           children: windowList.map((window) {
+            // Can be null when items are deleted from the itemsManager
             return _ItemListing(
               window: window,
               height: MediaQuery.of(context).size.height / 8,

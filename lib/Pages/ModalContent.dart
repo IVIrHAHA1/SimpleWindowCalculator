@@ -158,35 +158,30 @@ class _ModalContentState extends State<ModalContent> {
 
   /// TODO: Extract this method and create an interface. THINK S.O.L.I.D
   _deleteSelection() async {
-    // Ensure the deletion of this window does not break anything
-    if (_allowDeletion) {
-      /// Delete from database
-      await DatabaseProvider.instance.delete(selectedWindow);
+    /// Delete from database
+    await DatabaseProvider.instance.delete(selectedWindow);
 
-      // Update SharedPrefs if needed
-      SharedPreferences sp = await SharedPreferences.getInstance();
-      String defaultWindowName = sp.getString(DEFAULT_WINDOW_KEY);
-      if (selectedWindow.name == defaultWindowName) {
-        List<Window> availWindows = await DatabaseProvider.instance.loadAll();
-        if (availWindows.length > 0) {
-          sp.setString(DEFAULT_WINDOW_KEY, availWindows.first.name);
-        }
-      }
-
-      // Update activeItems/HomePage if needed
-      ItemsManager itemsManager = ItemsManager.instance;
-      itemsManager.forceRemove(selectedWindow);
-
-      if (itemsManager.activeItem == null) {
-        Window defaultWindow = await DatabaseProvider.instance
-            .queryWindow(sp.getString(DEFAULT_WINDOW_KEY));
-
-        itemsManager.activeItem = defaultWindow;
+    // Update SharedPrefs if needed
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    String defaultWindowName = sp.getString(DEFAULT_WINDOW_KEY);
+    if (selectedWindow.name == defaultWindowName) {
+      List<Window> availWindows = await DatabaseProvider.instance.loadAll();
+      if (availWindows.length > 0) {
+        sp.setString(DEFAULT_WINDOW_KEY, availWindows.first.name);
       }
     }
 
-    /// TODO: If not, alert user about having at least one window
-    else {}
+    // Update activeItems/HomePage if needed
+    ItemsManager itemsManager = ItemsManager.instance;
+    itemsManager.forceRemove(selectedWindow);
+
+    if (itemsManager.activeItem == null) {
+      Window defaultWindow = await DatabaseProvider.instance
+          .queryWindow(sp.getString(DEFAULT_WINDOW_KEY));
+
+      itemsManager.activeItem = defaultWindow;
+      itemsManager.notifyListeners();
+    }
   }
 
   newSelection(Window selection) async {
@@ -197,7 +192,7 @@ class _ModalContentState extends State<ModalContent> {
         selectedWindow = null;
     });
     int count = await DatabaseProvider.instance.entryLength();
-    if (count >= 1) {
+    if (count > 1) {
       _allowDeletion = true;
     } else {
       _allowDeletion = false;
@@ -262,27 +257,39 @@ class _ModalContentState extends State<ModalContent> {
                                   color: Colors.black,
                                 ),
                         title: Text(
-                          "Remove \"${selectedWindow.name.toLowerCase()}\"?",
+                          _allowDeletion
+                              ? 'Remove \"${selectedWindow.name.toLowerCase()}\"?'
+                              : 'Unable to Remove',
                         ),
                         content:
                             selectedWindow == ItemsManager.instance.activeItem
-                                ? Text('about to remove active window')
+                                ? Text(_allowDeletion
+                                    ? 'about to remove active window'
+                                    : 'must have at least one window available')
                                 : null,
                         actions: [
-                          FlatButton(
-                            child: Text('No'),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                          ),
-                          FlatButton(
-                            child: Text('Yes'),
-                            onPressed: () {
-                              _deleteSelection();
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                            },
-                          ),
+                          _allowDeletion
+                              ? FlatButton(
+                                  child: Text('No'),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                )
+                              : Container(),
+                          _allowDeletion
+                              ? FlatButton(
+                                  child: Text('Yes'),
+                                  onPressed: () {
+                                    _deleteSelection();
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                  },
+                                )
+                              : FlatButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text('Ok')),
                         ],
                       ),
                     );
