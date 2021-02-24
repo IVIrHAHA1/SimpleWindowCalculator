@@ -74,7 +74,7 @@ class Window with Calculatable, Item {
  */
   @override
   void update() {
-    var granPrice = 0.0;
+    var grandPrice = 0.0;
     var totalTime = Duration();
 
     factorList.forEach((factorKey, factor) {
@@ -84,14 +84,14 @@ class Window with Calculatable, Item {
       }
 
       // Step 2: Calculate Factor price modifier
-      granPrice += factor.calculatePrice(this.price);
+      grandPrice += factor.calculatePrice(this.price);
       totalTime += factor.calculateDuration(this.duration);
     });
 
     // Step 3: Add total standard price
-    granPrice += this.price * this.quantity;
+    grandPrice += this.price * this.quantity;
     totalTime += this.duration * this.quantity;
-    this.totalPrice = granPrice;
+    this.totalPrice = grandPrice;
     this.totalDuration = totalTime;
   }
 

@@ -55,6 +55,11 @@ class Calculator with Notifier {
       projectPrice = 0.0;
       projectDuration = Duration();
     } else {
+      var hourlyPrice = _priceDueToTime(time);
+      if (itemTotalPrice < hourlyPrice) {
+        itemTotalPrice = hourlyPrice;
+      }
+
       // Add Drive time
       projectPrice = itemTotalPrice + DRIVETIME;
 
@@ -74,6 +79,12 @@ class Calculator with Notifier {
 
     // Notify of updated results
     if (isListening) notifyListeners();
+  }
+
+  static const double pricePerHour = 85;
+  _priceDueToTime(Duration totalDuration) {
+    var duration = totalDuration.inSeconds / 3600;
+    return pricePerHour * duration;
   }
 }
 

@@ -289,7 +289,8 @@ class _ModalContentState extends State<ModalContent> {
                                   onPressed: () {
                                     Navigator.pop(context);
                                   },
-                                  child: Text('Ok')),
+                                  child: Text('Ok'),
+                                ),
                         ],
                       ),
                     );

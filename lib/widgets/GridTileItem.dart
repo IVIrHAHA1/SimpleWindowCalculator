@@ -1,4 +1,3 @@
-import 'package:SimpleWindowCalculator/Routes/Window_Object_Screen.dart';
 import 'package:SimpleWindowCalculator/Tools/ImageLoader.dart';
 import 'package:flutter/material.dart';
 import 'package:SimpleWindowCalculator/objects/Window.dart';
