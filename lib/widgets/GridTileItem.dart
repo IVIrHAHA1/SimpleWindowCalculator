@@ -1,6 +1,6 @@
-import 'package:SimpleWindowCalculator/Tools/ImageLoader.dart';
+import 'package:TheWindowCalculator/Tools/ImageLoader.dart';
 import 'package:flutter/material.dart';
-import 'package:SimpleWindowCalculator/objects/Window.dart';
+import 'package:TheWindowCalculator/objects/Window.dart';
 
 class GridTileItem extends StatelessWidget{
   final Window item;

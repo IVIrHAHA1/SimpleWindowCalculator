@@ -1,4 +1,4 @@
-# SimpleWindowCalculator
+# TheWindowCalculator
 
 A new Flutter project.
 

@@ -1,4 +1,4 @@
-import 'package:SimpleWindowCalculator/Util/Format.dart';
+import 'package:TheWindowCalculator/Util/Format.dart';
 import 'package:flutter/material.dart';
 
 class TechDetails extends StatelessWidget {

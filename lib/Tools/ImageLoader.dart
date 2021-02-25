@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:SimpleWindowCalculator/Tools/Calculator.dart';
+import 'package:TheWindowCalculator/Tools/Calculator.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' as paths;
 import 'package:path_provider/path_provider.dart' as syspaths;

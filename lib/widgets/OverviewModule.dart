@@ -1,5 +1,5 @@
-import 'package:SimpleWindowCalculator/GlobalValues.dart';
-import 'package:SimpleWindowCalculator/Util/ItemsManager.dart';
+import 'package:TheWindowCalculator/GlobalValues.dart';
+import 'package:TheWindowCalculator/Util/ItemsManager.dart';
 
 /**
  * Overview module controllers the TabView which in turn conatains the

@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:SimpleWindowCalculator/Tools/DatabaseProvider.dart';
-import 'package:SimpleWindowCalculator/Util/ItemsManager.dart';
-import 'package:SimpleWindowCalculator/Util/ResolveScreenDensity.dart';
-import 'package:SimpleWindowCalculator/objects/Window.dart';
+import 'package:TheWindowCalculator/Tools/DatabaseProvider.dart';
+import 'package:TheWindowCalculator/Util/ItemsManager.dart';
+import 'package:TheWindowCalculator/Util/ResolveScreenDensity.dart';
+import 'package:TheWindowCalculator/objects/Window.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'GlobalValues.dart';
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'The Window Calculator',
       theme: ThemeData(
         disabledColor: Colors.grey,
         iconTheme: IconThemeData(

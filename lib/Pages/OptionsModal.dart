@@ -1,4 +1,4 @@
-import 'package:SimpleWindowCalculator/Tools/ImageLoader.dart';
+import 'package:TheWindowCalculator/Tools/ImageLoader.dart';
 import 'package:flutter/material.dart';
 
 class OptionsModal extends ModalRoute {
