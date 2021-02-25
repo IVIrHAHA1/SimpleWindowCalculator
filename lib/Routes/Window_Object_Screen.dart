@@ -277,26 +277,27 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
             ],
           ),
 
+          /// PRICE BOX INPUT, IF NEEDED UNCOMMENT
           // Price Detail Box
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              DetailInputBox(
-                hint: priceHint,
-                style: textStyle,
-                hintStyle: hintStyle,
-                border: Border(
-                  bottom: BorderSide(
-                    width: 2,
-                    color: missingPrice ? Colors.red : Colors.white,
-                  ),
-                ),
-                textInputType: TextInputType.number,
-                validator: _numberValidator,
-              ),
-              _inputTitle('price')
-            ],
-          ),
+          // Column(
+          //   mainAxisSize: MainAxisSize.min,
+          //   children: [
+          //     DetailInputBox(
+          //       hint: priceHint,
+          //       style: textStyle,
+          //       hintStyle: hintStyle,
+          //       border: Border(
+          //         bottom: BorderSide(
+          //           width: 2,
+          //           color: missingPrice ? Colors.red : Colors.white,
+          //         ),
+          //       ),
+          //       textInputType: TextInputType.number,
+          //       validator: _numberValidator,
+          //     ),
+          //     _inputTitle('price')
+          //   ],
+          // ),
         ],
       ),
     );
