@@ -4,6 +4,7 @@ import 'package:TheWindowCalculator/Tools/DatabaseProvider.dart';
 import 'package:TheWindowCalculator/Util/ItemsManager.dart';
 import 'package:TheWindowCalculator/Util/ResolveScreenDensity.dart';
 import 'package:TheWindowCalculator/objects/Window.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'GlobalValues.dart';
@@ -81,6 +82,8 @@ class MySplashScreen extends StatelessWidget {
 
   Future<void> _initData() async {
     print('INITIALIZING DATA...');
+    await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
     // Prepare the window list and Manager instance
     ItemsManager.init<Window>();
 
