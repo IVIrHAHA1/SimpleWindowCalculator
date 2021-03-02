@@ -55,7 +55,8 @@ class _FactorCoinState extends State<FactorCoin> {
       disabled ? disabled = false : disabled = true;
     });
     widget.window.affixFactor(widget.factorKey, disabled);
-    widget.onStatusChanged(widget.window.getFactor(widget.factorKey).isAffixed());
+    widget
+        .onStatusChanged(widget.window.getFactor(widget.factorKey).isAffixed());
   }
 
 // Changes mode from incrementing to decrementing and vice-versa
@@ -103,9 +104,7 @@ class _FactorCoinState extends State<FactorCoin> {
 
   @override
   Widget build(BuildContext context) {
-    return !widget.isDummy
-        ? buildInteractiveCoin(context)
-        : buildDummyCoin();
+    return !widget.isDummy ? buildInteractiveCoin(context) : buildDummyCoin();
   }
 
   Widget buildDummyCoin() {
@@ -121,6 +120,8 @@ class _FactorCoinState extends State<FactorCoin> {
         // (disabled) -> Coin is grayed out and has to be held to re-enable
         //  * while disabled cannot drag or increment/decrement
         ? InkWell(
+            borderRadius: BorderRadius.circular(100.0),
+            splashColor: Colors.blueGrey,
             onLongPress: () {
               changeAttachmentStatus();
             },
@@ -132,6 +133,8 @@ class _FactorCoinState extends State<FactorCoin> {
             feedback: mintCoin(context, false, widget.size * 1.5),
             childWhenDragging: mintCoin(context, true, widget.size),
             child: InkWell(
+              borderRadius: BorderRadius.circular(100.0),
+              splashColor: Colors.blueGrey,
               onTap: () {
                 HapticFeedback.heavyImpact();
                 modeIncrement

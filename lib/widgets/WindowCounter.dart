@@ -265,24 +265,30 @@ class _WindowCounterState extends State<WindowCounter> {
               child: Column(
                 children: [
                   // INCREMENTING BUTTON
-                  GestureDetector(
-                    onLongPress: () {
-                      HapticFeedback.mediumImpact();
-                      widget.window.amendCount(.5);
-                      Calculator.instance.update();
-                    },
-                    onTap: () {
-                      HapticFeedback.mediumImpact();
-                      widget.window.amendCount(1.0);
-                      Calculator.instance.update();
-                    },
-                    child: Card(
-                      elevation: 5,
-                      shape: CircleBorder(side: BorderSide.none),
-                      child: Icon(
-                        Icons.add,
-                        color: Theme.of(ctx).primaryColor,
-                        size: buttonSize * 1.2,
+                  Material(
+                    borderRadius: BorderRadius.circular(100.0),
+                    color: Colors.transparent,
+                    child: InkWell(
+                      splashColor: Colors.blueGrey,
+                      borderRadius: BorderRadius.circular(100.0),
+                      onLongPress: () {
+                        HapticFeedback.mediumImpact();
+                        widget.window.amendCount(.5);
+                        Calculator.instance.update();
+                      },
+                      onTap: () {
+                        HapticFeedback.mediumImpact();
+                        widget.window.amendCount(1.0);
+                        Calculator.instance.update();
+                      },
+                      child: Card(
+                        elevation: 5,
+                        shape: CircleBorder(side: BorderSide.none),
+                        child: Icon(
+                          Icons.add,
+                          color: Theme.of(ctx).primaryColor,
+                          size: buttonSize * 1.2,
+                        ),
                       ),
                     ),
                   ),
@@ -292,24 +298,30 @@ class _WindowCounterState extends State<WindowCounter> {
                   ),
 
                   // DECREMENTING BUTTON
-                  GestureDetector(
-                    onLongPress: () {
-                      HapticFeedback.mediumImpact();
-                      widget.window.amendCount(-.5);
-                      Calculator.instance.update();
-                    },
-                    onTap: () {
-                      HapticFeedback.mediumImpact();
-                      widget.window.amendCount(-1.0);
-                      Calculator.instance.update();
-                    },
-                    child: Card(
-                      elevation: 5,
-                      shape: CircleBorder(side: BorderSide.none),
-                      child: Icon(
-                        Icons.remove,
-                        color: Theme.of(ctx).primaryColor,
-                        size: buttonSize * .8,
+                  Material(
+                    color: Colors.transparent,
+                    borderRadius: BorderRadius.circular(100.0),
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(100.0),
+                      splashColor: Colors.blueGrey,
+                      onLongPress: () {
+                        HapticFeedback.mediumImpact();
+                        widget.window.amendCount(-.5);
+                        Calculator.instance.update();
+                      },
+                      onTap: () {
+                        HapticFeedback.mediumImpact();
+                        widget.window.amendCount(-1.0);
+                        Calculator.instance.update();
+                      },
+                      child: Card(
+                        elevation: 5,
+                        shape: CircleBorder(side: BorderSide.none),
+                        child: Icon(
+                          Icons.remove,
+                          color: Theme.of(ctx).primaryColor,
+                          size: buttonSize * .8,
+                        ),
                       ),
                     ),
                   ),
