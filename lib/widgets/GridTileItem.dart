@@ -2,7 +2,7 @@ import 'package:TheWindowCalculator/Tools/ImageLoader.dart';
 import 'package:flutter/material.dart';
 import 'package:TheWindowCalculator/objects/Window.dart';
 
-class GridTileItem extends StatelessWidget{
+class GridTileItem extends StatelessWidget {
   final Window item;
 
   /// Function to be called when pressed. If [onSelected] is not null, then
@@ -63,7 +63,11 @@ class GridTileItem extends StatelessWidget{
             ),
             Flexible(
               flex: 0,
-              child: Text('${item.name.toLowerCase()}'),
+              child: Text(
+                '${item.name.toLowerCase()}',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
           ],
         ),

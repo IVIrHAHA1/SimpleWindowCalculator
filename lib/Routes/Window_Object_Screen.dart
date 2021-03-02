@@ -29,7 +29,7 @@ class WindowObjectScreen extends StatefulWidget {
 class _WindowObjectScreenState extends State<WindowObjectScreen> {
   String name;
   Duration duration;
-  double price;
+  double price = 0;
 
   Imager imager = Imager();
   TextStyle textStyle, hintStyle;
@@ -191,7 +191,7 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
 
   /// Validates the name
   _nameValidator(String input) async {
-    if (input.length > 3 && input.length < 16) {
+    if (input.length > 3 && input.length < 30) {
       nameExists = await DatabaseProvider.instance.contains(input);
       if (!nameExists) {
         name = input;
@@ -277,7 +277,7 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
             ],
           ),
 
-          /// PRICE BOX INPUT, IF NEEDED UNCOMMENT
+          /// PRICE BOX INPUT, IF NEEDED UNCOMMENT(Also, hardcoded a price as 0 in vars)
           // Price Detail Box
           // Column(
           //   mainAxisSize: MainAxisSize.min,

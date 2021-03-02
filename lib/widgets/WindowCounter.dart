@@ -150,6 +150,7 @@ class _WindowCounterState extends State<WindowCounter> {
           Text(
             '${widget.window.getName()}',
             style: Theme.of(context).textTheme.headline6,
+            overflow: TextOverflow.ellipsis,
           ),
 
           // Factor Row
