@@ -43,8 +43,10 @@ class Calculator with Notifier {
     Duration time = Duration();
 
     for (Calculatable item in projectItems) {
+      item.price = _priceDueToTime(item.duration);
+
       item.update();
-      itemTotalPrice += item._totalPrice;
+      itemTotalPrice += item.price;
       projectCount += item.quantity;
       time += item.totalDuration;
     }
@@ -81,9 +83,9 @@ class Calculator with Notifier {
     if (isListening) notifyListeners();
   }
 
-  static const double pricePerHour = 85;
+  static const double pricePerHour = 85.0;
   _priceDueToTime(Duration totalDuration) {
-    var duration = totalDuration.inSeconds / 3600;
+    var duration = totalDuration.inSeconds / 3600.0;
     return pricePerHour * duration;
   }
 }
