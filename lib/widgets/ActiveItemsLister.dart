@@ -13,8 +13,12 @@ import 'package:flutter/material.dart';
 
 class ActiveItemsLister extends StatelessWidget {
   final List<Window> windowList;
+  final Function collapseNotifier;
 
-  ActiveItemsLister(this.windowList);
+  ActiveItemsLister(
+    this.windowList,
+    this.collapseNotifier,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +30,7 @@ class ActiveItemsLister extends StatelessWidget {
           children: windowList.map((window) {
             // Can be null when items are deleted from the itemsManager
             return _ItemListing(
+              collapseNotifier,
               window: window,
               height: MediaQuery.of(context).size.height / 8,
             );
@@ -40,7 +45,10 @@ class _ItemListing extends StatelessWidget {
   final Window window;
   final double height;
 
-  const _ItemListing({
+  final Function collapse;
+
+  const _ItemListing(
+    this.collapse, {
     Key key,
     @required this.window,
     this.height = 200,
@@ -64,6 +72,7 @@ class _ItemListing extends StatelessWidget {
             GestureDetector(
               onTap: () {
                 ItemsManager.instance.activeItem = window;
+                collapse();
               },
               child: Container(
                 decoration: BoxDecoration(

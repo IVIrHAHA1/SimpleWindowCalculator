@@ -146,6 +146,7 @@ class _ResultsModuleState extends State<ResultsModule> {
                         child: OverviewModule(
                           widget.valueHolder.priceTotal,
                           widget.valueHolder.timeTotal,
+                          _collapseState,
                         ),
                       ),
                     ),

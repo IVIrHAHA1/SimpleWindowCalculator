@@ -1,4 +1,3 @@
-import 'package:TheWindowCalculator/GlobalValues.dart';
 import 'package:TheWindowCalculator/Util/ItemsManager.dart';
 
 /**
@@ -14,8 +13,9 @@ import 'package:flutter/material.dart';
 class OverviewModule extends StatelessWidget {
   final double totalPrice;
   final Duration totalDuration;
+  final Function collapseNotifier;
 
-  OverviewModule(this.totalPrice, this.totalDuration);
+  OverviewModule(this.totalPrice, this.totalDuration, this.collapseNotifier);
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +51,10 @@ class OverviewModule extends StatelessWidget {
             flex: 1,
             child: TabBarView(
               children: [
-                ActiveItemsLister(ItemsManager.instance.items),
+                ActiveItemsLister(
+                  ItemsManager.instance.items,
+                  collapseNotifier,
+                ),
                 TechDetails(totalPrice, totalDuration),
               ],
             ),
