@@ -23,6 +23,12 @@ class ActiveItemsLister extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      clipBehavior: Clip.hardEdge,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.only(
+        bottomLeft: Radius.circular(GlobalValues.cornerRadius),
+        bottomRight: Radius.circular(GlobalValues.cornerRadius),
+      )),
       alignment: Alignment.topCenter,
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
