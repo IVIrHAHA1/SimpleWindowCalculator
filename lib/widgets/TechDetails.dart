@@ -5,7 +5,7 @@ import '../Animations/PopUpTextField.dart';
 import 'package:flutter/material.dart';
 
 class TechDetails extends StatelessWidget {
-  final Map<String, Text> statList = Map();
+  final Map<String, Widget> statList = Map();
   final double totalPrice;
   final Duration totalDuration;
 
@@ -16,13 +16,20 @@ class TechDetails extends StatelessWidget {
     _initStats(context);
 
     return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: ListView.builder(
         itemBuilder: (ctx, index) {
           String labelKey = statList.keys.elementAt(index);
 
           return _MyListTile(
-            labelKey: labelKey,
-            statList: statList,
+            title: Text(
+              '$labelKey',
+              style: Theme.of(context).textTheme.headline6.copyWith(
+                    color: Colors.black,
+                    fontSize: 14,
+                  ),
+            ),
+            amount: statList[labelKey],
             withEdit: true,
           );
         },
@@ -76,13 +83,15 @@ class TechDetails extends StatelessWidget {
 class _MyListTile extends StatefulWidget {
   _MyListTile({
     Key key,
-    @required this.labelKey,
-    @required this.statList,
+    @required this.title,
+    @required this.amount,
+    this.subtitle,
     this.withEdit = false,
   }) : super(key: key);
 
-  final String labelKey;
-  final Map<String, Text> statList;
+  final Widget title;
+  final Widget subtitle;
+  final Widget amount;
   final bool withEdit;
 
   @override
@@ -106,23 +115,26 @@ class __MyListTileState extends State<_MyListTile>
 
   @override
   Widget build(BuildContext context) {
-    var textStyle = TextStyle(
-      color: Colors.black,
-      fontFamily: 'Lato',
-      fontWeight: FontWeight.bold,
-    );
     return Container(
       width: double.infinity,
       height: 40,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Text(
-            '${widget.labelKey}',
-            style: textStyle,
+          Expanded(
+            flex: 1,
+            child: widget.amount,
           ),
           Expanded(
-            child: _buildEditBtn(),
+            flex: 3,
+            child: widget.title,
+          ),
+          Expanded(
+            flex: 1,
+            child: Container(
+              alignment: Alignment.centerRight,
+              child: _buildEditBtn(),
+            ),
           ),
         ],
       ),
@@ -147,7 +159,7 @@ class __MyListTileState extends State<_MyListTile>
     // );
   }
 
-  _buildEditBtn() {
+  Widget _buildEditBtn() {
     return PopUpTextField(
       controller: controller,
       icon: SpinnerTransition(

@@ -127,11 +127,11 @@ class _PopUpTextFieldState extends State<PopUpTextField>
         shadowColor: Colors.black,
         shape: expand.value == _maxHeight
             ? CircleBorder(
-                side: BorderSide(width: 2, color: Colors.black12),
+                // side: BorderSide(width: 2, color: Colors.black12),
               )
             : RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0),
-                side: BorderSide(width: 2, color: Colors.black12),
+                // side: BorderSide(width: 2, color: Colors.black12),
               ),
         child: Container(
           height: _maxHeight,
