@@ -287,6 +287,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.8.0-nullsafety.2"
+  soyhaha:
+    dependency: "direct main"
+    description:
+      path: "D:/SoftwareDev/Libraries/FlutterLibraries/items"
+      relative: false
+    source: path
+    version: "0.0.1"
   sqflite:
     dependency: "direct main"
     description:

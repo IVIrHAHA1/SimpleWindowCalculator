@@ -83,10 +83,10 @@ class Calculator with Notifier {
     if (isListening) notifyListeners();
   }
 
-  static const double pricePerHour = 85.0;
+  
   _priceDueToTime(Duration totalDuration) {
     var duration = totalDuration.inSeconds / 3600.0;
-    return pricePerHour * duration;
+    return TARGET_HOURLY_RATE * duration;
   }
 }
 
