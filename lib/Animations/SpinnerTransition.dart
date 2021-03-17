@@ -59,7 +59,8 @@ class _SpinnerTransitionState extends State<SpinnerTransition>
     );
 
     controller.addListener(() {
-      if (controller.isCompleted) widget.onFinished(controller.value == 1);
+      if (controller.isCompleted && widget.onFinished != null)
+        widget.onFinished(controller.value == 1);
     });
 
     /// Full 180 rotation tween

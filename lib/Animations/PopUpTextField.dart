@@ -73,17 +73,6 @@ class _PopUpTextFieldState extends State<PopUpTextField>
       ),
     );
 
-    expand = Tween<double>(begin: 50, end: 300).animate(
-      CurvedAnimation(
-        parent: controller,
-        curve: Interval(
-          expInt_s,
-          expInt_e,
-          curve: Curves.decelerate,
-        ),
-      ),
-    );
-
     super.initState();
   }
 
@@ -97,48 +86,67 @@ class _PopUpTextFieldState extends State<PopUpTextField>
   static const double raiseInt_s = 0, raiseInt_e = .25;
   static const double riseHeightpx = 5.0;
 
+  double _maxHeight;
+  double _maxWidth;
+
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: controller,
-      builder: (ctx, child) {
-        return _firstChild();
-      },
-    );
+    return LayoutBuilder(builder: (ctx, constraints) {
+      this._maxHeight = constraints.maxHeight ?? 50;
+      this._maxWidth = constraints.maxWidth ?? 200;
+
+      return AnimatedBuilder(
+        animation: controller,
+        builder: (ctx, child) {
+          expand = Tween<double>(begin: _maxHeight, end: _maxWidth).animate(
+            CurvedAnimation(
+              parent: controller,
+              curve: Interval(
+                expInt_s,
+                expInt_e,
+                curve: Curves.decelerate,
+              ),
+            ),
+          );
+
+          return _buildChild();
+        },
+      );
+    });
   }
 
-  Widget _firstChild() {
+  Widget _buildChild() {
     return GestureDetector(
       onTap: () {
         expanded ? controller.forward() : controller.reverse();
-        setState(() {
-          expanded = !expanded;
-        });
+        expanded = !expanded;
       },
       child: Card(
         elevation: rise.value,
         color: widget.fillColor,
         shadowColor: Colors.black,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20.0),
-          side: BorderSide(width: 2, color: Colors.black12),
-        ),
+        shape: expand.value == _maxHeight
+            ? CircleBorder(
+                side: BorderSide(width: 2, color: Colors.black12),
+              )
+            : RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0),
+                side: BorderSide(width: 2, color: Colors.black12),
+              ),
         child: Container(
+          height: _maxHeight,
           width: expand.value,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              LayoutBuilder(builder: (ctx, contraints) {
-                num size = contraints.maxHeight - 10;
-                return SizedBox(
-                  child: FittedBox(
-                    fit: BoxFit.contain,
-                    child: widget.icon,
-                  ),
-                  height: size - riseHeightpx,
-                  width: size - riseHeightpx,
-                );
-              }),
+              SizedBox(
+                child: FittedBox(
+                  fit: BoxFit.fitHeight,
+                  child: widget.icon,
+                ),
+                height: (_maxHeight * .8) - riseHeightpx + rise.value,
+                width: (_maxHeight * .8) - riseHeightpx + rise.value,
+              ),
               Visibility(
                 visible: textOpacity.value > 0,
                 child: Flexible(

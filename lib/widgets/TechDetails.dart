@@ -106,32 +106,59 @@ class __MyListTileState extends State<_MyListTile>
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      // title: Visibility(
-      //   visible: !popUpExpanded,
-      //   child: Text(
-      //     widget.labelKey,
-      //     style: TextStyle(
-      //       color: Colors.black,
-      //       fontFamily: 'Lato',
-      //       fontWeight: FontWeight.bold,
-      //     ),
-      //   ),
-      // ),
-      // leading: Visibility(
-      //   visible: !popUpExpanded,
-      //   child: widget.statList[widget.labelKey],
-      // ),
-      trailing: widget.withEdit ? _buildEditBtn() : null,
+    var textStyle = TextStyle(
+      color: Colors.black,
+      fontFamily: 'Lato',
+      fontWeight: FontWeight.bold,
     );
+    return Container(
+      width: double.infinity,
+      height: 40,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Text(
+            '${widget.labelKey}',
+            style: textStyle,
+          ),
+          Expanded(
+            child: _buildEditBtn(),
+          ),
+        ],
+      ),
+    );
+    // return ListTile(
+    //   title: Visibility(
+    //     visible: !popUpExpanded,
+    //     child: Text(
+    //       widget.labelKey,
+    //       style: TextStyle(
+    //         color: Colors.black,
+    //         fontFamily: 'Lato',
+    //         fontWeight: FontWeight.bold,
+    //       ),
+    //     ),
+    //   ),
+    //   leading: Visibility(
+    //     visible: !popUpExpanded,
+    //     child: widget.statList[widget.labelKey],
+    //   ),
+    //   trailing: widget.withEdit ? _buildEditBtn() : null,
+    // );
   }
 
   _buildEditBtn() {
     return PopUpTextField(
       controller: controller,
       icon: SpinnerTransition(
-        child1: Icon(Icons.edit),
-        child2: Icon(Icons.check),
+        child1: Icon(
+          Icons.edit,
+          color: Colors.black,
+        ),
+        child2: Icon(
+          Icons.check,
+          color: Colors.black,
+        ),
         duration: duration,
         onPressed: () {
           !popUpExpanded ? controller.forward() : controller.reverse();
