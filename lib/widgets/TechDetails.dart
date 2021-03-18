@@ -122,7 +122,9 @@ class __MyListTileState extends State<_MyListTile>
       height: 40,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
-        children: [Expanded(child: _buildEditBtn())],
+        children: [
+          Expanded(child: _buildEditBtn()),
+        ],
         // children: [
         //   Expanded(
         //     flex: 1,
