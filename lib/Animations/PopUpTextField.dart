@@ -34,59 +34,22 @@ class PopUpTextField extends StatefulWidget {
 
 class _PopUpTextFieldState extends State<PopUpTextField>
     with SingleTickerProviderStateMixin {
-  AnimationController controller;
-  Tween<double> shadowTween;
+  AnimationController _controller;
 
-  bool expanded;
+  /// Whether the widget has expanded or not
+  bool _expanded;
 
-  Animation rise;
-  Animation iconOpacity;
-  Animation textOpacity;
-  Animation expand;
+  /// How much the icon rises when activated
+  Animation _rise;
+  /// The transition opacity of the icon
+  Animation _iconOpacity;
+  /// The opacity of the text field
+  Animation _textOpacity;
+  /// The width of the widget when expanded
+  Animation _expand;
 
   _PopUpTextFieldState() {
-    this.expanded = false;
-  }
-
-  @override
-  void initState() {
-    controller = widget.controller ??
-        AnimationController(
-          vsync: this,
-          duration: widget.duration,
-          reverseDuration: widget.duration,
-        );
-
-    // Rising Animation
-    rise = Tween<double>(begin: 0, end: riseHeightpx).animate(
-      CurvedAnimation(
-        parent: controller,
-        curve: Interval(raiseInt_s, raiseInt_e, curve: Curves.decelerate),
-      ),
-    );
-
-    iconOpacity = Tween<double>(begin: .25, end: .75).animate(
-      CurvedAnimation(
-        parent: controller,
-        curve: Interval(raiseInt_s, raiseInt_e),
-      ),
-    );
-
-    // Expansion Animation
-    textOpacity = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: controller,
-        curve: Interval(expInt_s, expInt_e),
-      ),
-    );
-
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
+    this._expanded = false;
   }
 
   static const double expInt_s = .5, expInt_e = 1;
@@ -97,17 +60,59 @@ class _PopUpTextFieldState extends State<PopUpTextField>
   double _maxWidth;
 
   @override
+  void initState() {
+    // Animation Controller
+    _controller = widget.controller ??
+        AnimationController(
+          vsync: this,
+          duration: widget.duration,
+          reverseDuration: widget.duration,
+        );
+
+    // Rising Animation
+    _rise = Tween<double>(begin: 0, end: riseHeightpx).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Interval(raiseInt_s, raiseInt_e, curve: Curves.decelerate),
+      ),
+    );
+
+    _iconOpacity = Tween<double>(begin: .25, end: .75).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Interval(raiseInt_s, raiseInt_e),
+      ),
+    );
+
+    // Expansion Animation
+    _textOpacity = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Interval(expInt_s, expInt_e),
+      ),
+    );
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (ctx, constraints) {
       this._maxHeight = constraints.maxHeight ?? 50;
       this._maxWidth = constraints.maxWidth ?? 200;
 
       return AnimatedBuilder(
-        animation: controller,
+        animation: _controller,
         builder: (ctx, child) {
-          expand = Tween<double>(begin: _maxHeight, end: _maxWidth).animate(
+          _expand = Tween<double>(begin: _maxHeight, end: _maxWidth).animate(
             CurvedAnimation(
-              parent: controller,
+              parent: _controller,
               curve: Interval(
                 expInt_s,
                 expInt_e,
@@ -125,14 +130,14 @@ class _PopUpTextFieldState extends State<PopUpTextField>
   Widget _buildChild() {
     return GestureDetector(
       onTap: () {
-        expanded ? controller.forward() : controller.reverse();
-        expanded = !expanded;
+        _expanded ? _controller.forward() : _controller.reverse();
+        _expanded = !_expanded;
       },
       child: Card(
-        elevation: rise.value,
+        elevation: _rise.value,
         color: widget.fillColor,
         shadowColor: Colors.black,
-        shape: expand.value == _maxHeight
+        shape: _expand.value == _maxHeight
             ? CircleBorder(
                 side: widget.borderSide,
               )
@@ -142,7 +147,7 @@ class _PopUpTextFieldState extends State<PopUpTextField>
               ),
         child: Container(
           height: _maxHeight,
-          width: expand.value,
+          width: _expand.value,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -152,15 +157,15 @@ class _PopUpTextFieldState extends State<PopUpTextField>
                   fit: BoxFit.fitHeight,
                   child: widget.icon,
                 ),
-                height: (_maxHeight * widget.iconHeightFactor) - riseHeightpx + rise.value,
-                width: (_maxHeight * widget.iconWidthFactor) - riseHeightpx + rise.value,
+                height: (_maxHeight * widget.iconHeightFactor) - riseHeightpx + _rise.value,
+                width: (_maxHeight * widget.iconWidthFactor) - riseHeightpx + _rise.value,
               ),
               // TextField
               Visibility(
-                visible: textOpacity.value > 0,
+                visible: _textOpacity.value > 0,
                 child: Flexible(
                   child: Opacity(
-                    opacity: textOpacity.value,
+                    opacity: _textOpacity.value,
                     child: TextField(
                       textAlign: TextAlign.end,
                       decoration: InputDecoration(

@@ -121,24 +121,27 @@ class __MyListTileState extends State<_MyListTile>
       width: double.infinity,
       height: 40,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Expanded(
-            flex: 1,
-            child: widget.amount,
-          ),
-          Expanded(
-            flex: !popUpExpanded ? 3 : 1,
-            child: widget.title,
-          ),
-          Expanded(
-            flex: !popUpExpanded ? 1 : 3,
-            child: Container(
-              alignment: Alignment.centerRight,
-              child: widget.withEdit ? _buildEditBtn() : Container(),
-            ),
-          ),
+          _buildEditBtn()
         ],
+        // children: [
+        //   Expanded(
+        //     flex: 1,
+        //     child: widget.amount,
+        //   ),
+        //   Expanded(
+        //     flex: !popUpExpanded ? 3 : 1,
+        //     child: widget.title,
+        //   ),
+        //   Expanded(
+        //     flex: !popUpExpanded ? 1 : 3,
+        //     child: Container(
+        //       alignment: Alignment.centerRight,
+        //       child: widget.withEdit ? _buildEditBtn() : Container(),
+        //     ),
+        //   ),
+        // ],
       ),
     );
   }
