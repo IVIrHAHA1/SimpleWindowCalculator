@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:TheWindowCalculator/GlobalValues.dart';
 import 'package:TheWindowCalculator/Util/Format.dart';
 import '../Animations/SpinnerTransition.dart';
@@ -104,7 +106,7 @@ class __MyListTileState extends State<_MyListTile>
     with SingleTickerProviderStateMixin {
   AnimationController controller;
   bool popUpExpanded = false;
-  var duration = const Duration(milliseconds: 800);
+  var duration = const Duration(milliseconds: 400);
 
   @override
   void initState() {
@@ -155,15 +157,27 @@ class __MyListTileState extends State<_MyListTile>
           color: Colors.black,
         ),
         duration: duration,
-        onFinished: (child2InView) {},
         onPressed: () {
-          !popUpExpanded ? controller.forward() : controller.reverse();
-          setState(() {
-            popUpExpanded = !popUpExpanded;
-          });
+          if (!popUpExpanded) {
+            controller.forward();
+            setState(() {
+              popUpExpanded = !popUpExpanded;
+            });
+          } else {
+            controller.reverse();
+            _reshape();
+          }
         },
       ),
       duration: duration,
     );
+  }
+
+  _reshape() async {
+    Timer(duration, () {
+      setState(() {
+        popUpExpanded = false;
+      });
+    });
   }
 }

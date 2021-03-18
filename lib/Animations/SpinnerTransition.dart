@@ -18,6 +18,7 @@ class SpinnerTransition extends StatefulWidget {
   final Duration reverseDuration;
 
   final Function onPressed;
+
   /// When spinner is done animating, will return true if [child2] is currently in view.
   final Function(bool spun) onFinished;
 
@@ -60,8 +61,9 @@ class _SpinnerTransitionState extends State<SpinnerTransition>
     );
 
     controller.addListener(() {
-      if (controller.isCompleted && widget.onFinished != null)
-        widget.onFinished(controller.value == 1);
+      if ((controller.value == 1 || controller.value == 0) &&
+          widget.onFinished != null)
+      widget.onFinished(controller.value == 1);
     });
 
     /// Full 180 rotation tween
