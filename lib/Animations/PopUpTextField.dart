@@ -96,28 +96,29 @@ class _PopUpTextFieldState extends State<PopUpTextField>
   }
 
   Widget _buildChild() {
+    // Container which gives max height determined by parent Widget
     return Container(
       height: _maxHeight,
       child: Row(
         /// TODO: ALLOW USER TO SET TO EXPAND LEFT OR RIGHT
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
+          // Container constrains the Card along with children, ie Icon and TextField
+          // with a maxWidth. Using BoxConstraints, allows for child resizing.
           Container(
             constraints: BoxConstraints(
               maxWidth: _maxWidth,
+              minWidth: _maxHeight,
             ),
+            width: _maxWidth * _expand.value,
             child: Card(
               elevation: _rise.value,
               color: widget.fillColor,
               shadowColor: Colors.black,
-              shape: !(_expand.value > 0)
-                  ? CircleBorder(
-                      side: widget.borderSide,
-                    )
-                  : RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                      side: widget.borderSide,
-                    ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(_maxHeight),
+                side: widget.borderSide,
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
@@ -135,7 +136,10 @@ class _PopUpTextFieldState extends State<PopUpTextField>
                       child: SizedBox(
                         child: FittedBox(
                           fit: BoxFit.fitHeight,
-                          child: widget.icon,
+                          child: Opacity(
+                          opacity: _iconOpacity.value,
+                            child: widget.icon,
+                          ),
                         ),
                         height: (_maxHeight * widget.iconHeightFactor) -
                             riseHeightpx +
