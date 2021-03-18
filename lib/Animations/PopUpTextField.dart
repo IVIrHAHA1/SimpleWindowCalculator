@@ -9,6 +9,10 @@ class PopUpTextField extends StatefulWidget {
   final Color fillColor;
   final Duration duration;
   final AnimationController controller;
+  final BorderSide borderSide;
+  final double iconHeightFactor, iconWidthFactor;
+
+  static const double iconSizeFactor = .75;
 
   PopUpTextField({
     this.hint,
@@ -19,6 +23,9 @@ class PopUpTextField extends StatefulWidget {
     this.icon,
     this.controller,
     this.duration,
+    this.iconHeightFactor = iconSizeFactor,
+    this.iconWidthFactor = iconSizeFactor,
+    this.borderSide = BorderSide.none,
   });
 
   @override
@@ -127,11 +134,11 @@ class _PopUpTextFieldState extends State<PopUpTextField>
         shadowColor: Colors.black,
         shape: expand.value == _maxHeight
             ? CircleBorder(
-                // side: BorderSide(width: 2, color: Colors.black12),
+                side: widget.borderSide,
               )
             : RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0),
-                // side: BorderSide(width: 2, color: Colors.black12),
+                side: widget.borderSide,
               ),
         child: Container(
           height: _maxHeight,
@@ -139,14 +146,16 @@ class _PopUpTextFieldState extends State<PopUpTextField>
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              // Icon Image
               SizedBox(
                 child: FittedBox(
                   fit: BoxFit.fitHeight,
                   child: widget.icon,
                 ),
-                height: (_maxHeight * .8) - riseHeightpx + rise.value,
-                width: (_maxHeight * .8) - riseHeightpx + rise.value,
+                height: (_maxHeight * widget.iconHeightFactor) - riseHeightpx + rise.value,
+                width: (_maxHeight * widget.iconWidthFactor) - riseHeightpx + rise.value,
               ),
+              // TextField
               Visibility(
                 visible: textOpacity.value > 0,
                 child: Flexible(

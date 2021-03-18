@@ -18,6 +18,7 @@ class SpinnerTransition extends StatefulWidget {
   final Duration reverseDuration;
 
   final Function onPressed;
+  /// When spinner is done animating, will return true if [child2] is currently in view.
   final Function(bool spun) onFinished;
 
   SpinnerTransition({

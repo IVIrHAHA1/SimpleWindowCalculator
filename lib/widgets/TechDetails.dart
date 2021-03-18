@@ -24,6 +24,8 @@ class TechDetails extends StatelessWidget {
           return _MyListTile(
             title: Text(
               '$labelKey',
+              overflow: TextOverflow.fade,
+              maxLines: 1,
               style: Theme.of(context).textTheme.headline6.copyWith(
                     color: Colors.black,
                     fontSize: 14,
@@ -126,37 +128,19 @@ class __MyListTileState extends State<_MyListTile>
             child: widget.amount,
           ),
           Expanded(
-            flex: 3,
+            flex: !popUpExpanded ? 3 : 1,
             child: widget.title,
           ),
           Expanded(
-            flex: 1,
+            flex: !popUpExpanded ? 1 : 3,
             child: Container(
               alignment: Alignment.centerRight,
-              child: _buildEditBtn(),
+              child: widget.withEdit ? _buildEditBtn() : Container(),
             ),
           ),
         ],
       ),
     );
-    // return ListTile(
-    //   title: Visibility(
-    //     visible: !popUpExpanded,
-    //     child: Text(
-    //       widget.labelKey,
-    //       style: TextStyle(
-    //         color: Colors.black,
-    //         fontFamily: 'Lato',
-    //         fontWeight: FontWeight.bold,
-    //       ),
-    //     ),
-    //   ),
-    //   leading: Visibility(
-    //     visible: !popUpExpanded,
-    //     child: widget.statList[widget.labelKey],
-    //   ),
-    //   trailing: widget.withEdit ? _buildEditBtn() : null,
-    // );
   }
 
   Widget _buildEditBtn() {
@@ -172,6 +156,7 @@ class __MyListTileState extends State<_MyListTile>
           color: Colors.black,
         ),
         duration: duration,
+        onFinished: (child2InView) {},
         onPressed: () {
           !popUpExpanded ? controller.forward() : controller.reverse();
           setState(() {
