@@ -41,10 +41,13 @@ class _PopUpTextFieldState extends State<PopUpTextField>
 
   /// How much the icon rises when activated
   Animation _rise;
+
   /// The transition opacity of the icon
   Animation _iconOpacity;
+
   /// The opacity of the text field
   Animation _textOpacity;
+
   /// The width of the widget when expanded
   Animation _expand;
 
@@ -128,61 +131,70 @@ class _PopUpTextFieldState extends State<PopUpTextField>
   }
 
   Widget _buildChild() {
-    return GestureDetector(
-      onTap: () {
-        _expanded ? _controller.forward() : _controller.reverse();
-        _expanded = !_expanded;
-      },
-      child: Card(
-        elevation: _rise.value,
-        color: widget.fillColor,
-        shadowColor: Colors.black,
-        shape: _expand.value == _maxHeight
-            ? CircleBorder(
-                side: widget.borderSide,
-              )
-            : RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0),
-                side: widget.borderSide,
-              ),
-        child: Container(
-          height: _maxHeight,
-          width: _expand.value,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Icon Image
-              SizedBox(
-                child: FittedBox(
-                  fit: BoxFit.fitHeight,
-                  child: widget.icon,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start, /// TODO: ALLOW USER TO SET TO EXPAND LEFT OR RIGHT
+      children: [
+        Card(
+          elevation: _rise.value,
+          color: widget.fillColor,
+          shadowColor: Colors.black,
+          shape: _expand.value == _maxHeight
+              ? CircleBorder(
+                  side: widget.borderSide,
+                )
+              : RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                  side: widget.borderSide,
                 ),
-                height: (_maxHeight * widget.iconHeightFactor) - riseHeightpx + _rise.value,
-                width: (_maxHeight * widget.iconWidthFactor) - riseHeightpx + _rise.value,
-              ),
-              // TextField
-              Visibility(
-                visible: _textOpacity.value > 0,
-                child: Flexible(
-                  child: Opacity(
-                    opacity: _textOpacity.value,
-                    child: TextField(
-                      textAlign: TextAlign.end,
-                      decoration: InputDecoration(
-                        contentPadding:
-                            const EdgeInsets.symmetric(horizontal: 8.0),
-                        hintText: widget.hint,
-                        hintStyle: widget.hintStyle,
-                        border: InputBorder.none,
+          child: Container(
+            height: _maxHeight,
+            width: _expand.value,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Icon Image
+                GestureDetector(
+                  onTap: () {
+                    _expanded ? _controller.forward() : _controller.reverse();
+                    _expanded = !_expanded;
+                  },
+                  child: SizedBox(
+                    child: FittedBox(
+                      fit: BoxFit.fitHeight,
+                      child: widget.icon,
+                    ),
+                    height: (_maxHeight * widget.iconHeightFactor) -
+                        riseHeightpx +
+                        _rise.value,
+                    width: (_maxHeight * widget.iconWidthFactor) -
+                        riseHeightpx +
+                        _rise.value,
+                  ),
+                ),
+                // TextField
+                Visibility(
+                  visible: _textOpacity.value > 0,
+                  child: Flexible(
+                    child: Opacity(
+                      opacity: _textOpacity.value,
+                      child: TextField(
+                        textAlign: TextAlign.end,
+                        decoration: InputDecoration(
+                          contentPadding:
+                              const EdgeInsets.symmetric(horizontal: 8.0),
+                          hintText: widget.hint,
+                          hintStyle: widget.hintStyle,
+                          border: InputBorder.none,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
-      ),
+      ],
     );
   }
 }

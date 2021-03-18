@@ -118,13 +118,11 @@ class __MyListTileState extends State<_MyListTile>
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
+      color: Colors.amber,
       height: 40,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          _buildEditBtn()
-        ],
+        children: [Expanded(child: _buildEditBtn())],
         // children: [
         //   Expanded(
         //     flex: 1,
