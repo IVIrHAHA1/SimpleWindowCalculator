@@ -134,11 +134,15 @@ class _PopUpTextFieldState extends State<PopUpTextField>
                         _expanded = !_expanded;
                       },
                       child: SizedBox(
-                        child: FittedBox(
-                          fit: BoxFit.fitHeight,
-                          child: Opacity(
-                          opacity: _iconOpacity.value,
-                            child: widget.icon,
+                        child: FractionallySizedBox(
+                          heightFactor: widget.iconHeightFactor,
+                          widthFactor: widget.iconWidthFactor,
+                          child: FittedBox(
+                            fit: BoxFit.fitHeight,
+                            child: Opacity(
+                              opacity: _iconOpacity.value,
+                              child: widget.icon,
+                            ),
                           ),
                         ),
                         height: (_maxHeight * widget.iconHeightFactor) -

@@ -104,7 +104,7 @@ class __MyListTileState extends State<_MyListTile>
     with SingleTickerProviderStateMixin {
   AnimationController controller;
   bool popUpExpanded = false;
-  var duration = const Duration(milliseconds: 400);
+  var duration = const Duration(milliseconds: 800);
 
   @override
   void initState() {
