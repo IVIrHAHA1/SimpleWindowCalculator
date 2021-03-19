@@ -18,14 +18,15 @@ class SpinnerTransition extends StatefulWidget {
   final Duration reverseDuration;
 
   final Function onPressed;
+  final AnimationController controller;
 
   /// When spinner is done animating, will return true if [child2] is currently in view.
-  final Function(bool spun) onFinished;
+  // final Function(bool spun) onFinished; // TODO: Revisit and see if this is needed
 
   SpinnerTransition({
     this.child1,
     this.child2,
-    this.onFinished,
+    this.controller,
     this.onPressed,
     this.duration = const Duration(milliseconds: 200),
     this.reverseDuration,
@@ -44,7 +45,7 @@ class _SpinnerTransitionState extends State<SpinnerTransition>
   Animation<double> scaleTween2;
   Animation<double> opacityTween2;
 
-  AnimationController controller;
+  AnimationController _controller;
 
   /// First phase intervals
   static const double _firstPhaseStart = 0, _firstPhaseEnd = .5;
@@ -54,17 +55,12 @@ class _SpinnerTransitionState extends State<SpinnerTransition>
 
   @override
   void initState() {
-    controller = AnimationController(
-      vsync: this,
-      duration: widget.duration,
-      reverseDuration: widget.reverseDuration ?? widget.duration,
-    );
-
-    controller.addListener(() {
-      if ((controller.value == 1 || controller.value == 0) &&
-          widget.onFinished != null)
-      widget.onFinished(controller.value == 1);
-    });
+    _controller = widget.controller ??
+        AnimationController(
+          vsync: this,
+          duration: widget.duration,
+          reverseDuration: widget.reverseDuration ?? widget.duration,
+        );
 
     /// Full 180 rotation tween
     cwSpin = Tween<double>(
@@ -72,7 +68,7 @@ class _SpinnerTransitionState extends State<SpinnerTransition>
       end: widget.direction == Direction.clockwise ? 180 : -180,
     ).animate(
       CurvedAnimation(
-        parent: controller,
+        parent: _controller,
         curve: Interval(_firstPhaseStart, _secondPhaseEnd,
             curve: Curves.easeInOut),
       ),
@@ -81,14 +77,14 @@ class _SpinnerTransitionState extends State<SpinnerTransition>
     /// First Phase Tweens
     scaleTween1 = Tween<double>(begin: 1.0, end: 0.33).animate(
       CurvedAnimation(
-        parent: controller,
+        parent: _controller,
         curve: Interval(_firstPhaseStart, _firstPhaseEnd),
       ),
     );
 
     opacityTween1 = Tween<double>(begin: 1.0, end: 0.0).animate(
       CurvedAnimation(
-        parent: controller,
+        parent: _controller,
         reverseCurve: Interval(
           _firstPhaseStart,
           _firstPhaseEnd,
@@ -105,7 +101,7 @@ class _SpinnerTransitionState extends State<SpinnerTransition>
     // Second Phase Tweens
     opacityTween2 = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
-        parent: controller,
+        parent: _controller,
         reverseCurve: Interval(
           _firstPhaseStart,
           _firstPhaseEnd,
@@ -121,7 +117,7 @@ class _SpinnerTransitionState extends State<SpinnerTransition>
 
     scaleTween2 = Tween<double>(begin: 0.33, end: 1.0).animate(
       CurvedAnimation(
-        parent: controller,
+        parent: _controller,
         curve: Interval(_secondPhaseStart, _secondPhaseEnd),
       ),
     );
@@ -131,18 +127,18 @@ class _SpinnerTransitionState extends State<SpinnerTransition>
 
   @override
   void dispose() {
-    this.controller.dispose();
+    if (widget.controller == null) this._controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: controller,
+      animation: _controller,
       builder: (ctx, child) {
         return Transform.rotate(
           angle: (cwSpin.value) * (math.pi / 180),
-          child: controller.value < .5 ? _firstChild() : _secondChild(),
+          child: _controller.value < .5 ? _firstChild() : _secondChild(),
         );
       },
     );
@@ -151,7 +147,7 @@ class _SpinnerTransitionState extends State<SpinnerTransition>
   Widget _firstChild() {
     return InkWell(
       onTap: () {
-        controller.forward();
+        _controller.forward();
         widget.onPressed();
       },
       child: ScaleTransition(
@@ -167,7 +163,7 @@ class _SpinnerTransitionState extends State<SpinnerTransition>
   Widget _secondChild() {
     return InkWell(
       onTap: () {
-        controller.reverse();
+        _controller.reverse();
         widget.onPressed();
       },
       child: ScaleTransition(

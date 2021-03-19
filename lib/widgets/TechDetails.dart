@@ -118,6 +118,12 @@ class __MyListTileState extends State<_MyListTile>
   }
 
   @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       height: 60,
@@ -148,6 +154,9 @@ class __MyListTileState extends State<_MyListTile>
     return PopUpTextField(
       controller: controller,
       textInputType: TextInputType.number,
+      onSubmitted: (submittedText) {
+        _collapseWidget();
+      },
       validator: (textValue) {
         try {
           num value = double.parse(textValue);
@@ -160,6 +169,7 @@ class __MyListTileState extends State<_MyListTile>
         }
       },
       icon: SpinnerTransition(
+        controller: controller,
         child1: Icon(
           Icons.edit,
           color: Colors.black,
@@ -171,18 +181,26 @@ class __MyListTileState extends State<_MyListTile>
         duration: duration,
         onPressed: () {
           if (!popUpExpanded) {
-            controller.forward();
-            setState(() {
-              popUpExpanded = !popUpExpanded;
-            });
+            _expandWidget();
           } else {
-            controller.reverse();
-            _reshape();
+            _collapseWidget();
           }
         },
       ),
       duration: duration,
     );
+  }
+
+  _expandWidget() {
+    controller.forward();
+    setState(() {
+      popUpExpanded = !popUpExpanded;
+    });
+  }
+
+  _collapseWidget() {
+    controller.reverse();
+    _reshape();
   }
 
   _reshape() async {

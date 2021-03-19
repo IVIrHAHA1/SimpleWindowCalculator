@@ -72,7 +72,8 @@ class _PopUpTextFieldState extends State<PopUpTextField>
 
   @override
   void dispose() {
-    _controller.dispose();
+    if (widget.controller == null) this._controller.dispose();
+
     super.dispose();
   }
 
@@ -170,7 +171,7 @@ class _PopUpTextFieldState extends State<PopUpTextField>
   /// Whether the widget has expanded or not
   bool _expanded = false;
   _actualizeWidget() {
-    _expanded ? _expandWidget() : _controller.reverse();
+    _expanded ? _expandWidget() : _collapseWidget();
     _expanded = !_expanded;
   }
 
@@ -178,9 +179,14 @@ class _PopUpTextFieldState extends State<PopUpTextField>
     _controller.forward();
   }
 
+  _collapseWidget() {
+    _controller.reverse();
+  }
+
   var errorString;
   Widget _buildTextField() {
     return TextField(
+      autofocus: true,
       textAlign: TextAlign.end,
       keyboardType: widget.textInputType,
       decoration: InputDecoration(
