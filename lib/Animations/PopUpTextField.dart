@@ -4,6 +4,7 @@ class PopUpTextField extends StatefulWidget {
   final String hint;
   final TextStyle hintStyle;
   final bool Function(String) validator;
+  final void Function(String submittedText) onSubmitted;
   final TextInputType textInputType;
   final Widget icon;
   final Color fillColor;
@@ -18,6 +19,7 @@ class PopUpTextField extends StatefulWidget {
     this.hint,
     this.hintStyle,
     this.validator,
+    this.onSubmitted,
     this.textInputType,
     this.fillColor = Colors.white,
     this.icon,
@@ -36,9 +38,6 @@ class _PopUpTextFieldState extends State<PopUpTextField>
     with SingleTickerProviderStateMixin {
   AnimationController _controller;
 
-  /// Whether the widget has expanded or not
-  bool _expanded;
-
   /// How much the icon rises when activated
   Animation _rise;
 
@@ -51,10 +50,7 @@ class _PopUpTextFieldState extends State<PopUpTextField>
   /// The width of the widget when expanded
   Animation _expand;
 
-  _PopUpTextFieldState() {
-    this._expanded = false;
-  }
-
+  // constraints of this widget
   double _maxHeight;
   double _maxWidth;
 
@@ -128,10 +124,7 @@ class _PopUpTextFieldState extends State<PopUpTextField>
                     flex: 0,
                     child: GestureDetector(
                       onTap: () {
-                        _expanded
-                            ? _controller.forward()
-                            : _controller.reverse();
-                        _expanded = !_expanded;
+                        _actualizeWidget();
                       },
                       child: SizedBox(
                         child: FractionallySizedBox(
@@ -161,16 +154,7 @@ class _PopUpTextFieldState extends State<PopUpTextField>
                       flex: 1,
                       child: Opacity(
                         opacity: _textOpacity.value,
-                        child: TextField(
-                          textAlign: TextAlign.end,
-                          decoration: InputDecoration(
-                            contentPadding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
-                            hintText: widget.hint,
-                            hintStyle: widget.hintStyle,
-                            border: InputBorder.none,
-                          ),
-                        ),
+                        child: _buildTextField(),
                       ),
                     ),
                   ),
@@ -180,6 +164,42 @@ class _PopUpTextFieldState extends State<PopUpTextField>
           ),
         ],
       ),
+    );
+  }
+
+  /// Whether the widget has expanded or not
+  bool _expanded = false;
+  _actualizeWidget() {
+    _expanded ? _expandWidget() : _controller.reverse();
+    _expanded = !_expanded;
+  }
+
+  _expandWidget() {
+    _controller.forward();
+  }
+
+  var errorString;
+  Widget _buildTextField() {
+    return TextField(
+      textAlign: TextAlign.end,
+      keyboardType: widget.textInputType,
+      decoration: InputDecoration(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 8.0),
+        hintText: widget.hint,
+        hintStyle: widget.hintStyle,
+        border: InputBorder.none,
+        errorText: errorString,
+      ),
+      onSubmitted: (submittedText) {
+        /// Text was acceptable
+        if (widget.validator(submittedText)) {
+          errorString = null;
+          _controller.reverse();
+          widget.onSubmitted(submittedText);
+        } else {
+          errorString = 'invalid entry';
+        }
+      },
     );
   }
 

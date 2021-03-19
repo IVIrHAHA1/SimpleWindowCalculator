@@ -147,6 +147,18 @@ class __MyListTileState extends State<_MyListTile>
   Widget _buildEditBtn() {
     return PopUpTextField(
       controller: controller,
+      textInputType: TextInputType.number,
+      validator: (textValue) {
+        try {
+          num value = double.parse(textValue);
+          if (value != null)
+            return true;
+          else
+            return false;
+        } catch (Exception) {
+          return false;
+        }
+      },
       icon: SpinnerTransition(
         child1: Icon(
           Icons.edit,
