@@ -6,6 +6,7 @@ import '../Animations/SpinnerTransition.dart';
 import '../Animations/PopUpTextField.dart';
 import 'package:flutter/material.dart';
 
+/// TODO: Change this so that it handles statlist much better, and load from SharedPreferences
 class TechDetails extends StatelessWidget {
   final Map<String, Widget> statList = Map();
   final double totalPrice;
@@ -34,7 +35,11 @@ class TechDetails extends StatelessWidget {
                   ),
             ),
             amount: statList[labelKey],
-            withEdit: true,
+            onEditted: labelKey == 'Hourly Rate'
+                ? (v) {
+                    print('this is new price: $v');
+                  }
+                : null,
           );
         },
         itemCount: statList.length,
@@ -84,19 +89,21 @@ class TechDetails extends StatelessWidget {
   }
 }
 
+/// TODO: Change this widget to except a settings type object, which contains all necessary information.
+/// This way when updated, the setState method is not called on the entire list.
 class _MyListTile extends StatefulWidget {
   _MyListTile({
     Key key,
     @required this.title,
     @required this.amount,
     this.subtitle,
-    this.withEdit = false,
+    this.onEditted,
   }) : super(key: key);
 
   final Widget title;
   final Widget subtitle;
   final Widget amount;
-  final bool withEdit;
+  final Function(String edittedText) onEditted;
 
   @override
   __MyListTileState createState() => __MyListTileState();
@@ -142,7 +149,7 @@ class __MyListTileState extends State<_MyListTile>
             flex: !popUpExpanded ? 1 : 3,
             child: Container(
               alignment: Alignment.centerRight,
-              child: widget.withEdit ? _buildEditBtn() : Container(),
+              child: widget.onEditted != null ? _buildEditBtn() : Container(),
             ),
           ),
         ],
@@ -155,6 +162,7 @@ class __MyListTileState extends State<_MyListTile>
       controller: controller,
       textInputType: TextInputType.number,
       onSubmitted: (submittedText) {
+        widget.onEditted(submittedText);
         _collapseWidget();
       },
       validator: (textValue) {
