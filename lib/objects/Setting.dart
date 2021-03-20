@@ -7,7 +7,7 @@ class Setting {
   Setting({
     this.title,
     this.subtitle,
-    this.value,
+    this.value = 0,
     this.editable = false,
   });
 }

@@ -1,11 +1,13 @@
 import 'dart:async';
 
 import 'package:TheWindowCalculator/objects/Setting.dart';
+import 'package:flutter/rendering.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Animations/SpinnerTransition.dart';
 import '../Animations/PopUpTextField.dart';
 import 'package:flutter/material.dart';
 import '../objects/OManager.dart' as defaults;
+import '../Util/Format.dart' as tools;
 
 class TechDetails extends StatelessWidget {
   final double totalPrice;
@@ -66,6 +68,9 @@ class __MyListTileState extends State<_MyListTile>
 
   @override
   Widget build(BuildContext context) {
+    TextStyle valueStyle = Theme.of(context).textTheme.headline6.copyWith(
+          color: Colors.black,
+        );
     return Container(
       height: 60,
       child: Row(
@@ -73,24 +78,37 @@ class __MyListTileState extends State<_MyListTile>
         children: [
           // Leading
           Expanded(
-            flex: 1,
+            flex: 3,
             child: FutureBuilder(
               future: _loadValue(widget.setting.title),
               builder: (_, snapshot) {
                 if (snapshot.hasData) {
-                  return Text(
-                    '${snapshot.data}',
-                    maxLines: 1,
-                    overflow: TextOverflow.fade,
-                    style: Theme.of(context).textTheme.headline6.copyWith(
-                          color: Colors.black,
-                        ),
+                  return LayoutBuilder(
+                    builder: (ctx, constraints) {
+                      String valueString =
+                          '\$ ${tools.Format.format(snapshot.data, 2)}';
+                      Size textSize = _getTextSize(valueString, valueStyle);
+
+                      Text text = Text(valueString, style: valueStyle);
+
+                      if (textSize.width > constraints.maxWidth) {
+                        return FittedBox(
+                          fit: BoxFit.fitWidth,
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: text,
+                          ),
+                        );
+                      } else {
+                        return text;
+                      }
+                    },
                   );
                 } else if (snapshot.hasError) {
                   return Text('error');
                 } else {
                   return Text(
-                    '0.0',
+                    '${widget.setting.value}',
                     maxLines: 1,
                     overflow: TextOverflow.fade,
                     style: Theme.of(context).textTheme.headline6.copyWith(
@@ -102,7 +120,7 @@ class __MyListTileState extends State<_MyListTile>
             ),
           ),
           Expanded(
-            flex: !popUpExpanded ? 3 : 1,
+            flex: !popUpExpanded ? 5 : 2,
             child: Text(
               '${widget.setting.title}',
               maxLines: 1,
@@ -114,7 +132,7 @@ class __MyListTileState extends State<_MyListTile>
             ),
           ),
           Expanded(
-            flex: !popUpExpanded ? 1 : 3,
+            flex: !popUpExpanded ? 2 : 5,
             child: Container(
               alignment: Alignment.centerRight,
               child: widget.setting.editable ? _buildEditBtn() : Container(),
@@ -125,6 +143,22 @@ class __MyListTileState extends State<_MyListTile>
     );
   }
 
+  Size _getTextSize(String text, TextStyle style) {
+    TextPainter painter = TextPainter(
+        text: TextSpan(
+          text: text,
+          style: style,
+        ),
+        maxLines: 1,
+        textDirection: TextDirection.ltr)
+      ..layout(
+        maxWidth: double.infinity,
+        minWidth: 0,
+      );
+
+    return painter.size;
+  }
+
   Widget _buildEditBtn() {
     return PopUpTextField(
       controller: controller,
@@ -133,7 +167,7 @@ class __MyListTileState extends State<_MyListTile>
         double newValue = double.parse(submittedText);
         _saveValue(widget.setting.title, newValue).then((saved) {
           if (saved) {
-            setState(() {});
+            _collapseWidget();
           }
         });
       },

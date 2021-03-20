@@ -123,6 +123,7 @@ final List<Setting> settingsList = [
   ),
   Setting(
     title: 'Drive Time Rate',
+    subtitle: 'for every 20 miles',
     editable: true,
   ),
   Setting(
