@@ -34,6 +34,8 @@ class Calculator with Notifier {
   /// - [projectPrice]
   /// - [projectDuration]
   update() {
+    num driveTime, priceMin, targetPrice;
+
     if (projectItems == null) {
       throw Exception('NEED TO ASSIGN [projectItems]');
     }
@@ -83,10 +85,10 @@ class Calculator with Notifier {
     if (isListening) notifyListeners();
   }
 
-  
-  _priceDueToTime(Duration totalDuration) {
+  _priceDueToTime(Duration totalDuration,
+      {double minPrice = TARGET_HOURLY_RATE}) {
     var duration = totalDuration.inSeconds / 3600.0;
-    return TARGET_HOURLY_RATE * duration;
+    return minPrice * duration;
   }
 }
 
