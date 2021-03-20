@@ -2,6 +2,7 @@ import 'dart:io';
 
 import '../objects/Factor.dart';
 
+import 'Setting.dart';
 import 'Window.dart';
 import 'package:flutter/material.dart';
 
@@ -114,6 +115,24 @@ class OManager {
     ),
   };
 }
+
+final List<Setting> settingsList = [
+  Setting(
+    title: 'Production Rate',
+    editable: true,
+  ),
+  Setting(
+    title: 'Drive Time Rate',
+    editable: true,
+  ),
+  Setting(
+    title: 'Minimum Price',
+    editable: true,
+  ),
+  Setting(
+    title: 'Tech Hourly Rate',
+  )
+];
 
 enum Factors {
   construction,

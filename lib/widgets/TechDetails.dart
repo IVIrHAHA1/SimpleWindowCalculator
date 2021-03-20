@@ -1,14 +1,13 @@
 import 'dart:async';
 
-import 'package:TheWindowCalculator/GlobalValues.dart';
-import 'package:TheWindowCalculator/Util/Format.dart';
+import 'package:TheWindowCalculator/objects/Setting.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../Animations/SpinnerTransition.dart';
 import '../Animations/PopUpTextField.dart';
 import 'package:flutter/material.dart';
+import '../objects/OManager.dart' as defaults;
 
-/// TODO: Change this so that it handles statlist much better, and load from SharedPreferences
 class TechDetails extends StatelessWidget {
-  final Map<String, Widget> statList = Map();
   final double totalPrice;
   final Duration totalDuration;
 
@@ -16,94 +15,28 @@ class TechDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _initStats(context);
-
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: ListView.builder(
         itemBuilder: (ctx, index) {
-          String labelKey = statList.keys.elementAt(index);
-
           return _MyListTile(
-            title: Text(
-              '$labelKey',
-              overflow: TextOverflow.fade,
-              maxLines: 1,
-              style: Theme.of(context).textTheme.headline6.copyWith(
-                    color: Colors.black,
-                    fontSize: 14,
-                  ),
-            ),
-            amount: statList[labelKey],
-            onEditted: labelKey == 'Hourly Rate'
-                ? (v) {
-                    print('this is new price: $v');
-                  }
-                : null,
+            setting: defaults.settingsList[index],
           );
         },
-        itemCount: statList.length,
+        itemCount: defaults.settingsList.length,
       ),
     );
   }
-
-  _initStats(BuildContext ctx) {
-    statList.putIfAbsent(
-        'Target Production Rate',
-        () => Text(
-              '\$${Format.format(TARGET_HOURLY_RATE, 2)}',
-              style: Theme.of(ctx).textTheme.headline5,
-            ));
-    statList.putIfAbsent('Hourly Rate', () => _dictateHourlyRate(ctx));
-    statList.putIfAbsent('Tech Rate', () => _techHourlyRate(ctx));
-  }
-
-  _dictateHourlyRate(BuildContext ctx) {
-    var hourlyRate;
-    _verifyTotals()
-        ? hourlyRate = 0.0
-        : hourlyRate = totalPrice / (totalDuration.inMinutes / 60);
-    return Text(
-      '\$${Format.format(hourlyRate, 2)}',
-      style: Theme.of(ctx).textTheme.headline5,
-    );
-  }
-
-  _techHourlyRate(BuildContext ctx) {
-    var techRate;
-
-    _verifyTotals()
-        ? techRate = 0.0
-        : techRate = (totalPrice / (totalDuration.inMinutes / 60)) * .3;
-    return Text(
-      '\$${Format.format(techRate, 2)}',
-      style: Theme.of(ctx).textTheme.headline5,
-    );
-  }
-
-  bool _verifyTotals() {
-    return totalPrice == null ||
-        totalPrice == 0 ||
-        totalDuration == null ||
-        totalDuration == Duration();
-  }
 }
 
-/// TODO: Change this widget to except a settings type object, which contains all necessary information.
 /// This way when updated, the setState method is not called on the entire list.
 class _MyListTile extends StatefulWidget {
   _MyListTile({
     Key key,
-    @required this.title,
-    @required this.amount,
-    this.subtitle,
-    this.onEditted,
+    this.setting,
   }) : super(key: key);
 
-  final Widget title;
-  final Widget subtitle;
-  final Widget amount;
-  final Function(String edittedText) onEditted;
+  final Setting setting;
 
   @override
   __MyListTileState createState() => __MyListTileState();
@@ -121,6 +54,7 @@ class __MyListTileState extends State<_MyListTile>
       vsync: this,
       duration: duration,
     );
+
     super.initState();
   }
 
@@ -137,19 +71,53 @@ class __MyListTileState extends State<_MyListTile>
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
+          // Leading
           Expanded(
             flex: 1,
-            child: widget.amount,
+            child: FutureBuilder(
+              future: _loadValue(widget.setting.title),
+              builder: (_, snapshot) {
+                if (snapshot.hasData) {
+                  return Text(
+                    '${snapshot.data}',
+                    maxLines: 1,
+                    overflow: TextOverflow.fade,
+                    style: Theme.of(context).textTheme.headline6.copyWith(
+                          color: Colors.black,
+                        ),
+                  );
+                } else if (snapshot.hasError) {
+                  return Text('error');
+                } else {
+                  return Text(
+                    '0.0',
+                    maxLines: 1,
+                    overflow: TextOverflow.fade,
+                    style: Theme.of(context).textTheme.headline6.copyWith(
+                          color: Colors.black,
+                        ),
+                  );
+                }
+              },
+            ),
           ),
           Expanded(
             flex: !popUpExpanded ? 3 : 1,
-            child: widget.title,
+            child: Text(
+              '${widget.setting.title}',
+              maxLines: 1,
+              overflow: TextOverflow.fade,
+              style: Theme.of(context).textTheme.headline6.copyWith(
+                    fontSize: 14,
+                    color: Colors.black,
+                  ),
+            ),
           ),
           Expanded(
             flex: !popUpExpanded ? 1 : 3,
             child: Container(
               alignment: Alignment.centerRight,
-              child: widget.onEditted != null ? _buildEditBtn() : Container(),
+              child: widget.setting.editable ? _buildEditBtn() : Container(),
             ),
           ),
         ],
@@ -162,8 +130,12 @@ class __MyListTileState extends State<_MyListTile>
       controller: controller,
       textInputType: TextInputType.number,
       onSubmitted: (submittedText) {
-        widget.onEditted(submittedText);
-        _collapseWidget();
+        double newValue = double.parse(submittedText);
+        _saveValue(widget.setting.title, newValue).then((saved) {
+          if (saved) {
+            setState(() {});
+          }
+        });
       },
       validator: (textValue) {
         try {
@@ -217,5 +189,19 @@ class __MyListTileState extends State<_MyListTile>
         popUpExpanded = false;
       });
     });
+  }
+
+  SharedPreferences _prefs;
+  Future<double> _loadValue(String key) async {
+    if (_prefs == null) _prefs = await SharedPreferences.getInstance();
+
+    return _prefs.getDouble(key);
+  }
+
+  Future<bool> _saveValue(String key, num value) async {
+    if (_prefs == null) _prefs = await SharedPreferences.getInstance();
+
+    bool saved = await _prefs.setDouble(key, value);
+    return saved;
   }
 }
