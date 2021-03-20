@@ -73,71 +73,115 @@ class __MyListTileState extends State<_MyListTile>
         );
     return Container(
       height: 60,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
+      child: Column(
         children: [
-          // Leading
           Expanded(
-            flex: 3,
-            child: FutureBuilder(
-              future: _loadValue(widget.setting.title),
-              builder: (_, snapshot) {
-                if (snapshot.hasData) {
-                  return LayoutBuilder(
-                    builder: (ctx, constraints) {
-                      String valueString =
-                          '\$ ${tools.Format.format(snapshot.data, 2)}';
-                      Size textSize = _getTextSize(valueString, valueStyle);
+            flex: 4,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                // Leading
+                Expanded(
+                  flex: 3,
+                  child: FutureBuilder(
+                    future: _loadValue(widget.setting.title),
+                    builder: (_, snapshot) {
+                      if (snapshot.hasData) {
+                        return LayoutBuilder(
+                          builder: (ctx, constraints) {
+                            String valueString =
+                                '\$ ${tools.Format.format(snapshot.data, 2)}';
+                            Size textSize =
+                                _getTextSize(valueString, valueStyle);
 
-                      Text text = Text(valueString, style: valueStyle);
+                            Text text = Text(valueString, style: valueStyle);
 
-                      if (textSize.width > constraints.maxWidth) {
-                        return FittedBox(
-                          fit: BoxFit.fitWidth,
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
-                            child: text,
-                          ),
+                            if (textSize.width > constraints.maxWidth) {
+                              return FittedBox(
+                                fit: BoxFit.fitWidth,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  child: text,
+                                ),
+                              );
+                            } else {
+                              return text;
+                            }
+                          },
                         );
+                      } else if (snapshot.hasError) {
+                        return Text('error');
                       } else {
-                        return text;
+                        return Text(
+                          '${widget.setting.value}',
+                          maxLines: 1,
+                          overflow: TextOverflow.fade,
+                          style: Theme.of(context).textTheme.headline6.copyWith(
+                                color: Colors.black,
+                              ),
+                        );
                       }
                     },
-                  );
-                } else if (snapshot.hasError) {
-                  return Text('error');
-                } else {
-                  return Text(
-                    '${widget.setting.value}',
+                  ),
+                ),
+                // Title
+                Expanded(
+                  flex: !popUpExpanded ? 5 : 2,
+                  child: Text(
+                    '${widget.setting.title}',
                     maxLines: 1,
                     overflow: TextOverflow.fade,
                     style: Theme.of(context).textTheme.headline6.copyWith(
+                          fontSize: 14,
                           color: Colors.black,
                         ),
-                  );
-                }
-              },
-            ),
-          ),
-          Expanded(
-            flex: !popUpExpanded ? 5 : 2,
-            child: Text(
-              '${widget.setting.title}',
-              maxLines: 1,
-              overflow: TextOverflow.fade,
-              style: Theme.of(context).textTheme.headline6.copyWith(
-                    fontSize: 14,
-                    color: Colors.black,
                   ),
+                ),
+                // Trailing
+                Expanded(
+                  flex: !popUpExpanded ? 2 : 5,
+                  child: Container(
+                    alignment: Alignment.centerRight,
+                    child:
+                        widget.setting.editable ? _buildEditBtn() : Container(),
+                  ),
+                ),
+              ],
             ),
           ),
           Expanded(
-            flex: !popUpExpanded ? 2 : 5,
-            child: Container(
-              alignment: Alignment.centerRight,
-              child: widget.setting.editable ? _buildEditBtn() : Container(),
+            flex: 1,
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: Container(),
+                ),
+                Expanded(
+                  flex: !popUpExpanded ? 5 : 2,
+                  child: widget.setting.subtitle != null
+                      ? Text(
+                          '${widget.setting.subtitle}',
+                          maxLines: 1,
+                          style: Theme.of(context)
+                              .textTheme
+                              .subtitle2
+                              .copyWith(fontSize: 12),
+                        )
+                      : Container(),
+                ),
+                Expanded(
+                  flex: !popUpExpanded ? 2 : 5,
+                  child: Container(),
+                ),
+              ],
             ),
           ),
+          Divider(
+            color: Colors.black,
+            height: 1,
+            thickness: 1,
+          )
         ],
       ),
     );
