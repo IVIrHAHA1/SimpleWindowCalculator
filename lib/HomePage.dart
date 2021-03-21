@@ -81,13 +81,11 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
 
     return Container(
       // This is to allow linear gradient behind the appBar
-      // block begin:
       color: Theme.of(context).primaryColor,
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.transparent,
         appBar: mAppBar,
-        // block end:
 
         body: buildModules(availableScreen),
       ),

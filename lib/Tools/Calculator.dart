@@ -100,6 +100,7 @@ class Calculator with Notifier {
         projectPrice = minPrice;
       }
 
+      if (projectCount <= 0) projectPrice = 0;
       projectDuration = time;
     }
 
