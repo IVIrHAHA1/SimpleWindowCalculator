@@ -285,7 +285,9 @@ class __MyListTileState extends State<_MyListTile>
     if (_prefs == null) _prefs = await SharedPreferences.getInstance();
 
     bool saved = await _prefs.setDouble(key, value);
-    Calculator.instance.updateDefaults();
+    Calculator.instance.updateDefaults().whenComplete(() {
+      Calculator.instance.update();
+    });
     return saved;
   }
 }

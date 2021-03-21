@@ -38,7 +38,7 @@ class Calculator with Notifier {
   double minPrice;
   double targetRate;
 
-  updateDefaults() async {
+  Future<void> updateDefaults() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     String key;
