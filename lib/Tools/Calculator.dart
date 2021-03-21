@@ -1,3 +1,6 @@
+import 'package:shared_preferences/shared_preferences.dart';
+import '../objects/OManager.dart' as s;
+
 import '../GlobalValues.dart';
 /* ***DEVELOPER'S NOTE: 
 * This class can be further abstracted, by 
@@ -26,7 +29,28 @@ class Calculator with Notifier {
       _instance = Calculator._();
     }
 
+    _instance.updateDefaults();
+
     return _instance;
+  }
+
+  double driveTime;
+  double minPrice;
+  double targetRate;
+
+  updateDefaults() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    String key;
+
+    key = s.settingsList[s.DefaultSettings.targetProduction].title;
+    targetRate = preferences.getDouble(key) ?? TARGET_HOURLY_RATE;
+
+    key = s.settingsList[s.DefaultSettings.minPrice].title;
+    minPrice = preferences.getDouble(key) ?? PRICE_MIN;
+
+    key = s.settingsList[s.DefaultSettings.driveTime].title;
+    driveTime = preferences.getDouble(key) ?? DRIVETIME;
   }
 
   /// Performs calculations on objects and thus updates
@@ -34,8 +58,6 @@ class Calculator with Notifier {
   /// - [projectPrice]
   /// - [projectDuration]
   update() {
-    num driveTime, priceMin, targetPrice;
-
     if (projectItems == null) {
       throw Exception('NEED TO ASSIGN [projectItems]');
     }
@@ -65,7 +87,7 @@ class Calculator with Notifier {
       }
 
       // Add Drive time
-      projectPrice = itemTotalPrice + DRIVETIME;
+      projectPrice = itemTotalPrice + driveTime;
 
       // Round up to an increment of 5, for pricing simplicity
       var temp = projectPrice % 5;
@@ -74,8 +96,8 @@ class Calculator with Notifier {
       }
 
       // Ensure price is not below minimum
-      if (projectPrice < PRICE_MIN) {
-        projectPrice = PRICE_MIN;
+      if (projectPrice < minPrice) {
+        projectPrice = minPrice;
       }
 
       projectDuration = time;
@@ -85,10 +107,9 @@ class Calculator with Notifier {
     if (isListening) notifyListeners();
   }
 
-  _priceDueToTime(Duration totalDuration,
-      {double minPrice = TARGET_HOURLY_RATE}) {
+  _priceDueToTime(Duration totalDuration) {
     var duration = totalDuration.inSeconds / 3600.0;
-    return minPrice * duration;
+    return targetRate * duration;
   }
 }
 

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:TheWindowCalculator/Tools/Calculator.dart';
 import 'package:TheWindowCalculator/objects/Setting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,7 +23,7 @@ class TechDetails extends StatelessWidget {
       child: ListView.builder(
         itemBuilder: (ctx, index) {
           return _MyListTile(
-            setting: defaults.settingsList[index],
+            setting: defaults.settingsList.values.toList()[index],
           );
         },
         itemCount: defaults.settingsList.length,
@@ -97,10 +98,7 @@ class __MyListTileState extends State<_MyListTile>
                           '${widget.setting.title}',
                           maxLines: 1,
                           overflow: TextOverflow.fade,
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline6
-                              .copyWith(
+                          style: Theme.of(context).textTheme.headline6.copyWith(
                                 fontSize: 14,
                                 color: Colors.black,
                               ),
@@ -143,8 +141,7 @@ class __MyListTileState extends State<_MyListTile>
             flex: !popUpExpanded ? 2 : 5,
             child: Container(
               alignment: Alignment.centerRight,
-              child:
-                  widget.setting.editable ? _buildEditBtn() : Container(),
+              child: widget.setting.editable ? _buildEditBtn() : Container(),
             ),
           ),
         ],
@@ -288,6 +285,7 @@ class __MyListTileState extends State<_MyListTile>
     if (_prefs == null) _prefs = await SharedPreferences.getInstance();
 
     bool saved = await _prefs.setDouble(key, value);
+    Calculator.instance.updateDefaults();
     return saved;
   }
 }

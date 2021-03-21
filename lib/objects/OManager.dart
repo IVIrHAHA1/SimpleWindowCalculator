@@ -116,28 +116,35 @@ class OManager {
   };
 }
 
-final List<Setting> settingsList = [
-  Setting(
-    title: 'Production Rate',
-    editable: true,
-  ),
-  Setting(
-    title: 'Drive Time Rate',
-    subtitle: 'for every 20 miles',
-    editable: true,
-  ),
-  Setting(
-    title: 'Minimum Price',
-    editable: true,
-  ),
-  Setting(
-    title: 'Tech Hourly Rate',
-  )
-];
-
 enum Factors {
   construction,
   sided,
   difficult,
   filthy,
+}
+
+final Map<DefaultSettings, Setting> settingsList = {
+  DefaultSettings.targetProduction: Setting(
+    title: 'Production Rate',
+    editable: true,
+  ),
+  DefaultSettings.driveTime: Setting(
+    title: 'Drive Time Rate',
+    subtitle: 'for every 20 miles',
+    editable: true,
+  ),
+  DefaultSettings.minPrice: Setting(
+    title: 'Minimum Price',
+    editable: true,
+  ),
+  DefaultSettings.techRate: Setting(
+    title: 'Tech Hourly Rate',
+  )
+};
+
+enum DefaultSettings {
+  targetProduction,
+  driveTime,
+  minPrice,
+  techRate,
 }
