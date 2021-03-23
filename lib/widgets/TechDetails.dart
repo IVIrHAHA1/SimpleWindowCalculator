@@ -73,7 +73,7 @@ class __MyListTileState extends State<_MyListTile>
           color: Colors.black,
         );
     return Container(
-      height: 60,
+      height: 60, // TODO: Adjust this
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [

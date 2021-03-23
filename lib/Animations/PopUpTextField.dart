@@ -94,19 +94,21 @@ class _PopUpTextFieldState extends State<PopUpTextField>
 
   Widget _buildChild() {
     // Container which gives max height determined by parent Widget
+    print('This is height: $_maxHeight, this is width: $_maxWidth');
+
     return Container(
       height: _maxHeight,
       child: Row(
-        /// TODO: ALLOW USER TO SET TO EXPAND LEFT OR RIGHT
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           // Container constrains the Card along with children, ie Icon and TextField
           // with a maxWidth. Using BoxConstraints, allows for child resizing.
           Container(
             constraints: BoxConstraints(
-              maxWidth: _maxWidth,
-              minWidth: _maxHeight,
-            ),
+                maxWidth: _maxWidth,
+                minWidth:
+                    _maxHeight > _maxWidth ? _maxHeight - 16 : _maxHeight),
+            alignment: Alignment.centerLeft,
             width: _maxWidth * _expand.value,
             child: Card(
               elevation: _rise.value,
@@ -132,7 +134,7 @@ class _PopUpTextFieldState extends State<PopUpTextField>
                           heightFactor: widget.iconHeightFactor,
                           widthFactor: widget.iconWidthFactor,
                           child: FittedBox(
-                            fit: BoxFit.fitHeight,
+                            fit: BoxFit.contain,
                             child: Opacity(
                               opacity: _iconOpacity.value,
                               child: widget.icon,

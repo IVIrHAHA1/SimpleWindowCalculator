@@ -139,6 +139,7 @@ final Map<DefaultSettings, Setting> settingsList = {
   ),
   DefaultSettings.techRate: Setting(
     title: 'Tech Hourly Rate',
+    subtitle: 'coming soon'
   )
 };
 
