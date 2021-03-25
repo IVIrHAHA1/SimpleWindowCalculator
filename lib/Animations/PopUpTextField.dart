@@ -94,8 +94,6 @@ class _PopUpTextFieldState extends State<PopUpTextField>
 
   Widget _buildChild() {
     // Container which gives max height determined by parent Widget
-    print('This is height: $_maxHeight, this is width: $_maxWidth');
-
     return Container(
       height: _maxHeight,
       child: Row(

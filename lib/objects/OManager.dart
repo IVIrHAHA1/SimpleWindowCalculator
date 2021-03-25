@@ -130,22 +130,16 @@ final Map<DefaultSettings, Setting> settingsList = {
   ),
   DefaultSettings.driveTime: Setting(
     title: 'Drive Time Rate',
-    subtitle: 'for every 20 miles',
     editable: true,
   ),
   DefaultSettings.minPrice: Setting(
     title: 'Minimum Price',
     editable: true,
   ),
-  DefaultSettings.techRate: Setting(
-    title: 'Tech Hourly Rate',
-    subtitle: 'coming soon'
-  )
 };
 
 enum DefaultSettings {
   targetProduction,
   driveTime,
   minPrice,
-  techRate,
 }
