@@ -251,48 +251,50 @@ class _ModalContentState extends State<ModalContent> {
                 ? () {
                     showDialog(
                       context: context,
-                      child: AlertDialog(
-                        titleTextStyle:
-                            Theme.of(context).textTheme.headline6.copyWith(
-                                  color: Colors.black,
-                                ),
-                        title: Text(
-                          _allowDeletion
-                              ? 'Remove \"${selectedWindow.name.toLowerCase()}\"?'
-                              : 'Unable to Remove',
-                        ),
-                        content:
-                            selectedWindow == ItemsManager.instance.activeItem
-                                ? Text(_allowDeletion
-                                    ? 'about to remove active window'
-                                    : 'must have at least one window available')
-                                : null,
-                        actions: [
-                          _allowDeletion
-                              ? FlatButton(
-                                  child: Text('No'),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                )
-                              : Container(),
-                          _allowDeletion
-                              ? FlatButton(
-                                  child: Text('Yes'),
-                                  onPressed: () {
-                                    _deleteSelection();
-                                    Navigator.pop(context);
-                                    Navigator.pop(context);
-                                  },
-                                )
-                              : FlatButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text('Ok'),
-                                ),
-                        ],
-                      ),
+                      builder: (_) {
+                        return AlertDialog(
+                          titleTextStyle:
+                              Theme.of(context).textTheme.headline6.copyWith(
+                                    color: Colors.black,
+                                  ),
+                          title: Text(
+                            _allowDeletion
+                                ? 'Remove \"${selectedWindow.name.toLowerCase()}\"?'
+                                : 'Unable to Remove',
+                          ),
+                          content: selectedWindow ==
+                                  ItemsManager.instance.activeItem
+                              ? Text(_allowDeletion
+                                  ? 'about to remove active window'
+                                  : 'must have at least one window available')
+                              : null,
+                          actions: [
+                            _allowDeletion
+                                ? TextButton(
+                                    child: Text('No'),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                  )
+                                : Container(),
+                            _allowDeletion
+                                ? TextButton(
+                                    child: Text('Yes'),
+                                    onPressed: () {
+                                      _deleteSelection();
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                    },
+                                  )
+                                : TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text('Ok'),
+                                  ),
+                          ],
+                        );
+                      },
                     );
                   }
                 : null,
