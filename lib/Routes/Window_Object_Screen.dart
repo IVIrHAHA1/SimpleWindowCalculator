@@ -1,9 +1,9 @@
-import 'package:TheWindowCalculator/GlobalValues.dart';
-import 'package:TheWindowCalculator/Pages/OptionsModal.dart';
-import 'package:TheWindowCalculator/Tools/DatabaseProvider.dart';
-import 'package:TheWindowCalculator/Tools/ImageLoader.dart';
-import 'package:TheWindowCalculator/Util/ItemsManager.dart';
-import 'package:TheWindowCalculator/widgets/DetailInputBox.dart';
+import '../GlobalValues.dart';
+import '../Pages/OptionsModal.dart';
+import '../Tools/DatabaseProvider.dart';
+import '../Tools/ImageLoader.dart';
+import '../Util/ItemsManager.dart';
+import '../widgets/DetailInputBox.dart';
 import 'package:common_tools/StringFormater.dart' as formatter;
 import 'package:shared_preferences/shared_preferences.dart';
 

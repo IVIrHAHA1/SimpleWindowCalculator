@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:TheWindowCalculator/Tools/Calculator.dart';
-import 'package:TheWindowCalculator/Tools/DatabaseProvider.dart';
-import 'package:TheWindowCalculator/Util/ItemsManager.dart';
+import '../Tools/Calculator.dart';
+import '../Tools/DatabaseProvider.dart';
+import '../Util/ItemsManager.dart';
 
 import '../objects/Factor.dart';
 import '../objects/OManager.dart';

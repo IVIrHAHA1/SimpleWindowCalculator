@@ -1,11 +1,11 @@
 import 'dart:async';
 
-import 'package:TheWindowCalculator/Routes/Window_Object_Screen.dart';
-import 'package:TheWindowCalculator/Tools/DatabaseProvider.dart';
-import 'package:TheWindowCalculator/GlobalValues.dart';
-import 'package:TheWindowCalculator/Util/ItemsManager.dart';
-import 'package:TheWindowCalculator/objects/Window.dart';
-import 'package:TheWindowCalculator/widgets/GridTileItem.dart';
+import '../Routes/Window_Object_Screen.dart';
+import '../Tools/DatabaseProvider.dart';
+import '../GlobalValues.dart';
+import '../Util/ItemsManager.dart';
+import '../objects/Window.dart';
+import '../widgets/GridTileItem.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../objects/OManager.dart';

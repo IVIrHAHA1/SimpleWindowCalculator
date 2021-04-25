@@ -1,4 +1,4 @@
-import 'package:TheWindowCalculator/Tools/Calculator.dart';
+import '../Tools/Calculator.dart';
 
 /// Manages "active items" and puts forth an active item, which can then be interfaced with.
 ///

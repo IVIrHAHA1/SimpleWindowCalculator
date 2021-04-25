@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:TheWindowCalculator/Tools/Calculator.dart';
-import 'package:TheWindowCalculator/objects/Setting.dart';
+import '../Tools/Calculator.dart';
+import '../objects/Setting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Animations/SpinnerTransition.dart';

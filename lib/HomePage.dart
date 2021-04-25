@@ -1,8 +1,8 @@
-import 'package:TheWindowCalculator/Tools/DatabaseProvider.dart';
-import 'package:TheWindowCalculator/Tools/Calculator.dart';
-import 'package:TheWindowCalculator/GlobalValues.dart';
-import 'package:TheWindowCalculator/Util/ItemsManager.dart';
-import 'package:TheWindowCalculator/Pages/ModalContent.dart';
+import './Tools/DatabaseProvider.dart';
+import './Tools/Calculator.dart';
+import './GlobalValues.dart';
+import './Util/ItemsManager.dart';
+import './Pages/ModalContent.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import './widgets/WindowCounter.dart';

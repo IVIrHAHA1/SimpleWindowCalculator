@@ -1,4 +1,4 @@
-import 'package:TheWindowCalculator/Util/ItemsManager.dart';
+import '../Util/ItemsManager.dart';
 
 /**
  * Overview module controllers the TabView which in turn conatains the

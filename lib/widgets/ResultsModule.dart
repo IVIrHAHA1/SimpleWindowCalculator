@@ -1,6 +1,6 @@
-import 'package:TheWindowCalculator/Util/Format.dart';
-import 'package:TheWindowCalculator/GlobalValues.dart';
-import 'package:TheWindowCalculator/widgets/OverviewModule.dart';
+import '../Util/Format.dart';
+import '../GlobalValues.dart';
+import '../widgets/OverviewModule.dart';
 import 'package:flutter/material.dart';
 
 class ResultsModule extends StatefulWidget {

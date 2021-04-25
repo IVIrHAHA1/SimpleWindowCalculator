@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:TheWindowCalculator/objects/OManager.dart';
-import 'package:TheWindowCalculator/objects/Window.dart';
+import '../objects/OManager.dart';
+import '../objects/Window.dart';
 import 'package:path/path.dart' as paths;
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';

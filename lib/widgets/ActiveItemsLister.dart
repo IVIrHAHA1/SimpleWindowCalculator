@@ -1,5 +1,5 @@
-import 'package:TheWindowCalculator/Tools/ImageLoader.dart';
-import 'package:TheWindowCalculator/Util/ItemsManager.dart';
+import '../Tools/ImageLoader.dart';
+import '../Util/ItemsManager.dart';
 
 import '../GlobalValues.dart';
 import '../Util/HexColors.dart';

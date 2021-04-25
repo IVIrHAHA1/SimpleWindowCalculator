@@ -1,8 +1,8 @@
 import 'dart:math';
 
-import 'package:TheWindowCalculator/Tools/Calculator.dart';
-import 'package:TheWindowCalculator/Tools/ImageLoader.dart';
-import 'package:TheWindowCalculator/objects/Factor.dart';
+import '../Tools/Calculator.dart';
+import '../Tools/ImageLoader.dart';
+import '../objects/Factor.dart';
 import 'package:flutter/services.dart';
 
 import '../Util/HexColors.dart';

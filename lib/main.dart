@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:TheWindowCalculator/Tools/DatabaseProvider.dart';
-import 'package:TheWindowCalculator/Util/ItemsManager.dart';
-import 'package:TheWindowCalculator/Util/ResolveScreenDensity.dart';
-import 'package:TheWindowCalculator/objects/Window.dart';
+import './Tools/DatabaseProvider.dart';
+import './Util/ItemsManager.dart';
+import './Util/ResolveScreenDensity.dart';
+import './objects/Window.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
