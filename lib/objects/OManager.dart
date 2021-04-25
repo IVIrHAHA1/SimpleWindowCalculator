@@ -36,6 +36,26 @@ class OManager {
       ),
     ),
 
+    // Commercial Window
+    Window(
+      name: 'Commercial',
+      duration: Duration(minutes: 3, seconds: 30),
+      price: 6,
+      image: File(
+        'assets/images/comm_window.png',
+      ),
+    ),
+
+    // Windwall Window
+    Window(
+      name: 'Windwall',
+      duration: Duration(minutes: 2, seconds: 30),
+      price: 5,
+      image: File(
+        'assets/images/windwall.png',
+      ),
+    ),
+
     // Picture Window
     Window(
       name: 'Picture',
