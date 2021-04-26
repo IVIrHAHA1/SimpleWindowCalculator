@@ -110,8 +110,8 @@ class _ModalContentState extends State<ModalContent> {
                   borderRadius:
                       BorderRadius.circular(GlobalValues.cornerRadius),
                   color: _editMode
-                      ? Theme.of(context).primaryColorLight
-                      : Colors.grey,
+                      ? Theme.of(context).selectedRowColor
+                      : Theme.of(context).primaryColorLight,
                 ),
               ),
             ),

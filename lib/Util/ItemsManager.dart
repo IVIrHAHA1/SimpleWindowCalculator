@@ -41,7 +41,7 @@ class ItemsManager with Notifier{
   /// ```
   static init<T>() {
     _instance = ItemsManager._();
-    _instance._itemsList = List<T>();
+    _instance._itemsList = List<T>.empty(growable: true);
   }
 
   /// Clears the list and sets [activeItem] to the optional [setActiveItem].

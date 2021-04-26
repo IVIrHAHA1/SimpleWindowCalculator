@@ -47,14 +47,20 @@ class _WindowCounterState extends State<WindowCounter> {
     final double radii = (widget.height / 2);
 
     // Inner Factor Position
+    // ignore: non_constant_identifier_names
     final double ifp_y = radii * sin(pi / 8) + radii - errorMargin;
+    // ignore: non_constant_identifier_names
     final double ifp_x = radii * cos(pi / 8) - errorMargin;
 
     // Outter Factor Position
+    // ignore: non_constant_identifier_names
     final double ofp_y = radii * sin(pi / 3) + radii - errorMargin;
+    // ignore: non_constant_identifier_names
     final double ofp_x = radii * cos(pi / 3) - errorMargin;
 
+    // ignore: non_constant_identifier_names
     final double ifp_y_top = radii * sin(-pi / 11) + radii - errorMargin;
+    // ignore: non_constant_identifier_names
     final double ofp_y_top = radii * sin(-pi / 3.75) + radii - errorMargin;
 
     return Container(
@@ -241,7 +247,7 @@ class _WindowCounterState extends State<WindowCounter> {
     // Final Result
     final double buttonWidth = _circlePoint - buttonSize / 4;
 
-    return Stack(overflow: Overflow.clip, children: [
+    return Stack(clipBehavior: Clip.hardEdge, children: [
       Positioned(
         height: widget.height,
         width: widget.height,
