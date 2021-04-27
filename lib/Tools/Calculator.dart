@@ -131,7 +131,7 @@ mixin Calculatable {
 
 /// Notifies any attached listeners
 mixin Notifier {
-  List<Function> _listeners = List();
+  List<Function> _listeners = List.empty(growable: true);
 
   notifyListeners() {
     for (Function listener in _listeners) {

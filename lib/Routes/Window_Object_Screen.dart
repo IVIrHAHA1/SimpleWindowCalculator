@@ -201,7 +201,8 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
     return null;
   }
 
-  /// Validates the Price value
+  /// Validates the Price value (Could be used later perhaps)
+  // ignore: unused_element
   _numberValidator(String input) {
     try {
       var parsedPrice = double.parse(input);
@@ -226,10 +227,6 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
   }
 
   Container _buildInputs(double bodyHeight, BuildContext context) {
-    String priceHint = price != null
-        ? '\$ ${formatter.Format.formatDouble(price, 2)}'
-        : 'Price';
-
     return Container(
       height: bodyHeight * .5,
       width: MediaQuery.of(context).size.width * .5,

@@ -147,14 +147,17 @@ final Map<DefaultSettings, Setting> settingsList = {
   DefaultSettings.targetProduction: Setting(
     title: 'Production Rate',
     editable: true,
+    value: 85.0,
   ),
   DefaultSettings.driveTime: Setting(
     title: 'Drive Time Rate',
     editable: true,
+    value: 25.0,
   ),
   DefaultSettings.minPrice: Setting(
     title: 'Minimum Price',
     editable: true,
+    value: 100.0,
   ),
 };
 

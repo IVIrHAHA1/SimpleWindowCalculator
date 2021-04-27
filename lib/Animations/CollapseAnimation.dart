@@ -17,9 +17,6 @@ class CollapsingAnimation extends StatefulWidget {
 class _CollapsingAnimationState extends State<CollapsingAnimation> {
   @override
   Widget build(BuildContext context) {
-    widget.controller.addListener(() {
-      widget.controller._displacement = widget.controller.value;
-    });
     return SizeTransition(
       sizeFactor: widget.controller,
       axis: Axis.vertical,
@@ -32,7 +29,6 @@ class CollapsingController extends AnimationController {
   final TickerProvider vsync;
   final Duration duration;
   final Duration reverseDuration;
-  double _displacement = 0;
 
   CollapsingController({
     this.vsync,

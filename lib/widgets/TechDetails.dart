@@ -180,7 +180,7 @@ class __MyListTileState extends State<_MyListTile>
           return Text('error');
         } else {
           return Text(
-            '${widget.setting.value}',
+            '\$ ${tools.Format.format(widget.setting.value, 2)}',
             maxLines: 1,
             overflow: TextOverflow.fade,
             style: Theme.of(context).textTheme.headline6.copyWith(

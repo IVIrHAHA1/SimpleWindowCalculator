@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 enum ScreenDensities { idpi, mdpi, hdpi, xhdpi, xxhdpi, xxxhdpi }
 

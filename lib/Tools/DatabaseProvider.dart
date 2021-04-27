@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import '../objects/OManager.dart';
 import '../objects/Window.dart';
 import 'package:path/path.dart' as paths;
 import 'package:sqflite/sqflite.dart';
@@ -133,7 +132,7 @@ class DatabaseProvider {
       );
 
       if (mapList.length > 0) {
-        List<Window> windowList = List();
+        List<Window> windowList = List.empty(growable:true);
 
         /// Get window from window json
         for (Map map in mapList) {
@@ -141,7 +140,7 @@ class DatabaseProvider {
         }
         return windowList;
       } else {
-        return List();
+        return List.empty(growable: true);
       }
     }
   }
@@ -153,7 +152,7 @@ class DatabaseProvider {
     List<Map> mapList = await db.rawQuery("SELECT * FROM $WINDOW_TABLE");
 
     if (mapList.length >= 1) {
-      List<Window> windowList = List();
+      List<Window> windowList = List.empty(growable: true);
 
       /// Get window from window json
       for (Map map in mapList) {
@@ -162,7 +161,7 @@ class DatabaseProvider {
       return windowList;
     }
     // No objects to load, so return empty list.
-    return List<Window>();
+    return List<Window>.empty(growable: true);
   }
 
   Future<int> entryLength() async {
