@@ -211,7 +211,7 @@ class __MyListTileState extends State<_MyListTile>
   Widget _buildEditBtn() {
     return PopUpTextField(
       controller: controller,
-      textInputType: TextInputType.number,
+      textInputType: TextInputType.number,  
       onSubmitted: (submittedText) {
         double newValue = double.parse(submittedText);
         _saveValue(widget.setting.title, newValue).then((saved) {
@@ -238,10 +238,11 @@ class __MyListTileState extends State<_MyListTile>
           color: Colors.black,
         ),
         child2: Icon(
-          Icons.check,
+          Icons.close,
           color: Colors.black,
         ),
         duration: duration,
+        // Spinner submission 
         onPressed: () {
           if (!popUpExpanded) {
             _expandWidget();

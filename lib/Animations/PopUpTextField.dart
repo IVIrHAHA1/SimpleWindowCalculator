@@ -183,6 +183,8 @@ class _PopUpTextFieldState extends State<PopUpTextField>
     _controller.reverse();
   }
 
+  TextEditingController editingController;
+
   var errorString;
   Widget _buildTextField() {
     return TextField(
@@ -196,6 +198,7 @@ class _PopUpTextFieldState extends State<PopUpTextField>
         border: InputBorder.none,
         errorText: errorString,
       ),
+      textInputAction: TextInputAction.done,
       onSubmitted: (submittedText) {
         /// Text was acceptable
         if (widget.validator(submittedText)) {
