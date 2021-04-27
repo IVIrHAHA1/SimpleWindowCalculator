@@ -20,9 +20,6 @@ class SpinnerTransition extends StatefulWidget {
   final Function onPressed;
   final AnimationController controller;
 
-  /// When spinner is done animating, will return true if [child2] is currently in view.
-  // final Function(bool spun) onFinished; // TODO: Revisit and see if this is needed
-
   SpinnerTransition({
     this.child1,
     this.child2,

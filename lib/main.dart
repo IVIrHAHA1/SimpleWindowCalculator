@@ -2,7 +2,6 @@ import 'dart:async';
 
 import './Tools/DatabaseProvider.dart';
 import './Util/ItemsManager.dart';
-import './Util/ResolveScreenDensity.dart';
 import './objects/Window.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -111,41 +110,6 @@ class MySplashScreen extends StatelessWidget {
     } else {
       throw Exception("FAILED TO INSTANTIATE STARTING WINDOW");
     }
-  }
-
-  /// TODO: This will be utilized when creating the get started process
-  String _getSplashScreenImage(BuildContext ctx) {
-    String assetString;
-    switch (ResolveScreenDensity.of(ctx)) {
-      case ScreenDensities.idpi:
-        assetString = 'assets/ss_icon/app_icon_mdpi.png';
-        break;
-
-      case ScreenDensities.mdpi:
-        assetString = 'assets/ss_icon/app_icon_mdpi.png';
-        break;
-
-      case ScreenDensities.hdpi:
-        assetString = 'assets/ss_icon/app_icon_hdpi.png';
-        break;
-
-      case ScreenDensities.xhdpi:
-        assetString = 'assets/ss_icon/app_icon_xhdpi.png';
-        break;
-
-      case ScreenDensities.xxhdpi:
-        assetString = 'assets/ss_icon/app_icon_xxhdpi.png';
-        break;
-
-      case ScreenDensities.xxxhdpi:
-        assetString = 'assets/ss_icon/app_icon_xxxhdpi.png';
-        break;
-
-      default:
-        assetString = null;
-        break;
-    }
-    return assetString;
   }
 
   @override

@@ -126,7 +126,6 @@ class DatabaseProvider {
     } else {
       Database db = await database;
 
-      /// TODO: Will probably have to refine this, as its vulnerable to sql injections
       List<Map> mapList = await db.rawQuery(
         "SELECT * FROM $WINDOW_TABLE WHERE $WINDOW_NAME_ID LIKE '%$subString%'",
       );

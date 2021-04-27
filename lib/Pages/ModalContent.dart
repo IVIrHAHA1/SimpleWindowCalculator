@@ -154,7 +154,6 @@ class _ModalContentState extends State<ModalContent> {
 
   bool _allowDeletion = false;
 
-  /// TODO: Extract this method and create an interface. THINK S.O.L.I.D
   _deleteSelection() async {
     /// Delete from database
     await DatabaseProvider.instance.delete(selectedWindow);
@@ -230,7 +229,6 @@ class _ModalContentState extends State<ModalContent> {
                 );
               }
             } else {
-              /// TODO: TRY AND RECOVER FROM CRASH
               return Container(child: Text('Fatal Crash'));
             }
           }),
