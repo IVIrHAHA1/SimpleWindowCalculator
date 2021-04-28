@@ -93,7 +93,7 @@ class OManager {
     return presetWindows[0];
   }
 
-  static getFactorInstance(Factors type) {
+  static Factor getFactorInstance(Factors type) {
     return factorList[type].copy();
   }
 
@@ -129,7 +129,7 @@ class OManager {
     Factors.filthy: Factor(
       factorKey: Factors.filthy,
       name: 'Filthy',
-      priceMultiplier: 1.5,
+      priceMultiplier: 1.75,
       durationMultiplier: 2.0,
       image: Image.asset('assets/images/filthy_factor.png'),
     ),

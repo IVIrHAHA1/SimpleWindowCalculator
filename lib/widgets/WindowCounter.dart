@@ -70,10 +70,27 @@ class _WindowCounterState extends State<WindowCounter> {
           buildPreview(context, factorSize),
           buildController(context, factorSize),
 
-          // Filthy Factor
+          // Construction Factor
           Positioned(
             top: ofp_y_top,
             right: ofp_x,
+            child: FactorCoin(
+              factorKey: Factors.construction,
+              window: widget.window,
+              size: factorSize,
+              alignment: Alignment.topCenter,
+              backgroundColor: HexColors.fromHex('#FFB9B9'),
+              isDummy: false,
+              onStatusChanged: (_) {
+                setState(() {});
+              },
+            ),
+          ),
+
+          // Filthy Factor
+          Positioned(
+            top: ifp_y_top,
+            right: ifp_x,
             child: FactorCoin(
               factorKey: Factors.filthy,
               window: widget.window,
@@ -89,7 +106,7 @@ class _WindowCounterState extends State<WindowCounter> {
 
           // Difficult Factor
           Positioned(
-            top: ifp_y_top,
+            top: ifp_y,
             right: ifp_x,
             child: FactorCoin(
               factorKey: Factors.difficult,
@@ -97,23 +114,6 @@ class _WindowCounterState extends State<WindowCounter> {
               size: factorSize,
               alignment: Alignment.topCenter,
               backgroundColor: HexColors.fromHex('#FFEDA5'),
-              isDummy: false,
-              onStatusChanged: (_) {
-                setState(() {});
-              },
-            ),
-          ),
-
-          // Construction Factor
-          Positioned(
-            top: ifp_y,
-            right: ifp_x,
-            child: FactorCoin(
-              factorKey: Factors.construction,
-              window: widget.window,
-              size: factorSize,
-              alignment: Alignment.topCenter,
-              backgroundColor: HexColors.fromHex('#FFB9B9'),
               isDummy: false,
               onStatusChanged: (_) {
                 setState(() {});

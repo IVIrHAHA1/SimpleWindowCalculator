@@ -91,7 +91,6 @@ class MySplashScreen extends StatelessWidget {
     // Initialize database if needed and fill with default values.
     bool hasDatabase = await DatabaseProvider.instance.isInitialized();
     if (!hasDatabase) {
-      // TODO: Will create the GET_STARTED Route here
       DatabaseProvider.instance.fillDatabase(OManager.presetWindows);
       prefs.setString(DEFAULT_WINDOW_KEY, OManager.getDefaultWindow().name);
     }

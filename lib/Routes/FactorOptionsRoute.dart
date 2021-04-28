@@ -214,7 +214,7 @@ class FactorOptionRoute extends ModalRoute {
    */
   Container buildHeader(BuildContext context, double height, double width) {
     return Container(
-      padding: EdgeInsets.only(left: width * paddingRatio),
+      padding: EdgeInsets.symmetric(horizontal: width * paddingRatio),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(GlobalValues.cornerRadius),
@@ -225,9 +225,19 @@ class FactorOptionRoute extends ModalRoute {
       alignment: Alignment.centerLeft,
       height: height * .15,
       width: double.infinity,
-      child: Text(
-        'Factor Options: ' + _formatFactorKey(factorKey),
-        style: Theme.of(context).textTheme.headline6,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            _formatFactorKey(factorKey),
+            style: Theme.of(context).textTheme.headline6,
+          ),
+          
+          Text(
+            'x${OManager.getFactorInstance(factorKey).getMultiplier()}',
+            style: Theme.of(context).textTheme.headline6,
+          ),
+        ],
       ),
     );
   }
