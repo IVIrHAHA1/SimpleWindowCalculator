@@ -180,6 +180,7 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
       builder: (_) {
         return ModalContent(
           addWindow: _activateNewWindow,
+          height: MediaQuery.of(context).size.height / 2,
         );
       },
     );

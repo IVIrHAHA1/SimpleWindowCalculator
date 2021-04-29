@@ -96,8 +96,8 @@ class _FactorCoinState extends State<FactorCoin> {
         Navigator.of(context).pop();
         break;
 
+      /// Not implemented
       case FactorOptions.edit:
-        // TODO: implement
         Navigator.of(context).pop();
     }
   }

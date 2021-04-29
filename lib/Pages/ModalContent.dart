@@ -12,8 +12,13 @@ import 'package:flutter/material.dart';
 class ModalContent extends StatefulWidget {
   final Function addWindow;
   final Color backgroundColor;
+  final double height;
 
-  ModalContent({this.addWindow, this.backgroundColor = Colors.white});
+  ModalContent({
+    this.addWindow,
+    this.backgroundColor = Colors.white,
+    @required this.height,
+  });
 
   @override
   _ModalContentState createState() => _ModalContentState();
@@ -54,17 +59,23 @@ class _ModalContentState extends State<ModalContent> {
 
   @override
   Widget build(BuildContext context) {
-    double modalSheetHeight = (MediaQuery.of(context).size.height) / 2;
+    double modalSheetHeight = widget.height;
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        buildSearchHeading(modalSheetHeight * .15, context),
-        Flexible(
-            fit: FlexFit.loose,
-            child: buildBody(modalSheetHeight * .8, context)),
-        buildButtonFooter(modalSheetHeight * .15, context),
-      ],
+    return SingleChildScrollView(
+      child: SizedBox(
+        height: modalSheetHeight,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            buildSearchHeading(modalSheetHeight * .15, context),
+            Expanded(
+              flex: 1,
+              child: buildBody(modalSheetHeight * .8, context),
+            ),
+            buildButtonFooter(modalSheetHeight * .15, context),
+          ],
+        ),
+      ),
     );
   }
 
