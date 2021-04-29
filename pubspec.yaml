@@ -1,4 +1,4 @@
-name: TheWindowCalculator
+name: the_window_calculator
 description: A simple price and time estimator to aid the hard-working people in the window cleaning industry.
 
 # The following line prevents the package from being accidentally published to
