@@ -104,7 +104,10 @@ class OManager {
       name: 'Construction Clean Up',
       priceMultiplier: 2.0,
       durationMultiplier: 2.0,
-      image: Image.asset('assets/images/construction_factor.png'),
+      image: Image.asset(
+        'assets/images/construction_factor.png',
+        semanticLabel: 'Construction Clean Up',
+      ),
     ),
 
     // one side being cleaned
@@ -113,7 +116,10 @@ class OManager {
       name: 'Sided',
       priceMultiplier: .6,
       durationMultiplier: .6,
-      image: Image.asset('assets/images/sided_factor.png'),
+      image: Image.asset(
+        'assets/images/sided_factor.png',
+        semanticLabel: 'Exterior Only',
+      ),
     ),
 
     // difficult to clean
@@ -122,7 +128,10 @@ class OManager {
       name: 'Difficult',
       priceMultiplier: 1.5,
       durationMultiplier: 2.0,
-      image: Image.asset('assets/images/hazard_factor.png'),
+      image: Image.asset(
+        'assets/images/hazard_factor.png',
+        semanticLabel: 'inaccessible',
+      ),
     ),
 
     // filthy
@@ -131,7 +140,10 @@ class OManager {
       name: 'Filthy',
       priceMultiplier: 1.75,
       durationMultiplier: 2.0,
-      image: Image.asset('assets/images/filthy_factor.png'),
+      image: Image.asset(
+        'assets/images/filthy_factor.png',
+        semanticLabel: 'Extra Dirty',
+      ),
     ),
   };
 }

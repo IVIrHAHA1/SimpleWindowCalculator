@@ -255,7 +255,6 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
                   } else if (entry.length <= _minInputLength) {
                     return "Too Short";
                   } else if (entry.length > _maxInputLength) {
-                    print('this doesnt work');
                     return "Too Long";
                   } else {
                     return "Invalid Entry";
