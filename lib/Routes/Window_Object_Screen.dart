@@ -190,8 +190,10 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
   bool nameExists = false;
 
   /// Validates the name
+  final _maxInputLength = 16;
+  final _minInputLength = 3;
   _nameValidator(String input) async {
-    if (input.length > 3 && input.length < 30) {
+    if (input.length > _minInputLength && input.length < _maxInputLength) {
       nameExists = await DatabaseProvider.instance.contains(input);
       if (!nameExists) {
         name = input;
@@ -250,9 +252,10 @@ class _WindowObjectScreenState extends State<WindowObjectScreen> {
                   if (nameExists) {
                     nameExists = false;
                     return "Unavailable";
-                  } else if (entry.length <= 3) {
+                  } else if (entry.length <= _minInputLength) {
                     return "Too Short";
-                  } else if (entry.length > 16) {
+                  } else if (entry.length > _maxInputLength) {
+                    print('this doesnt work');
                     return "Too Long";
                   } else {
                     return "Invalid Entry";
