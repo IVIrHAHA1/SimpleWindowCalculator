@@ -1,3 +1,5 @@
+import 'package:the_window_calculator/Animations/SpinnerTransition.dart';
+
 import '../Util/Format.dart';
 import '../GlobalValues.dart';
 import '../widgets/OverviewModule.dart';
@@ -30,7 +32,7 @@ class ResultsModule extends StatefulWidget {
 
 class _ResultsModuleState extends State<ResultsModule> {
   // Amount the ResultsMod is going to occupy vs the "total-window-count" module
-  static const double cardRatio = .75;
+  static const double cardRatio = .8;
 
   /// The total height of both "total-window-count" and ResultsMod
   final double widgetSize;
@@ -42,10 +44,17 @@ class _ResultsModuleState extends State<ResultsModule> {
   bool expanded;
 
   Animation opacityAnim;
+  Animation<double> rotationAnim;
+
   @override
   void initState() {
     opacityAnim =
         Tween<double>(begin: 0.0, end: 1.0).animate(widget.internalController);
+
+    rotationAnim = CurvedAnimation(
+      parent: widget.internalController,
+      curve: Curves.easeInOut,
+    );
     super.initState();
   }
 
@@ -58,6 +67,9 @@ class _ResultsModuleState extends State<ResultsModule> {
   _expandState() {
     expanded = true;
     widget.triggerExpandAnim(true);
+    // widget.height = screen height - appBar
+    // widgetSize = total count mod + results mod
+    // at the end dynamicHeight equals widget.height minus total count mod
     dynamicHeight = widget.height - (widgetSize - collapsedHeight);
   }
 
@@ -72,7 +84,7 @@ class _ResultsModuleState extends State<ResultsModule> {
     TextStyle numberStyle = Theme.of(context).textTheme.headline5;
     // Price Circle
     ResultCircle priceCircle = ResultCircle(
-      height: (collapsedHeight * .8),
+      height: (collapsedHeight * .7),
       textView: widget.valueHolder.priceTotal != null
           ? Text(
               '\$${Format.format(widget.valueHolder.priceTotal, 2)}',
@@ -86,7 +98,7 @@ class _ResultsModuleState extends State<ResultsModule> {
 
     // Time Circle
     ResultCircle timeCircle = ResultCircle(
-      height: (collapsedHeight * .6),
+      height: (collapsedHeight * .5),
       textView: widget.valueHolder.timeTotal != null
           ? Text(
               '${Format.formatTime(widget.valueHolder.timeTotal)}',
@@ -112,10 +124,9 @@ class _ResultsModuleState extends State<ResultsModule> {
             child: Container(
               padding: const EdgeInsets.only(top: 12.0),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  GestureDetector(
-                    onTap: expanded ? _collapseState : _expandState,
+                  Flexible(
+                    flex: 0,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -136,6 +147,7 @@ class _ResultsModuleState extends State<ResultsModule> {
 
                   // OverviewList
                   Flexible(
+                    flex: 1,
                     child: FadeTransition(
                       opacity: opacityAnim,
                       child: Container(
@@ -147,6 +159,30 @@ class _ResultsModuleState extends State<ResultsModule> {
                           widget.valueHolder.priceTotal,
                           widget.valueHolder.timeTotal,
                           _collapseState,
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  Flexible(
+                    flex: 0,
+                    child: Container(
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: SpinnerTransition(
+                        onPressed: expanded ? _collapseState : _expandState,
+                        direction: Direction.clockwise,
+                        duration: Duration(milliseconds: 200),
+                        reverseDuration: Duration(milliseconds: 200),
+                        child1: Icon(
+                          Icons.arrow_drop_down,
+                          size: collapsedHeight * .15,
+                          color: Colors.blue,
+                        ),
+                        child2: Icon(
+                          Icons.arrow_drop_up,
+                          size: collapsedHeight * .15,
+                          color: Colors.blue,
                         ),
                       ),
                     ),
