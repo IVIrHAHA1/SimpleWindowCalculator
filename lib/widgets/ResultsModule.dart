@@ -127,21 +127,33 @@ class _ResultsModuleState extends State<ResultsModule> {
                 children: [
                   Flexible(
                     flex: 0,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // Price Result Circle
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                          child: priceCircle,
-                        ),
+                    child: GestureDetector(
+                      onPanUpdate: (details) {
+                        if (details.delta.dy > 0 && !expanded) {
+                          _expandState();
+                        }
+                      },
+                      child: Container(
+                        color: Colors.transparent,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            // Price Result Circle
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 12.0),
+                              child: priceCircle,
+                            ),
 
-                        // Approx Time Result Circle
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                          child: timeCircle,
+                            // Approx Time Result Circle
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 12.0),
+                              child: timeCircle,
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
 
@@ -166,23 +178,32 @@ class _ResultsModuleState extends State<ResultsModule> {
 
                   Flexible(
                     flex: 0,
-                    child: Container(
-                      width: double.infinity,
-                      color: Colors.transparent,
-                      child: SpinnerTransition(
-                        onPressed: expanded ? _collapseState : _expandState,
-                        direction: Direction.clockwise,
-                        duration: Duration(milliseconds: 200),
-                        reverseDuration: Duration(milliseconds: 200),
-                        child1: Icon(
-                          Icons.arrow_drop_down,
-                          size: collapsedHeight * .15,
-                          color: Colors.blue,
-                        ),
-                        child2: Icon(
-                          Icons.arrow_drop_up,
-                          size: collapsedHeight * .15,
-                          color: Colors.blue,
+                    child: GestureDetector(
+                      onPanUpdate: (details) {
+                        if (details.delta.dy < 0 && expanded) {
+                          _collapseState();
+                        } else if (details.delta.dy > 0 && !expanded) {
+                          _expandState();
+                        }
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        color: Colors.transparent,
+                        child: SpinnerTransition(
+                          onPressed: expanded ? _collapseState : _expandState,
+                          direction: Direction.clockwise,
+                          duration: Duration(milliseconds: 200),
+                          reverseDuration: Duration(milliseconds: 200),
+                          child1: Icon(
+                            Icons.arrow_drop_down,
+                            size: collapsedHeight * .15,
+                            color: Colors.blue,
+                          ),
+                          child2: Icon(
+                            Icons.arrow_drop_up,
+                            size: collapsedHeight * .15,
+                            color: Colors.blue,
+                          ),
                         ),
                       ),
                     ),
@@ -203,31 +224,38 @@ class _ResultsModuleState extends State<ResultsModule> {
    *  Total Window Count Display  
    */
   Widget _buildWindowCountDisplay(BuildContext context) {
-    return Container(
-      height: widgetSize - collapsedHeight,
-      child: ListTile(
-        leading: Text(
-          'Total Window Count',
-          style: Theme.of(context).textTheme.headline6,
-        ),
-        trailing: Container(
-          width: 75,
-          height: 50,
-          child: Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            color: Colors.white,
-            child: Center(
-              child: widget.valueHolder.countTotal != null
-                  ? Text(
-                      '${Format.format(widget.valueHolder.countTotal, 1)}',
-                      style: Theme.of(context).textTheme.headline5,
-                    )
-                  : Text(
-                      '0',
-                      style: Theme.of(context).textTheme.headline5,
-                    ),
+    return GestureDetector(
+      onPanUpdate: (details) {
+        if (details.delta.dy < 0 && expanded) {
+          _collapseState();
+        }
+      },
+      child: Container(
+        height: widgetSize - collapsedHeight,
+        child: ListTile(
+          leading: Text(
+            'Total Window Count',
+            style: Theme.of(context).textTheme.headline6,
+          ),
+          trailing: Container(
+            width: 75,
+            height: 50,
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              color: Colors.white,
+              child: Center(
+                child: widget.valueHolder.countTotal != null
+                    ? Text(
+                        '${Format.format(widget.valueHolder.countTotal, 1)}',
+                        style: Theme.of(context).textTheme.headline5,
+                      )
+                    : Text(
+                        '0',
+                        style: Theme.of(context).textTheme.headline5,
+                      ),
+              ),
             ),
           ),
         ),
