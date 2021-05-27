@@ -1,5 +1,3 @@
-import 'package:the_window_calculator/Animations/SpinnerTransition.dart';
-
 import '../Util/Format.dart';
 import '../GlobalValues.dart';
 import '../widgets/OverviewModule.dart';
@@ -131,6 +129,8 @@ class _ResultsModuleState extends State<ResultsModule> {
                       onPanUpdate: (details) {
                         if (details.delta.dy > 0 && !expanded) {
                           _expandState();
+                        } else if (details.delta.dy < 0 && expanded) {
+                          _collapseState();
                         }
                       },
                       child: Container(
@@ -186,24 +186,21 @@ class _ResultsModuleState extends State<ResultsModule> {
                           _expandState();
                         }
                       },
+                      onTap: expanded ? _collapseState : _expandState,
                       child: Container(
                         width: double.infinity,
                         color: Colors.transparent,
-                        child: SpinnerTransition(
-                          onPressed: expanded ? _collapseState : _expandState,
-                          direction: Direction.clockwise,
-                          duration: Duration(milliseconds: 200),
-                          reverseDuration: Duration(milliseconds: 200),
-                          child1: Icon(
-                            Icons.arrow_drop_down,
-                            size: collapsedHeight * .15,
-                            color: Colors.blue,
-                          ),
-                          child2: Icon(
-                            Icons.arrow_drop_up,
-                            size: collapsedHeight * .15,
-                            color: Colors.blue,
-                          ),
+                        child: AnimatedSwitcher(
+                          duration: widget.internalController.duration,
+                          child: expanded
+                              ? Icon(
+                                  Icons.arrow_drop_up,
+                                  color: Colors.blue,
+                                )
+                              : Icon(
+                                  Icons.arrow_drop_down,
+                                  color: Colors.blue,
+                                ),
                         ),
                       ),
                     ),
