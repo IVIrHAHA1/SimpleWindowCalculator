@@ -63,6 +63,9 @@ class _WindowCounterState extends State<WindowCounter> {
     // ignore: non_constant_identifier_names
     final double ofp_y_top = radii * sin(-pi / 3.75) + radii - errorMargin;
 
+    // TODO: If tutorial mode is on, disable factorCoins
+    bool _tutorialMode = false;
+
     return Container(
       height: widget.height,
       child: Stack(
@@ -80,7 +83,7 @@ class _WindowCounterState extends State<WindowCounter> {
               size: factorSize,
               alignment: Alignment.topCenter,
               backgroundColor: HexColors.fromHex('#FFB9B9'),
-              isDummy: false,
+              isDummy: _tutorialMode,
               onStatusChanged: (_) {
                 setState(() {});
               },
@@ -97,7 +100,7 @@ class _WindowCounterState extends State<WindowCounter> {
               size: factorSize,
               alignment: Alignment.center,
               backgroundColor: HexColors.fromHex('#DCA065'),
-              isDummy: false,
+              isDummy: _tutorialMode,
               onStatusChanged: (_) {
                 setState(() {});
               },
@@ -114,7 +117,7 @@ class _WindowCounterState extends State<WindowCounter> {
               size: factorSize,
               alignment: Alignment.topCenter,
               backgroundColor: HexColors.fromHex('#FFEDA5'),
-              isDummy: false,
+              isDummy: _tutorialMode,
               onStatusChanged: (_) {
                 setState(() {});
               },
@@ -130,7 +133,7 @@ class _WindowCounterState extends State<WindowCounter> {
               window: widget.window,
               size: factorSize,
               alignment: Alignment.center,
-              isDummy: false,
+              isDummy: _tutorialMode,
               onStatusChanged: (_) {
                 setState(() {});
               },

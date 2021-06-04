@@ -86,7 +86,6 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.transparent,
         appBar: mAppBar,
-
         body: buildModules(availableScreen),
       ),
     );
@@ -120,6 +119,7 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
           Flexible(
             child: FadeTransition(
               opacity: opacityAnim,
+              // TODO: If Tutorial Mode is enabled, disable the counter
               child: WindowCounter(
                 height: availableScreen * .5,
                 window: manager.activeItem,

@@ -74,7 +74,7 @@ class _FactorCoinState extends State<FactorCoin> {
   }
 
   /*
-   *  Gives option menu control of various states throught the app. 
+   *  Gives option menu control of various states through out the app. 
    */
   optionController(Function stateOperation, FactorOptions option) {
     switch (option) {
