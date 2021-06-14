@@ -14,7 +14,7 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     height = MediaQuery.of(context).size.height * .8;
-    width = MediaQuery.of(context).size.width * .8;
+    width = MediaQuery.of(context).size.width * .85;
 
     return Container(
       alignment: Alignment.center,
@@ -68,16 +68,55 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Widget settingsBody() {
-    return Column(
-      children: [
-        // adjusting prices
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.only(top: 8.0, right: 16.0, left: 16.0),
+        child: Container(
+          child: Column(
+            children: [
+              // adjusting prices
+              ExpandableListTile(
+                title: Text('adjust prices'),
+                subtitle: Text('this will change the results'),
+                icon: Icon(
+                  Icons.attach_money,
+                  color: Colors.black54,
+                ),
+              ),
 
-        // change currency symbol
+              // change currency symbol
+              ExpandableListTile(
+                title: Text('change currency symbol'),
+                subtitle: Text('this will change the results'),
+                icon: Icon(
+                  Icons.attach_money,
+                  color: Colors.black54,
+                ),
+              ),
 
-        // how calculations work
+              // how calculations work
+              ExpandableListTile(
+                title: Text('how calculations work'),
+                subtitle: Text('this will change the results'),
+                icon: Icon(
+                  Icons.attach_money,
+                  color: Colors.black54,
+                ),
+              ),
 
-        // about
-      ],
+              // about
+              ExpandableListTile(
+                title: Text('about'),
+                subtitle: Text('this will change the results'),
+                icon: Icon(
+                  Icons.attach_money,
+                  color: Colors.black54,
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -103,6 +142,79 @@ class _SettingsPageState extends State<SettingsPage> {
                 letterSpacing: 2),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class ExpandableListTile extends StatefulWidget {
+  const ExpandableListTile({
+    Key key,
+    @required this.title,
+    this.targetHeight = 75,
+    this.subtitle,
+    this.icon,
+    this.embeddedChild,
+  }) : super(key: key);
+
+  final Widget title, subtitle;
+  final Icon icon;
+  final double targetHeight;
+  final embeddedChild;
+
+  @override
+  _ExpandableListTileState createState() => _ExpandableListTileState();
+}
+
+class _ExpandableListTileState extends State<ExpandableListTile> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: widget.targetHeight,
+      child: Column(
+        children: [
+          Expanded(
+            /// Visual Tile
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: widget.icon,
+                  ),
+                ),
+                Expanded(
+                  flex: 6,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Material(
+                        color: Colors.transparent,
+                        textStyle: Theme.of(context)
+                            .textTheme
+                            .subtitle2
+                            .copyWith(fontSize: 18),
+                        child: widget.title,
+                      ),
+                      // Divider(
+                      //   thickness: 1.5,
+                      //   color: Colors.black12,
+                      // ),
+                      Material(
+                        color: Colors.transparent,
+                        textStyle: Theme.of(context).textTheme.caption,
+                        child: widget.subtitle,
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+
+          /// Expanded to show embbeded child
+        ],
       ),
     );
   }
