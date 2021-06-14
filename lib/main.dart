@@ -102,7 +102,7 @@ class MySplashScreen extends StatelessWidget {
       prefs.setString(DEFAULT_WINDOW_KEY, OManager.getDefaultWindow().name);
 
       /// TODO: Enable tutorial mode
-      needsTutorial = true;
+      // needsTutorial = true;
     }
 
     // Set the active window as dictated by the OManager
@@ -124,7 +124,6 @@ class MySplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     _initData().then((tutorialNeeded) {
-      print(tutorialNeeded ? "needed" : "not needed");
       _router(context, tutorialNeeded);
     });
 
