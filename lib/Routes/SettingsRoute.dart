@@ -48,6 +48,10 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
 
               /// SETTINGS BODY
+              Expanded(
+                flex: 1,
+                child: settingsBody(),
+              ),
 
               /// SETTINGS FOOTER
               SizedBox(
@@ -60,6 +64,20 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget settingsBody() {
+    return Column(
+      children: [
+        // adjusting prices
+
+        // change currency symbol
+
+        // how calculations work
+
+        // about
+      ],
     );
   }
 
