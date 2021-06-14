@@ -24,39 +24,14 @@ class OverviewModule extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Flexible(
-            flex: 0,
-            child: TabBar(
-              tabs: [
-                Tab(
-                  child: Text(
-                    'Job Details',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                Tab(
-                  child: Text(
-                    'Tech Details',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          // TODO: Add Overview header
+
+          // OVERVIEW BODY
           Flexible(
             flex: 1,
-            child: TabBarView(
-              children: [
-                ActiveItemsLister(
-                  ItemsManager.instance.items,
-                  collapseNotifier,
-                ),
-                TechDetails(totalPrice, totalDuration),
-              ],
+            child: ActiveItemsLister(
+              ItemsManager.instance.items,
+              collapseNotifier,
             ),
           ),
         ],
