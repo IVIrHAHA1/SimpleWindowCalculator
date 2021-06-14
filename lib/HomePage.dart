@@ -1,3 +1,6 @@
+import 'package:flutter/cupertino.dart';
+import 'package:the_window_calculator/Routes/SettingsRoute.dart';
+
 import './Tools/DatabaseProvider.dart';
 import './Tools/Calculator.dart';
 import './GlobalValues.dart';
@@ -57,12 +60,22 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     // Needs to be here because of clear onPressed
     AppBar mAppBar = AppBar(
+      // Settings_Button
+      leading: IconButton(
+        onPressed: () {
+          openSettings(context);
+        },
+        icon: Icon(
+          Icons.settings,
+          color: Theme.of(context).iconTheme.color,
+        ),
+      ),
       actions: [
         IconButton(
           onPressed: _clearProject,
           icon: Icon(
             Icons.delete_forever,
-            color: Colors.white,
+            color: Theme.of(context).iconTheme.color,
           ),
         )
       ],
@@ -184,5 +197,13 @@ class _MyHomePage extends State with SingleTickerProviderStateMixin {
         );
       },
     );
+  }
+
+  void openSettings(BuildContext ctx) {
+    showCupertinoModalPopup(
+        context: ctx,
+        builder: (_) {
+          return SettingsPage();
+        });
   }
 }
