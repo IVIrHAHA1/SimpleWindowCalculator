@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:the_window_calculator/widgets/TechDetails.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key key}) : super(key: key);
@@ -79,7 +80,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 title: Text('adjust prices'),
                 subtitle: Text('this will change the results'),
                 icon: Icon(
-                  Icons.attach_money,
+                  Icons.price_check_sharp,
                   color: Colors.black54,
                 ),
               ),
@@ -88,9 +89,11 @@ class _SettingsPageState extends State<SettingsPage> {
               ExpandableListTile(
                 title: Text('change currency symbol'),
                 subtitle: Text('this will change the results'),
-                icon: Icon(
-                  Icons.attach_money,
-                  color: Colors.black54,
+                icon: Text(
+                  '\$',
+                  style: Theme.of(context).textTheme.headline5.copyWith(
+                        color: Colors.black54,
+                      ),
                 ),
               ),
 
@@ -99,7 +102,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 title: Text('how calculations work'),
                 subtitle: Text('this will change the results'),
                 icon: Icon(
-                  Icons.attach_money,
+                  Icons.quiz_outlined,
                   color: Colors.black54,
                 ),
               ),
@@ -109,7 +112,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 title: Text('about'),
                 subtitle: Text('this will change the results'),
                 icon: Icon(
-                  Icons.attach_money,
+                  Icons.info_outline,
                   color: Colors.black54,
                 ),
               )
@@ -158,7 +161,7 @@ class ExpandableListTile extends StatefulWidget {
   }) : super(key: key);
 
   final Widget title, subtitle;
-  final Icon icon;
+  final Widget icon;
   final double targetHeight;
   final embeddedChild;
 
@@ -167,53 +170,72 @@ class ExpandableListTile extends StatefulWidget {
 }
 
 class _ExpandableListTileState extends State<ExpandableListTile> {
+  double childHeight = 200;
+  bool expanded = false;
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: widget.targetHeight,
+      padding: EdgeInsets.symmetric(vertical: 12.0),
       child: Column(
         children: [
-          Expanded(
+          Flexible(
+            flex: 0,
+
             /// Visual Tile
-            child: Row(
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: Align(
-                    alignment: Alignment.topCenter,
-                    child: widget.icon,
+            child: InkWell(
+              onTap: () {
+                setState(() {
+                  print('tap registered');
+                  expanded = !expanded;
+                });
+              },
+              child: Row(
+                children: [
+                  Flexible(
+                    flex: 2,
+                    child: Align(
+                      alignment: Alignment.topCenter,
+                      child: widget.icon,
+                    ),
                   ),
-                ),
-                Expanded(
-                  flex: 6,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Material(
-                        color: Colors.transparent,
-                        textStyle: Theme.of(context)
-                            .textTheme
-                            .subtitle2
-                            .copyWith(fontSize: 18),
-                        child: widget.title,
-                      ),
-                      // Divider(
-                      //   thickness: 1.5,
-                      //   color: Colors.black12,
-                      // ),
-                      Material(
-                        color: Colors.transparent,
-                        textStyle: Theme.of(context).textTheme.caption,
-                        child: widget.subtitle,
-                      ),
-                    ],
-                  ),
-                )
-              ],
+                  Expanded(
+                    flex: 6,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 4.0),
+                          child: Material(
+                            color: Colors.transparent,
+                            textStyle: Theme.of(context)
+                                .textTheme
+                                .subtitle2
+                                .copyWith(fontSize: 18),
+                            child: widget.title,
+                          ),
+                        ),
+                        Material(
+                          color: Colors.transparent,
+                          textStyle: Theme.of(context).textTheme.caption,
+                          child: widget.subtitle,
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
 
           /// Expanded to show embbeded child
+          AnimatedContainer(
+            height: expanded ? childHeight : 0,
+            width: double.infinity,
+            duration: Duration(milliseconds: 300),
+            color: Colors.amber,
+            child: Text('hello'),
+          ),
         ],
       ),
     );

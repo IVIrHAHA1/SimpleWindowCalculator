@@ -11,10 +11,10 @@ import '../objects/OManager.dart' as defaults;
 import '../Util/Format.dart' as tools;
 
 class TechDetails extends StatelessWidget {
-  final double totalPrice;
-  final Duration totalDuration;
+  // final double totalPrice;
+  // final Duration totalDuration;
 
-  TechDetails(this.totalPrice, this.totalDuration);
+  TechDetails();
 
   @override
   Widget build(BuildContext context) {
@@ -211,7 +211,7 @@ class __MyListTileState extends State<_MyListTile>
   Widget _buildEditBtn() {
     return PopUpTextField(
       controller: controller,
-      textInputType: TextInputType.number,  
+      textInputType: TextInputType.number,
       onSubmitted: (submittedText) {
         double newValue = double.parse(submittedText);
         _saveValue(widget.setting.title, newValue).then((saved) {
@@ -242,7 +242,7 @@ class __MyListTileState extends State<_MyListTile>
           color: Colors.black,
         ),
         duration: duration,
-        // Spinner submission 
+        // Spinner submission
         onPressed: () {
           if (!popUpExpanded) {
             _expandWidget();
