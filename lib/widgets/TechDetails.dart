@@ -11,9 +11,6 @@ import '../objects/OManager.dart' as defaults;
 import '../Util/Format.dart' as tools;
 
 class TechDetails extends StatelessWidget {
-  // final double totalPrice;
-  // final Duration totalDuration;
-
   TechDetails();
 
   @override
@@ -73,7 +70,7 @@ class __MyListTileState extends State<_MyListTile>
           color: Colors.black,
         );
     return Container(
-      height: 60, // TODO: Adjust this
+      height: 50, // TODO: Adjust this
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [

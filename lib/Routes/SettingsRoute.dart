@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:the_window_calculator/Util/HexColors.dart';
 import 'package:the_window_calculator/widgets/TechDetails.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -83,6 +84,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   Icons.price_check_sharp,
                   color: Colors.black54,
                 ),
+                embeddedChild: TechDetails(),
               ),
 
               // change currency symbol
@@ -232,9 +234,9 @@ class _ExpandableListTileState extends State<ExpandableListTile> {
           AnimatedContainer(
             height: expanded ? childHeight : 0,
             width: double.infinity,
+            color: HexColors.fromHex('#FBFBFB'),
             duration: Duration(milliseconds: 300),
-            color: Colors.amber,
-            child: Text('hello'),
+            child: widget.embeddedChild,
           ),
         ],
       ),
