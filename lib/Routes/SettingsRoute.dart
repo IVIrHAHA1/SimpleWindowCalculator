@@ -71,55 +71,52 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Widget settingsBody() {
     return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.only(top: 8.0, right: 16.0, left: 16.0),
-        child: Container(
-          child: Column(
-            children: [
-              // adjusting prices
-              ExpandableListTile(
-                title: Text('adjust prices'),
-                subtitle: Text('this will change the results'),
-                icon: Icon(
-                  Icons.price_check_sharp,
-                  color: Colors.black54,
-                ),
-                embeddedChild: TechDetails(),
+      child: Container(
+        child: Column(
+          children: [
+            // adjusting prices
+            ExpandableListTile(
+              title: Text('adjust prices'),
+              subtitle: Text('this will change the results'),
+              icon: Icon(
+                Icons.price_check_sharp,
+                color: Colors.black54,
               ),
+              embeddedChild: TechDetails(),
+            ),
 
-              // change currency symbol
-              ExpandableListTile(
-                title: Text('change currency symbol'),
-                subtitle: Text('this will change the results'),
-                icon: Text(
-                  '\$',
-                  style: Theme.of(context).textTheme.headline5.copyWith(
-                        color: Colors.black54,
-                      ),
-                ),
+            // change currency symbol
+            ExpandableListTile(
+              title: Text('change currency symbol'),
+              subtitle: Text('this will change the results'),
+              icon: Text(
+                '\$',
+                style: Theme.of(context).textTheme.headline5.copyWith(
+                      color: Colors.black54,
+                    ),
               ),
+            ),
 
-              // how calculations work
-              ExpandableListTile(
-                title: Text('how calculations work'),
-                subtitle: Text('this will change the results'),
-                icon: Icon(
-                  Icons.quiz_outlined,
-                  color: Colors.black54,
-                ),
+            // how calculations work
+            ExpandableListTile(
+              title: Text('how calculations work'),
+              subtitle: Text('this will change the results'),
+              icon: Icon(
+                Icons.quiz_outlined,
+                color: Colors.black54,
               ),
+            ),
 
-              // about
-              ExpandableListTile(
-                title: Text('about'),
-                subtitle: Text('this will change the results'),
-                icon: Icon(
-                  Icons.info_outline,
-                  color: Colors.black54,
-                ),
-              )
-            ],
-          ),
+            // about
+            ExpandableListTile(
+              title: Text('about'),
+              subtitle: Text('this will change the results'),
+              icon: Icon(
+                Icons.info_outline,
+                color: Colors.black54,
+              ),
+            )
+          ],
         ),
       ),
     );
