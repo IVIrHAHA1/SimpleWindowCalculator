@@ -118,7 +118,7 @@ class _PopUpTextFieldState extends State<PopUpTextField>
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
+                // mainAxisSize: MainAxisSize.min,
                 children: [
                   // Icon Image
                   Expanded(

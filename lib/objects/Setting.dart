@@ -1,13 +1,13 @@
 class Setting {
   String title;
   String subtitle;
-  num value;
+  var value;
   bool editable;
 
   Setting({
     this.title,
-    this.subtitle,
-    this.value = 0,
+    this.subtitle = '',
+    this.value,
     this.editable = false,
   });
 }

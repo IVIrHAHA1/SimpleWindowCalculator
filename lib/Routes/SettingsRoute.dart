@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:the_window_calculator/Util/HexColors.dart';
+import 'package:the_window_calculator/objects/Setting.dart';
+import 'package:the_window_calculator/widgets/PopUpTile.dart';
 import 'package:the_window_calculator/widgets/TechDetails.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -95,15 +97,26 @@ class _SettingsPageState extends State<SettingsPage> {
                       color: Colors.black54,
                     ),
               ),
-            ),
-
-            // how calculations work
-            ExpandableListTile(
-              title: Text('how calculations work'),
-              subtitle: Text('this will change the results'),
-              icon: Icon(
-                Icons.quiz_outlined,
-                color: Colors.black54,
+              childHeight: 60,
+              embeddedChild: Container(
+                width: MediaQuery.of(context).size.width,
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      left: 32.0,
+                      top: 8.0,
+                      bottom: 8.0,
+                      right: 8.0,
+                    ),
+                    child: PopUpTile(
+                      setting: Setting(
+                        title: 'Currency Symbol',
+                        editable: true,
+                        value: '\$',
+                      ),
+                    ),
+                  ),
+                ),
               ),
             ),
 
@@ -157,11 +170,13 @@ class ExpandableListTile extends StatefulWidget {
     this.subtitle,
     this.icon,
     this.embeddedChild,
+    this.childHeight = 150,
   }) : super(key: key);
 
   final Widget title, subtitle;
   final Widget icon;
   final double targetHeight;
+  final double childHeight;
   final embeddedChild;
 
   @override
@@ -169,7 +184,6 @@ class ExpandableListTile extends StatefulWidget {
 }
 
 class _ExpandableListTileState extends State<ExpandableListTile> {
-  double childHeight = 200;
   bool expanded = false;
 
   @override
@@ -185,7 +199,6 @@ class _ExpandableListTileState extends State<ExpandableListTile> {
             child: InkWell(
               onTap: () {
                 setState(() {
-                  print('tap registered');
                   expanded = !expanded;
                 });
               },
@@ -229,7 +242,7 @@ class _ExpandableListTileState extends State<ExpandableListTile> {
 
           /// Expanded to show embbeded child
           AnimatedContainer(
-            height: expanded ? childHeight : 0,
+            height: expanded ? widget.childHeight : 0,
             width: double.infinity,
             color: HexColors.fromHex('#FBFBFB'),
             duration: Duration(milliseconds: 300),
