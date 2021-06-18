@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:the_window_calculator/Util/HexColors.dart';
-import 'package:the_window_calculator/objects/Setting.dart';
+import 'package:the_window_calculator/objects/OManager.dart' as settings;
 import 'package:the_window_calculator/widgets/PopUpTile.dart';
 import 'package:the_window_calculator/widgets/TechDetails.dart';
 
@@ -108,11 +108,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     right: 8.0,
                   ),
                   child: PopUpTile(
-                    setting: Setting(
-                      title: 'Currency Symbol',
-                      editable: true,
-                      value: '\$',
-                    ),
+                    setting: settings.preferredCurrencySymbol,
                   ),
                 ),
               ),

@@ -20,10 +20,10 @@ class TechDetails extends StatelessWidget {
         padding: const EdgeInsets.all(0),
         itemBuilder: (ctx, index) {
           return _MyListTile(
-            setting: defaults.settingsList.values.toList()[index],
+            setting: defaults.techDetailsList.values.toList()[index],
           );
         },
-        itemCount: defaults.settingsList.length,
+        itemCount: defaults.techDetailsList.length,
       ),
     );
   }
@@ -128,7 +128,8 @@ class __MyListTileState extends State<_MyListTile>
           return LayoutBuilder(
             builder: (ctx, constraints) {
               String valueString =
-                  '\$ ${tools.Format.format(snapshot.data, 2)}';
+                  (prefCurrencySymbol != null ? '$prefCurrencySymbol' : '\$') +
+                      '${tools.Format.format(snapshot.data, 2)}';
               Size textSize = _getTextSize(valueString, valueStyle);
 
               Text text = Text(valueString, style: valueStyle);
@@ -148,9 +149,13 @@ class __MyListTileState extends State<_MyListTile>
           );
         } else if (snapshot.hasError) {
           return Text('error');
-        } else {
+        }
+
+        /// This loads when no previous value has been saved
+        else {
           return Text(
-            '\$ ${tools.Format.format(widget.setting.value, 2)}',
+            (prefCurrencySymbol != null ? '$prefCurrencySymbol' : '\$') +
+                '${tools.Format.format(widget.setting.value, 2)}',
             maxLines: 1,
             overflow: TextOverflow.fade,
             style: valueStyle,
@@ -244,8 +249,11 @@ class __MyListTileState extends State<_MyListTile>
   }
 
   SharedPreferences _prefs;
+  String prefCurrencySymbol;
   Future<double> _loadValue(String key) async {
     if (_prefs == null) _prefs = await SharedPreferences.getInstance();
+    prefCurrencySymbol =
+        _prefs.getString(defaults.preferredCurrencySymbol.title);
 
     return _prefs.getDouble(key);
   }

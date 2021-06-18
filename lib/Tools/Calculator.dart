@@ -43,13 +43,13 @@ class Calculator with Notifier {
 
     String key;
 
-    key = s.settingsList[s.DefaultSettings.targetProduction].title;
+    key = s.techDetailsList[s.TechDetails.targetProduction].title;
     targetRate = preferences.getDouble(key) ?? TARGET_HOURLY_RATE;
 
-    key = s.settingsList[s.DefaultSettings.minPrice].title;
+    key = s.techDetailsList[s.TechDetails.minPrice].title;
     minPrice = preferences.getDouble(key) ?? PRICE_MIN;
 
-    key = s.settingsList[s.DefaultSettings.driveTime].title;
+    key = s.techDetailsList[s.TechDetails.driveTime].title;
     driveTime = preferences.getDouble(key) ?? DRIVETIME;
   }
 

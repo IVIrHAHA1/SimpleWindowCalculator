@@ -155,25 +155,33 @@ enum Factors {
   filthy,
 }
 
-final Map<DefaultSettings, Setting> settingsList = {
-  DefaultSettings.targetProduction: Setting(
+/// The symbol used to display the currency
+final Setting preferredCurrencySymbol = Setting(
+  title: 'Currency Symbol',
+  editable: true,
+  value: '\$',
+);
+
+/// Techdetails which allows the user to change the values calculated
+final Map<TechDetails, Setting> techDetailsList = {
+  TechDetails.targetProduction: Setting(
     title: 'Hourly Rate',
     editable: true,
     value: 85.0,
   ),
-  DefaultSettings.driveTime: Setting(
+  TechDetails.driveTime: Setting(
     title: 'Added Fixed Cost',
     editable: true,
     value: 25.0,
   ),
-  DefaultSettings.minPrice: Setting(
+  TechDetails.minPrice: Setting(
     title: 'Minimum Price',
     editable: true,
     value: 100.0,
   ),
 };
 
-enum DefaultSettings {
+enum TechDetails {
   targetProduction,
   driveTime,
   minPrice,
