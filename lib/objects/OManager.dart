@@ -157,12 +157,12 @@ enum Factors {
 
 final Map<DefaultSettings, Setting> settingsList = {
   DefaultSettings.targetProduction: Setting(
-    title: 'Production Rate',
+    title: 'Hourly Rate',
     editable: true,
     value: 85.0,
   ),
   DefaultSettings.driveTime: Setting(
-    title: 'Drive Time Rate',
+    title: 'Added Fixed Cost',
     editable: true,
     value: 25.0,
   ),

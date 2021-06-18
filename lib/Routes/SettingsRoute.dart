@@ -85,7 +85,7 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               embeddedChild: Padding(
                 padding: const EdgeInsets.only(
-                  left: 24.0,
+                  left: 32.0,
                   right: 8.0,
                 ),
                 child: TechDetails(),
@@ -103,7 +103,7 @@ class _SettingsPageState extends State<SettingsPage> {
               embeddedChild: SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.only(
-                    left: 24.0,
+                    left: 32.0,
                     bottom: 8.0,
                     right: 8.0,
                   ),
