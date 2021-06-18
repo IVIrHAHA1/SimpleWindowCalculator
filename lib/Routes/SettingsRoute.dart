@@ -79,41 +79,39 @@ class _SettingsPageState extends State<SettingsPage> {
             // adjusting prices
             ExpandableListTile(
               title: Text('adjust prices'),
-              subtitle: Text('this will change the results'),
               icon: Icon(
                 Icons.price_check_sharp,
                 color: Colors.black54,
               ),
-              embeddedChild: TechDetails(),
+              embeddedChild: Padding(
+                padding: const EdgeInsets.only(
+                  left: 24.0,
+                  right: 8.0,
+                ),
+                child: TechDetails(),
+              ),
             ),
 
             // change currency symbol
             ExpandableListTile(
               title: Text('change currency symbol'),
-              subtitle: Text('this will change the results'),
-              icon: Text(
-                '\$',
-                style: Theme.of(context).textTheme.headline5.copyWith(
-                      color: Colors.black54,
-                    ),
+              icon: Icon(
+                Icons.money_rounded,
+                color: Colors.black54,
               ),
               childHeight: 60,
-              embeddedChild: Container(
-                width: MediaQuery.of(context).size.width,
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                      left: 32.0,
-                      top: 8.0,
-                      bottom: 8.0,
-                      right: 8.0,
-                    ),
-                    child: PopUpTile(
-                      setting: Setting(
-                        title: 'Currency Symbol',
-                        editable: true,
-                        value: '\$',
-                      ),
+              embeddedChild: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    left: 24.0,
+                    bottom: 8.0,
+                    right: 8.0,
+                  ),
+                  child: PopUpTile(
+                    setting: Setting(
+                      title: 'Currency Symbol',
+                      editable: true,
+                      value: '\$',
                     ),
                   ),
                 ),
@@ -189,53 +187,56 @@ class _ExpandableListTileState extends State<ExpandableListTile> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 12.0),
+      padding: EdgeInsets.symmetric(vertical: 16.0),
       child: Column(
         children: [
           Flexible(
             flex: 0,
 
             /// Visual Tile
-            child: InkWell(
-              onTap: () {
-                setState(() {
-                  expanded = !expanded;
-                });
-              },
-              child: Row(
-                children: [
-                  Flexible(
-                    flex: 2,
-                    child: Align(
-                      alignment: Alignment.topCenter,
-                      child: widget.icon,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: InkWell(
+                onTap: () {
+                  setState(() {
+                    expanded = !expanded;
+                  });
+                },
+                child: Row(
+                  children: [
+                    Flexible(
+                      flex: 2,
+                      child: Align(
+                        alignment: Alignment.topCenter,
+                        child: widget.icon,
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    flex: 6,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 4.0),
-                          child: Material(
-                            color: Colors.transparent,
-                            textStyle: Theme.of(context)
-                                .textTheme
-                                .subtitle2
-                                .copyWith(fontSize: 18),
-                            child: widget.title,
+                    Expanded(
+                      flex: 6,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 4.0),
+                            child: Material(
+                              color: Colors.transparent,
+                              textStyle: Theme.of(context)
+                                  .textTheme
+                                  .subtitle2
+                                  .copyWith(fontSize: 18),
+                              child: widget.title,
+                            ),
                           ),
-                        ),
-                        Material(
-                          color: Colors.transparent,
-                          textStyle: Theme.of(context).textTheme.caption,
-                          child: widget.subtitle,
-                        ),
-                      ],
-                    ),
-                  )
-                ],
+                          Material(
+                            color: Colors.transparent,
+                            textStyle: Theme.of(context).textTheme.caption,
+                            child: widget.subtitle,
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           ),
@@ -243,7 +244,7 @@ class _ExpandableListTileState extends State<ExpandableListTile> {
           /// Expanded to show embbeded child
           AnimatedContainer(
             height: expanded ? widget.childHeight : 0,
-            width: double.infinity,
+            width: MediaQuery.of(context).size.width,
             color: HexColors.fromHex('#FBFBFB'),
             duration: Duration(milliseconds: 300),
             child: widget.embeddedChild,

@@ -16,8 +16,8 @@ class TechDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: ListView.builder(
+        padding: const EdgeInsets.all(0),
         itemBuilder: (ctx, index) {
           return _MyListTile(
             setting: defaults.settingsList.values.toList()[index],
@@ -66,8 +66,8 @@ class __MyListTileState extends State<_MyListTile>
 
   @override
   Widget build(BuildContext context) {
-    TextStyle valueStyle = Theme.of(context).textTheme.headline6.copyWith(
-          color: Colors.black,
+    TextStyle valueStyle = Theme.of(context).textTheme.bodyText2.copyWith(
+          fontWeight: FontWeight.bold,
         );
     return Container(
       height: 50, // TODO: Adjust this
@@ -95,37 +95,10 @@ class __MyListTileState extends State<_MyListTile>
                           '${widget.setting.title}',
                           maxLines: 1,
                           overflow: TextOverflow.fade,
-                          style: Theme.of(context).textTheme.headline6.copyWith(
-                                fontSize: 14,
-                                color: Colors.black,
+                          style: Theme.of(context).textTheme.bodyText2.copyWith(
+                                fontWeight: FontWeight.bold,
                               ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-                // Subtitle
-                Expanded(
-                  flex: 2,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        flex: 3,
-                        child: Container(),
-                      ),
-                      Expanded(
-                        flex: !popUpExpanded ? 5 : 3,
-                        child: widget.setting.subtitle != null
-                            ? Text(
-                                '${widget.setting.subtitle}',
-                                maxLines: 1,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .subtitle2
-                                    .copyWith(fontSize: 12),
-                              )
-                            : Container(),
                       ),
                     ],
                   ),
@@ -180,9 +153,7 @@ class __MyListTileState extends State<_MyListTile>
             '\$ ${tools.Format.format(widget.setting.value, 2)}',
             maxLines: 1,
             overflow: TextOverflow.fade,
-            style: Theme.of(context).textTheme.headline6.copyWith(
-                  color: Colors.black,
-                ),
+            style: valueStyle,
           );
         }
       },

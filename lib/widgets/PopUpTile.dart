@@ -74,9 +74,8 @@ class _PopUpTileState extends State<PopUpTile>
                           '${widget.setting.title}',
                           maxLines: 1,
                           overflow: TextOverflow.fade,
-                          style: Theme.of(context).textTheme.headline6.copyWith(
-                                fontSize: 14,
-                                color: Colors.black87,
+                          style: Theme.of(context).textTheme.bodyText2.copyWith(
+                                fontWeight: FontWeight.bold,
                               ),
                         ),
                       ),
@@ -130,7 +129,7 @@ class _PopUpTileState extends State<PopUpTile>
           return Text('error');
         } else {
           return Text(
-            '\$ ${tools.Format.format(widget.setting.value, 2)}',
+            widget.setting.value,
             maxLines: 1,
             overflow: TextOverflow.fade,
             style: Theme.of(context).textTheme.headline6.copyWith(
@@ -161,10 +160,8 @@ class _PopUpTileState extends State<PopUpTile>
   Widget _buildEditBtn() {
     return PopUpTextField(
       controller: controller,
-      textInputType: TextInputType.number,
       onSubmitted: (submittedText) {
-        double newValue = double.parse(submittedText);
-        _saveValue(widget.setting.title, newValue).then((saved) {
+        _saveValue(widget.setting.title, submittedText).then((saved) {
           if (saved) {
             _collapseWidget();
           }
@@ -172,8 +169,7 @@ class _PopUpTileState extends State<PopUpTile>
       },
       validator: (textValue) {
         try {
-          num value = double.parse(textValue);
-          if (value != null)
+          if (textValue.length == 1)
             return true;
           else
             return false;
@@ -229,17 +225,13 @@ class _PopUpTileState extends State<PopUpTile>
   Future<String> _loadValue(String key) async {
     if (_prefs == null) _prefs = await SharedPreferences.getInstance();
 
-    // return _prefs.getString(key);
-    return '\$';
+    return _prefs.getString(key);
   }
 
-  Future<bool> _saveValue(String key, var value) async {
+  Future<bool> _saveValue(String key, String value) async {
     if (_prefs == null) _prefs = await SharedPreferences.getInstance();
 
     bool saved = await _prefs.setString(key, value);
-    Calculator.instance.updateDefaults().whenComplete(() {
-      Calculator.instance.update();
-    });
     return saved;
   }
 }
