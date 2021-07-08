@@ -9,3 +9,5 @@ const double PRICE_MIN = 150;
 const double TARGET_HOURLY_RATE = 85.0;
 
 const String DEFAULT_WINDOW_KEY = "SP_DEFAULT_WINDOW";
+
+const TEXT_COLOR = '#303030';
