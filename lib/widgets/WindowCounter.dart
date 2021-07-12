@@ -66,6 +66,7 @@ class _WindowCounterState extends State<WindowCounter> {
     bool _disableFactors = false;
 
     return Container(
+      color: Colors.amber,
       height: widget.height,
       child: Stack(
         children: [
@@ -74,18 +75,21 @@ class _WindowCounterState extends State<WindowCounter> {
 
           // Construction Factor
           Positioned(
-            top: ofp_y_top,
-            right: ofp_x,
-            child: FactorCoin(
-              factorKey: Factors.construction,
-              window: widget.window,
-              size: factorSize,
-              alignment: Alignment.topCenter,
-              backgroundColor: HexColors.fromHex('#FFB9B9'),
-              isDummy: _disableFactors,
-              onStatusChanged: (_) {
-                setState(() {});
-              },
+            top: 0,
+            right: 0,
+            child: Container(
+              color: Colors.deepOrange,
+              child: FactorCoin(
+                factorKey: Factors.construction,
+                window: widget.window,
+                size: factorSize,
+                alignment: Alignment.topCenter,
+                backgroundColor: HexColors.fromHex('#FFB9B9'),
+                isDummy: _disableFactors,
+                onStatusChanged: (_) {
+                  setState(() {});
+                },
+              ),
             ),
           ),
 
@@ -125,8 +129,8 @@ class _WindowCounterState extends State<WindowCounter> {
 
           // Sided Factor
           Positioned(
-            top: ofp_y,
-            right: ofp_x,
+            bottom: 0,
+            right: 0,
             child: FactorCoin(
               factorKey: Factors.sided,
               window: widget.window,
@@ -139,16 +143,16 @@ class _WindowCounterState extends State<WindowCounter> {
             ),
           ),
 
-          Positioned(
-            top: ofp_y_top,
-            right: 50,
-            child: Container(
-              color: Colors.amber,
-              child: Icon(
-                Icons.help_outline,
-              ),
-            ),
-          ),
+          // Positioned(
+          //   top: ofp_y_top,
+          //   right: 50,
+          //   child: Container(
+          //     color: Colors.amber,
+          //     child: Icon(
+          //       Icons.help_outline,
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

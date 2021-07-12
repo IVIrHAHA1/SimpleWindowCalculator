@@ -163,12 +163,12 @@ class _FactorCoinState extends State<FactorCoin> {
   /*
    *  Builds the coin aesthetics 
    */
-  Card mintCoin(BuildContext context, bool greyed, double coinSize) {
-    return Card(
-      elevation: 0,
-      color: greyed ? Colors.grey : widget.backgroundColor,
-      shape: CircleBorder(
-        side: BorderSide(
+  Widget mintCoin(BuildContext context, bool greyed, double coinSize) {
+    return Container(
+      decoration: BoxDecoration(
+        color: greyed ? Colors.grey : widget.backgroundColor,
+        shape: BoxShape.circle,
+        border: Border.all(
           color: styleBorder(context, greyed),
           width: coinSize / 12,
           style: BorderStyle.solid,
