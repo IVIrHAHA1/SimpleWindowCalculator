@@ -101,8 +101,7 @@ class MySplashScreen extends StatelessWidget {
       DatabaseProvider.instance.fillDatabase(OManager.presetWindows);
       prefs.setString(DEFAULT_WINDOW_KEY, OManager.getDefaultWindow().name);
 
-      /// TODO: Enable tutorial mode
-      // needsTutorial = true;
+      needsTutorial = true;
     }
 
     // Set the active window as dictated by the OManager

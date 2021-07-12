@@ -63,8 +63,7 @@ class _WindowCounterState extends State<WindowCounter> {
     // ignore: non_constant_identifier_names
     final double ofp_y_top = radii * sin(-pi / 3.75) + radii - errorMargin;
 
-    // TODO: If tutorial mode is on, disable factorCoins
-    bool _tutorialMode = false;
+    bool _disableFactors = false;
 
     return Container(
       height: widget.height,
@@ -83,7 +82,7 @@ class _WindowCounterState extends State<WindowCounter> {
               size: factorSize,
               alignment: Alignment.topCenter,
               backgroundColor: HexColors.fromHex('#FFB9B9'),
-              isDummy: _tutorialMode,
+              isDummy: _disableFactors,
               onStatusChanged: (_) {
                 setState(() {});
               },
@@ -100,7 +99,7 @@ class _WindowCounterState extends State<WindowCounter> {
               size: factorSize,
               alignment: Alignment.center,
               backgroundColor: HexColors.fromHex('#DCA065'),
-              isDummy: _tutorialMode,
+              isDummy: _disableFactors,
               onStatusChanged: (_) {
                 setState(() {});
               },
@@ -117,7 +116,7 @@ class _WindowCounterState extends State<WindowCounter> {
               size: factorSize,
               alignment: Alignment.topCenter,
               backgroundColor: HexColors.fromHex('#FFEDA5'),
-              isDummy: _tutorialMode,
+              isDummy: _disableFactors,
               onStatusChanged: (_) {
                 setState(() {});
               },
@@ -133,10 +132,21 @@ class _WindowCounterState extends State<WindowCounter> {
               window: widget.window,
               size: factorSize,
               alignment: Alignment.center,
-              isDummy: _tutorialMode,
+              isDummy: _disableFactors,
               onStatusChanged: (_) {
                 setState(() {});
               },
+            ),
+          ),
+
+          Positioned(
+            top: ofp_y_top,
+            right: 50,
+            child: Container(
+              color: Colors.amber,
+              child: Icon(
+                Icons.help_outline,
+              ),
             ),
           ),
         ],

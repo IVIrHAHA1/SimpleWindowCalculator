@@ -10,10 +10,16 @@ class TutorialOverlay extends StatefulWidget {
 class _TutorialOverlayState extends State<TutorialOverlay> {
   @override
   Widget build(BuildContext context) {
+    print('TUTORIAL MODE STARTED');
     return Scaffold(
       body: Stack(
         children: [
-          MyHomePage(),
+          Container(
+            foregroundDecoration: BoxDecoration(
+              color: Colors.amber.withOpacity(.5),
+            ),
+            child: MyHomePage(),
+          ),
           Positioned(
             left: 0,
             right: 0,
