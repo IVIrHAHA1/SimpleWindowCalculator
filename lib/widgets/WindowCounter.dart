@@ -44,29 +44,30 @@ class _WindowCounterState extends State<WindowCounter> {
     // an ellipse (when used in conjuction with radii)
     final double errorMargin = factorSize * .8;
     // Using the center of FactorCoin as the point of reference
-    final double radii = (widget.height / 2);
+    final double ctrlRadius = (widget.height / 2);
 
     // Inner Factor Position
     // ignore: non_constant_identifier_names
-    final double ifp_y = radii * sin(pi / 8) + radii - errorMargin;
-    // ignore: non_constant_identifier_names
-    final double ifp_x = radii * cos(pi / 8) - errorMargin;
+    // final double ifp_y = ctrlRadius * sin(pi / 8) + ctrlRadius - errorMargin;
+    // // ignore: non_constant_identifier_names
+    // final double ifp_x = ctrlRadius * cos(pi / 8) - errorMargin;
 
-    // Outter Factor Position
-    // ignore: non_constant_identifier_names
-    final double ofp_y = radii * sin(pi / 3) + radii - errorMargin;
-    // ignore: non_constant_identifier_names
-    final double ofp_x = radii * cos(pi / 3) - errorMargin;
+    // // Outter Factor Position
+    // // ignore: non_constant_identifier_names
+    // final double ofp_y = ctrlRadius * sin(pi / 3) + ctrlRadius - errorMargin;
+    // // ignore: non_constant_identifier_names
+    // final double ofp_x = ctrlRadius * cos(pi / 3) - errorMargin;
 
-    // ignore: non_constant_identifier_names
-    final double ifp_y_top = radii * sin(-pi / 11) + radii - errorMargin;
-    // ignore: non_constant_identifier_names
-    final double ofp_y_top = radii * sin(-pi / 3.75) + radii - errorMargin;
+    // // ignore: non_constant_identifier_names
+    // final double ifp_y_top =
+    //     ctrlRadius * sin(-pi / 11) + ctrlRadius - errorMargin;
+    // // ignore: non_constant_identifier_names
+    // final double ofp_y_top =
+    //     ctrlRadius * sin(-pi / 3.75) + ctrlRadius - errorMargin;
 
     bool _disableFactors = false;
 
     return Container(
-      color: Colors.amber,
       height: widget.height,
       child: Stack(
         children: [
@@ -75,28 +76,25 @@ class _WindowCounterState extends State<WindowCounter> {
 
           // Construction Factor
           Positioned(
-            top: 0,
-            right: 0,
-            child: Container(
-              color: Colors.deepOrange,
-              child: FactorCoin(
-                factorKey: Factors.construction,
-                window: widget.window,
-                size: factorSize,
-                alignment: Alignment.topCenter,
-                backgroundColor: HexColors.fromHex('#FFB9B9'),
-                isDummy: _disableFactors,
-                onStatusChanged: (_) {
-                  setState(() {});
-                },
-              ),
+            top: ctrlRadius - ctrlRadius * sin(5 * pi / 12),
+            right: ctrlRadius * cos(5 * pi / 12),
+            child: FactorCoin(
+              factorKey: Factors.construction,
+              window: widget.window,
+              size: factorSize,
+              alignment: Alignment.topCenter,
+              backgroundColor: HexColors.fromHex('#FFB9B9'),
+              isDummy: _disableFactors,
+              onStatusChanged: (_) {
+                setState(() {});
+              },
             ),
           ),
 
           // Filthy Factor
           Positioned(
-            top: ifp_y_top,
-            right: ifp_x,
+            top: ctrlRadius - ctrlRadius * sin(5 * pi / 24),
+            right: ctrlRadius * cos(5 * pi / 24),
             child: FactorCoin(
               factorKey: Factors.filthy,
               window: widget.window,
@@ -112,8 +110,8 @@ class _WindowCounterState extends State<WindowCounter> {
 
           // Difficult Factor
           Positioned(
-            top: ifp_y,
-            right: ifp_x,
+            top: ctrlRadius - ctrlRadius * sin(0),
+            right: ctrlRadius * cos(0),
             child: FactorCoin(
               factorKey: Factors.difficult,
               window: widget.window,
@@ -129,8 +127,8 @@ class _WindowCounterState extends State<WindowCounter> {
 
           // Sided Factor
           Positioned(
-            bottom: 0,
-            right: 0,
+            top: ctrlRadius + ctrlRadius * sin(5 * pi / 24),
+            right: ctrlRadius * cos(5 * pi / 24),
             child: FactorCoin(
               factorKey: Factors.sided,
               window: widget.window,
@@ -143,16 +141,17 @@ class _WindowCounterState extends State<WindowCounter> {
             ),
           ),
 
-          // Positioned(
-          //   top: ofp_y_top,
-          //   right: 50,
-          //   child: Container(
-          //     color: Colors.amber,
-          //     child: Icon(
-          //       Icons.help_outline,
-          //     ),
-          //   ),
-          // ),
+          Positioned(
+            bottom: 5,
+            right: 5,
+            child: Container(
+              child: Icon(
+                Icons.help_outline,
+                color: Theme.of(context).primaryColor,
+                size: 32,
+              ),
+            ),
+          ),
         ],
       ),
     );
