@@ -76,8 +76,8 @@ class _WindowCounterState extends State<WindowCounter> {
 
           // Construction Factor
           Positioned(
-            top: ctrlRadius - ctrlRadius * sin(5 * pi / 12) - (factorSize / 2),
-            right: ctrlRadius * cos(5 * pi / 12) - (factorSize / 2),
+            top: _positionVert(5 * pi / 12),
+            right: _positionHori(5 * pi / 12),
             child: FactorCoin(
               factorKey: Factors.construction,
               window: widget.window,
@@ -93,8 +93,8 @@ class _WindowCounterState extends State<WindowCounter> {
 
           // Filthy Factor
           Positioned(
-            top: ctrlRadius - ctrlRadius * sin(5 * pi / 24) - (factorSize / 2),
-            right: ctrlRadius * cos(5 * pi / 24) - (factorSize / 2),
+            top: _positionVert(5 * pi / 24),
+            right: _positionHori(5 * pi / 24),
             child: FactorCoin(
               factorKey: Factors.filthy,
               window: widget.window,
@@ -110,8 +110,8 @@ class _WindowCounterState extends State<WindowCounter> {
 
           // Difficult Factor
           Positioned(
-            top: ctrlRadius - ctrlRadius * sin(0) - (factorSize / 2),
-            right: ctrlRadius * cos(0) - (factorSize / 2),
+            top: _positionVert(0),
+            right: _positionHori(0),
             child: FactorCoin(
               factorKey: Factors.difficult,
               window: widget.window,
@@ -127,8 +127,8 @@ class _WindowCounterState extends State<WindowCounter> {
 
           // Sided Factor
           Positioned(
-            top: ctrlRadius + ctrlRadius * sin(5 * pi / 24) - (factorSize / 2),
-            right: ctrlRadius * cos(5 * pi / 24) - (factorSize / 2),
+            bottom: _positionVert(5 * pi / 24),
+            right: _positionHori(5 * pi / 24),
             child: FactorCoin(
               factorKey: Factors.sided,
               window: widget.window,
@@ -156,6 +156,27 @@ class _WindowCounterState extends State<WindowCounter> {
       ),
     );
   }
+
+/* ---------------------- Positioning Maths ---------------------- */
+  final double factorCoinRatio = 6.5;
+
+  /// Positions an element on the Y-axis by subtracting from the
+  /// center point of the circle. In otherwords, the radius.
+  num _positionVert(num angle, {num rad}) {
+    final double radius = rad ?? widget.height / 2;
+    final double coinSize = widget.height / factorCoinRatio;
+
+    return radius - (radius * sin(angle) + (coinSize / 2));
+  }
+
+  num _positionHori(num angle, {num rad}) {
+    final double radius = rad ?? widget.height / 2;
+    final double coinSize = widget.height / factorCoinRatio;
+
+    return radius * cos(angle) - (coinSize / 2);
+  }
+
+/* --------------------------------------------------------------- */
 
   Widget buildPreview(BuildContext context, double factorSize) {
     double width = MediaQuery.of(context).size.width / 2;
