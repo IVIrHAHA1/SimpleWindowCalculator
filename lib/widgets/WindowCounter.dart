@@ -76,8 +76,8 @@ class _WindowCounterState extends State<WindowCounter> {
 
           // Construction Factor
           Positioned(
-            top: ctrlRadius - ctrlRadius * sin(5 * pi / 12),
-            right: ctrlRadius * cos(5 * pi / 12),
+            top: ctrlRadius - ctrlRadius * sin(5 * pi / 12) - (factorSize / 2),
+            right: ctrlRadius * cos(5 * pi / 12) - (factorSize / 2),
             child: FactorCoin(
               factorKey: Factors.construction,
               window: widget.window,
@@ -93,8 +93,8 @@ class _WindowCounterState extends State<WindowCounter> {
 
           // Filthy Factor
           Positioned(
-            top: ctrlRadius - ctrlRadius * sin(5 * pi / 24),
-            right: ctrlRadius * cos(5 * pi / 24),
+            top: ctrlRadius - ctrlRadius * sin(5 * pi / 24) - (factorSize / 2),
+            right: ctrlRadius * cos(5 * pi / 24) - (factorSize / 2),
             child: FactorCoin(
               factorKey: Factors.filthy,
               window: widget.window,
@@ -110,8 +110,8 @@ class _WindowCounterState extends State<WindowCounter> {
 
           // Difficult Factor
           Positioned(
-            top: ctrlRadius - ctrlRadius * sin(0),
-            right: ctrlRadius * cos(0),
+            top: ctrlRadius - ctrlRadius * sin(0) - (factorSize / 2),
+            right: ctrlRadius * cos(0) - (factorSize / 2),
             child: FactorCoin(
               factorKey: Factors.difficult,
               window: widget.window,
@@ -127,8 +127,8 @@ class _WindowCounterState extends State<WindowCounter> {
 
           // Sided Factor
           Positioned(
-            top: ctrlRadius + ctrlRadius * sin(5 * pi / 24),
-            right: ctrlRadius * cos(5 * pi / 24),
+            top: ctrlRadius + ctrlRadius * sin(5 * pi / 24) - (factorSize / 2),
+            right: ctrlRadius * cos(5 * pi / 24) - (factorSize / 2),
             child: FactorCoin(
               factorKey: Factors.sided,
               window: widget.window,
