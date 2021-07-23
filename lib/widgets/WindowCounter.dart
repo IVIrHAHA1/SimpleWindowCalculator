@@ -35,36 +35,7 @@ class WindowCounter extends StatefulWidget {
 class _WindowCounterState extends State<WindowCounter> {
   @override
   Widget build(BuildContext context) {
-    // final box = context.findRenderObject() as RenderBox;
-
-    // if (box != null) height = box.size.height;
-
     final factorSize = widget.height / 6.5;
-    // ErrorMargin is used to keep the the radius circular rather than
-    // an ellipse (when used in conjuction with radii)
-    final double errorMargin = factorSize * .8;
-    // Using the center of FactorCoin as the point of reference
-    final double ctrlRadius = (widget.height / 2);
-
-    // Inner Factor Position
-    // ignore: non_constant_identifier_names
-    // final double ifp_y = ctrlRadius * sin(pi / 8) + ctrlRadius - errorMargin;
-    // // ignore: non_constant_identifier_names
-    // final double ifp_x = ctrlRadius * cos(pi / 8) - errorMargin;
-
-    // // Outter Factor Position
-    // // ignore: non_constant_identifier_names
-    // final double ofp_y = ctrlRadius * sin(pi / 3) + ctrlRadius - errorMargin;
-    // // ignore: non_constant_identifier_names
-    // final double ofp_x = ctrlRadius * cos(pi / 3) - errorMargin;
-
-    // // ignore: non_constant_identifier_names
-    // final double ifp_y_top =
-    //     ctrlRadius * sin(-pi / 11) + ctrlRadius - errorMargin;
-    // // ignore: non_constant_identifier_names
-    // final double ofp_y_top =
-    //     ctrlRadius * sin(-pi / 3.75) + ctrlRadius - errorMargin;
-
     bool _disableFactors = false;
 
     return Container(
@@ -127,7 +98,7 @@ class _WindowCounterState extends State<WindowCounter> {
 
           // Sided Factor
           Positioned(
-            bottom: _positionVert(5 * pi / 24),
+            top: _positionVert(-5 * pi / 24),
             right: _positionHori(5 * pi / 24),
             child: FactorCoin(
               factorKey: Factors.sided,
