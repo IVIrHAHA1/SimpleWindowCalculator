@@ -1,10 +1,13 @@
 import 'dart:io';
 
+import 'package:the_window_calculator/GlobalValues.dart';
+
 import '../objects/Factor.dart';
 
 import 'Setting.dart';
 import 'Window.dart';
 import 'package:flutter/material.dart';
+import '../GlobalValues.dart' as gv;
 
 class OManager {
   static final List<Window> presetWindows = [
@@ -167,17 +170,17 @@ final Map<TechDetails, Setting> techDetailsList = {
   TechDetails.targetProduction: Setting(
     title: 'Hourly Rate',
     editable: true,
-    value: 85.0,
+    value: gv.TARGET_HOURLY_RATE,
   ),
   TechDetails.driveTime: Setting(
     title: 'Added Fixed Cost',
     editable: true,
-    value: 25.0,
+    value: gv.DRIVETIME,
   ),
   TechDetails.minPrice: Setting(
     title: 'Minimum Price',
     editable: true,
-    value: 100.0,
+    value: gv.PRICE_MIN,
   ),
 };
 

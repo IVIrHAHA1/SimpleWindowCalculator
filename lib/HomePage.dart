@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:the_window_calculator/Routes/SettingsRoute.dart';
+import 'package:the_window_calculator/Routes/SettingsPage.dart';
 
 import './Tools/DatabaseProvider.dart';
 import './Tools/Calculator.dart';
