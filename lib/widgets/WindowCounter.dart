@@ -39,15 +39,16 @@ class _WindowCounterState extends State<WindowCounter> {
     bool _disableFactors = false;
 
     return Container(
-      height: widget.height,
+      height: widget.height + factorSize / 1.5,
       child: Stack(
+        alignment: Alignment.centerLeft,
         children: [
-          buildPreview(context, factorSize),
+          buildPreview(context, dummySize: factorSize / 2),
           buildController(context, factorSize),
 
           // Construction Factor
           Positioned(
-            top: _positionVert(5 * pi / 12),
+            bottom: _positionVert(-5 * pi / 12),
             right: _positionHori(5 * pi / 12),
             child: FactorCoin(
               factorKey: Factors.construction,
@@ -64,7 +65,7 @@ class _WindowCounterState extends State<WindowCounter> {
 
           // Filthy Factor
           Positioned(
-            top: _positionVert(5 * pi / 24),
+            bottom: _positionVert(-5 * pi / 24),
             right: _positionHori(5 * pi / 24),
             child: FactorCoin(
               factorKey: Factors.filthy,
@@ -81,7 +82,7 @@ class _WindowCounterState extends State<WindowCounter> {
 
           // Difficult Factor
           Positioned(
-            top: _positionVert(0),
+            bottom: _positionVert(0),
             right: _positionHori(0),
             child: FactorCoin(
               factorKey: Factors.difficult,
@@ -98,7 +99,7 @@ class _WindowCounterState extends State<WindowCounter> {
 
           // Sided Factor
           Positioned(
-            top: _positionVert(-5 * pi / 24),
+            bottom: _positionVert(5 * pi / 24),
             right: _positionHori(5 * pi / 24),
             child: FactorCoin(
               factorKey: Factors.sided,
@@ -149,7 +150,7 @@ class _WindowCounterState extends State<WindowCounter> {
 
 /* --------------------------------------------------------------- */
 
-  Widget buildPreview(BuildContext context, double factorSize) {
+  Widget buildPreview(BuildContext context, {@required double dummySize}) {
     double width = MediaQuery.of(context).size.width / 2;
 
     return Positioned(
@@ -169,30 +170,32 @@ class _WindowCounterState extends State<WindowCounter> {
 
           // Factor Row
           Container(
+            padding: const EdgeInsets.only(top: 4),
+            height: dummySize * 2.5,
             width: width,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 buildDummyCoin(
-                  factorSize,
+                  dummySize,
                   '#DCA065',
                   Alignment.center,
                   Factors.filthy,
                 ),
                 buildDummyCoin(
-                  factorSize,
+                  dummySize,
                   '#FFEDA5',
                   Alignment.topCenter,
                   Factors.difficult,
                 ),
                 buildDummyCoin(
-                  factorSize,
+                  dummySize,
                   '#FFB9B9',
                   Alignment.topCenter,
                   Factors.construction,
                 ),
                 buildDummyCoin(
-                  factorSize,
+                  dummySize,
                   null,
                   Alignment.center,
                   Factors.sided,
@@ -206,7 +209,7 @@ class _WindowCounterState extends State<WindowCounter> {
   }
 
   Widget buildDummyCoin(
-    double factorSize,
+    double dummySize,
     String colorCode,
     Alignment alignment,
     Factors factorKey,
@@ -225,7 +228,7 @@ class _WindowCounterState extends State<WindowCounter> {
             child: FactorCoin(
               factorKey: factorKey,
               window: widget.window,
-              size: factorSize / 2,
+              size: dummySize,
               alignment: alignment,
               backgroundColor:
                   colorCode != null ? HexColors.fromHex(colorCode) : null,
@@ -255,97 +258,101 @@ class _WindowCounterState extends State<WindowCounter> {
     // Final Result
     final double buttonWidth = _circlePoint - buttonSize / 4;
 
-    return Stack(clipBehavior: Clip.hardEdge, children: [
-      Positioned(
-        height: widget.height,
-        width: widget.height,
-        right: -widget.height / 2,
-        child: Container(
-          padding: EdgeInsets.all(factorPadding),
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.white,
+    return Stack(
+      clipBehavior: Clip.hardEdge,
+      alignment: Alignment.bottomCenter,
+      children: [
+        Positioned(
+          height: widget.height,
+          width: widget.height,
+          right: -widget.height / 2,
+          child: Container(
+            padding: EdgeInsets.all(factorPadding),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.white,
+            ),
+            child: Stack(alignment: Alignment.center, children: [
+              Container(
+                height: _innerCircleSize,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Theme.of(ctx).primaryColor,
+                ),
+              ),
+              Positioned(
+                right: _innerCircleSize / 2 + GlobalValues.appMargin,
+                child: Column(
+                  children: [
+                    // INCREMENTING BUTTON
+                    Material(
+                      borderRadius: BorderRadius.circular(100.0),
+                      color: Colors.transparent,
+                      child: InkWell(
+                        splashColor: Colors.blueGrey,
+                        borderRadius: BorderRadius.circular(100.0),
+                        onLongPress: () {
+                          HapticFeedback.mediumImpact();
+                          widget.window.amendCount(.5);
+                          Calculator.instance.update();
+                        },
+                        onTap: () {
+                          HapticFeedback.mediumImpact();
+                          widget.window.amendCount(1.0);
+                          Calculator.instance.update();
+                        },
+                        child: Card(
+                          elevation: 5,
+                          shape: CircleBorder(side: BorderSide.none),
+                          child: Icon(
+                            Icons.add,
+                            color: Theme.of(ctx).primaryColor,
+                            size: buttonSize * 1.2,
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    SizedBox(
+                      height: buttonWidth * .5,
+                    ),
+
+                    // DECREMENTING BUTTON
+                    Material(
+                      color: Colors.transparent,
+                      borderRadius: BorderRadius.circular(100.0),
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(100.0),
+                        splashColor: Colors.blueGrey,
+                        onLongPress: () {
+                          HapticFeedback.mediumImpact();
+                          widget.window.amendCount(-.5);
+                          Calculator.instance.update();
+                        },
+                        onTap: () {
+                          HapticFeedback.mediumImpact();
+                          widget.window.amendCount(-1.0);
+                          Calculator.instance.update();
+                        },
+                        child: Card(
+                          elevation: 5,
+                          shape: CircleBorder(side: BorderSide.none),
+                          child: Icon(
+                            Icons.remove,
+                            color: Theme.of(ctx).primaryColor,
+                            size: buttonSize * .8,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ]),
           ),
-          child: Stack(alignment: Alignment.center, children: [
-            Container(
-              height: _innerCircleSize,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Theme.of(ctx).primaryColor,
-              ),
-            ),
-            Positioned(
-              right: _innerCircleSize / 2 + GlobalValues.appMargin,
-              child: Column(
-                children: [
-                  // INCREMENTING BUTTON
-                  Material(
-                    borderRadius: BorderRadius.circular(100.0),
-                    color: Colors.transparent,
-                    child: InkWell(
-                      splashColor: Colors.blueGrey,
-                      borderRadius: BorderRadius.circular(100.0),
-                      onLongPress: () {
-                        HapticFeedback.mediumImpact();
-                        widget.window.amendCount(.5);
-                        Calculator.instance.update();
-                      },
-                      onTap: () {
-                        HapticFeedback.mediumImpact();
-                        widget.window.amendCount(1.0);
-                        Calculator.instance.update();
-                      },
-                      child: Card(
-                        elevation: 5,
-                        shape: CircleBorder(side: BorderSide.none),
-                        child: Icon(
-                          Icons.add,
-                          color: Theme.of(ctx).primaryColor,
-                          size: buttonSize * 1.2,
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  SizedBox(
-                    height: buttonWidth * .5,
-                  ),
-
-                  // DECREMENTING BUTTON
-                  Material(
-                    color: Colors.transparent,
-                    borderRadius: BorderRadius.circular(100.0),
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(100.0),
-                      splashColor: Colors.blueGrey,
-                      onLongPress: () {
-                        HapticFeedback.mediumImpact();
-                        widget.window.amendCount(-.5);
-                        Calculator.instance.update();
-                      },
-                      onTap: () {
-                        HapticFeedback.mediumImpact();
-                        widget.window.amendCount(-1.0);
-                        Calculator.instance.update();
-                      },
-                      child: Card(
-                        elevation: 5,
-                        shape: CircleBorder(side: BorderSide.none),
-                        child: Icon(
-                          Icons.remove,
-                          color: Theme.of(ctx).primaryColor,
-                          size: buttonSize * .8,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ]),
         ),
-      ),
-    ]);
+      ],
+    );
   }
 
   buildWindowPreview(BuildContext context) {
