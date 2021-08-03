@@ -30,6 +30,8 @@ class FactorInfoPage extends StatelessWidget {
                   factorKey: Factors.sided,
                   isDummy: true,
                 ),
+                sub1: 'increments/decrements 1',
+                sub2: 'multiplier value x.6',
               ),
               // Obstructed
               _factorDisplay(
@@ -41,6 +43,7 @@ class FactorInfoPage extends StatelessWidget {
                   isDummy: true,
                   backgroundColor: Color(0xFFFFEDA5),
                 ),
+                sub2: 'multiplier value x1.5',
               ),
               // Filthy
               _factorDisplay(
@@ -52,6 +55,7 @@ class FactorInfoPage extends StatelessWidget {
                   isDummy: true,
                   backgroundColor: Color(0xFFDCA065),
                 ),
+                sub2: 'multiplier value x1.75',
               ),
               // Construction
               _factorDisplay(
@@ -63,6 +67,7 @@ class FactorInfoPage extends StatelessWidget {
                   isDummy: true,
                   backgroundColor: Color(0xFFFFB9B9),
                 ),
+                sub2: 'multiplier value x2',
               ),
             ],
           ),
@@ -75,18 +80,33 @@ class FactorInfoPage extends StatelessWidget {
     BuildContext ctx, {
     FactorCoin coin,
     String title,
+    String sub1 = 'increments/decrements 0.5',
+    String sub2,
   }) {
+    final TextTheme theme = Theme.of(ctx).textTheme;
+
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.only(bottom: 40.0, top: 8.0),
       child: Column(
         children: [
           Text(
             '$title',
-            style: Theme.of(ctx).textTheme.headline6.copyWith(
-                  color: Colors.black,
-                ),
+            style: theme.headline6.copyWith(
+              color: Colors.black,
+            ),
           ),
-          coin,
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: coin,
+          ),
+          Text(
+            '$sub1',
+            style: theme.subtitle1,
+          ),
+          Text(
+            '$sub2',
+            style: theme.subtitle1,
+          ),
         ],
       ),
     );
