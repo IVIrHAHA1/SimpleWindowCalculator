@@ -1,5 +1,8 @@
 import 'dart:math';
 
+import 'package:flutter/cupertino.dart';
+import 'package:the_window_calculator/Pages/FactorInfoPage.dart';
+
 import '../Tools/Calculator.dart';
 import '../Tools/ImageLoader.dart';
 import '../objects/Factor.dart';
@@ -116,11 +119,20 @@ class _WindowCounterState extends State<WindowCounter> {
           Positioned(
             bottom: 5,
             right: 5,
-            child: Container(
-              child: Icon(
-                Icons.help_outline,
-                color: Theme.of(context).primaryColor,
-                size: 32,
+            child: InkWell(
+              onTap: () {
+                showCupertinoModalPopup(
+                    context: context,
+                    builder: (_) {
+                      return FactorInfoPage();
+                    });
+              },
+              child: Container(
+                child: Icon(
+                  Icons.help_outline,
+                  color: Theme.of(context).primaryColor,
+                  size: 32,
+                ),
               ),
             ),
           ),
